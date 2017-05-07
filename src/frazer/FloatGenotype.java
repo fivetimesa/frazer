@@ -23,37 +23,46 @@ import java.util.Arrays;
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 
-public class FloatGenotype extends Genotype {
+public class FloatGenotype extends Genotype<Float> {
 
     private float[] genes;
 
     public FloatGenotype(int count) {
         super(count);
         genes = new float[count];
+        this.randomInit();
     }
 
     @Override
-    public void randomInit() {
+    public final void randomInit() {
     	Random generator = new Random();
     	for(int i = 0; i < count; i++)
     		genes[i] = generator.nextFloat();
     }
 
+    /**
+     *
+     * @param min
+     * @param max
+     */
     public void randomInit(float min, float max) {
     	Random generator = new Random();
     	for(int i = 0; i < count; i++)
     		genes[i] = min + generator.nextFloat() * (max - min);
     }
 
-    public float getGene(int i) {
+    @Override
+    public Float getGene(int i) {
+        rangeCheck(i);
     	return genes[i];
     }
 
     public void setGene(int i, float v) {
+        rangeCheck(i);
     	genes[i] = v;
     }
 
-    //public float[] getGenesArray() {
-    //	return Arrays.copyOf(genes, genes.length);;
-    //}
+    public float[] getGenes() {
+    	return Arrays.copyOf(genes, genes.length);
+    }
 }

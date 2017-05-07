@@ -16,29 +16,47 @@
  */
 package frazer;
 
+import java.util.Arrays;
 import java.util.Random;
 
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public class BitGenotype extends Genotype {
+public class BitGenotype extends Genotype<Boolean> {
 
     boolean[] genes;
 
     public BitGenotype(int count) {
         super(count);
         genes = new boolean[count];
+        this.randomInit();
     }
 
+    /**
+     *
+     */
     @Override
     public void randomInit() {
-        Random r  = new Random();
+        Random r = new Random();
         for (int i = 0; i < count; i++) {
             genes[i] = r.nextBoolean();
         }
     }
 
-    
-    
+    public void setGene(int i, boolean b) {
+        rangeCheck(i);
+        genes[i] = b;
+    }
+
+    @Override
+    public Boolean getGene(int i) {
+        rangeCheck(i);
+        return genes[i];
+    }
+
+    public boolean[] getGenes() {
+        return Arrays.copyOf(genes, genes.length);
+    }
+
 }

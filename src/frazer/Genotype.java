@@ -20,8 +20,10 @@ package frazer;
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public class Genotype {
+public class Genotype<T> {
+
     protected final int count;
+    T[] genes;
 
     public Genotype(int count) {
         this.count = count;
@@ -29,7 +31,16 @@ public class Genotype {
 
     public void randomInit() {
     }
-    
+
+    public T getGene(int i) {
+        rangeCheck(i);
+        return genes[i];
+    }
+
+    protected void rangeCheck(int i) {
+        if (i < 0 || i > count - 1)
+            throw new IndexOutOfBoundsException(
+                    "Genes index: " + i + ", Size: " + count);
+    }
+
 }
-
-
