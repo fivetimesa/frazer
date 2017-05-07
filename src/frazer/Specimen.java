@@ -16,11 +16,13 @@
  */
 package frazer;
 
+import frazer.interfaces.Fitness;
+
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public class Specimen implements Comparable<Specimen> {
+public class Specimen implements Comparable<Specimen>, Fitness {
 
     Genotype genes;
 
@@ -52,17 +54,19 @@ public class Specimen implements Comparable<Specimen> {
      * @param paretoScoreSize
      * @throws Exception
      */
-    public Specimen(int geneCount, byte geneType, int paretoScoreSize) throws Exception
-    {
+    public Specimen(int geneCount, byte geneType, int paretoScoreSize) throws Exception {
         this(geneCount, geneType);
-        if(paretoScoreSize > 1)
-        {
+        if (paretoScoreSize > 1) {
             fitnessParetoScores = new float[paretoScoreSize];
-        }
-        else
+        } else
             throw new Exception("Pareto score size must be greater than 1.");
     }
-    
+
+    @Override
+    public float evaluateFitness() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     /**
      * Compares specimens by thier <code>fitnessScore</code>.
      *
