@@ -54,6 +54,6 @@ public class FloatGenotype extends Genotype {
     }
 
     public float[] getGenesArray() {
-    	return Arrays.copyOf(genes, genes.length);;
+    	return Arrays.copyOf(genes, genes.length);
     }
 }
