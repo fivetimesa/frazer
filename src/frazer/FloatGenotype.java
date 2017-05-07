@@ -49,11 +49,11 @@ public class FloatGenotype extends Genotype {
     	return genes[i];
     }
 
-    public float setGene(float v) {
+    public void setGene(int i, float v) {
     	genes[i] = v;
     }
 
-    public float[] getGenesArray() {
-    	return Arrays.copyOf(genes, genes.length);;
-    }
+    //public float[] getGenesArray() {
+    //	return Arrays.copyOf(genes, genes.length);;
+    //}
 }
