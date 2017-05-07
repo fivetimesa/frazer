@@ -16,14 +16,16 @@
  */
 package frazer;
 import java.util.Random;
+import java.util.Arrays;
 
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
+
 public class FloatGenotype extends Genotype {
 
-    float[] genes;
+    private float[] genes;
 
     public FloatGenotype(int count) {
         super(count);
@@ -43,4 +45,15 @@ public class FloatGenotype extends Genotype {
     		genes[i] = min + generator.nextFloat() * (max - min);
     }
 
+    public float getGene(int i) {
+    	return genes[i];
+    }
+
+    public float setGene(float v) {
+    	genes[i] = v;
+    }
+
+    public float[] getGenesArray() {
+    	return Arrays.copyOf(genes, genes.length);;
+    }
 }
