@@ -22,4 +22,31 @@ package frazer;
  */
 public class Population {
     int count;
+    Specimen[] specimens;
+
+    /**
+     *
+     * @param populationCount
+     * @param geneCount
+     * @param geneType
+     */
+    public Population(int populationCount, int geneCount, byte geneType) {
+        this.count = populationCount;
+        specimens = new Specimen[populationCount];
+        for (int i = 0; i < populationCount; i++) {
+            specimens[i] = new Specimen(geneCount, geneType);
+        }
+    }
+
+    /**
+     *
+     * @param specimens
+     */
+    public Population(Specimen[] specimens) {
+        this.specimens = specimens;
+        this.count = specimens.length;
+    }
+    
+    
+    
 }
