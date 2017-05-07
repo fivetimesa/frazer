@@ -15,6 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package frazer;
+import java.util.Random;
 
 /**
  *
@@ -27,7 +28,19 @@ public class FloatGenotype extends Genotype {
     public FloatGenotype(int count) {
         super(count);
         genes = new float[count];
+    }
 
+    @override
+    public void randomInit() {
+    	Random generator = new Random();
+    	for(int i = 0; i < count; i++)
+    		genes[i] = generator.nextFloat();
+    }
+
+    public void randomInit(float min, float max) {
+    	Random generator = new Random();
+    	for(int i = 0; i < count; i++)
+    		genes[i] = min + generator.nextFloat() * (max - min);
     }
 
 }
