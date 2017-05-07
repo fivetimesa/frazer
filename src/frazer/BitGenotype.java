@@ -20,13 +20,13 @@ package frazer;
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public class Genotype {
-    private final int count;
+public class BitGenotype extends Genotype {
 
-    public Genotype(int count) {
-        this.count = count;
+    boolean[] genes;
+
+    public BitGenotype(int count) {
+        super(count);
+        genes = new boolean[count];
     }
-    
+
 }
-
-

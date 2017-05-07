@@ -21,5 +21,5 @@ package frazer;
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 public class Population {
-    
+    int count;
 }

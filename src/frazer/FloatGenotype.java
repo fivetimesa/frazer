@@ -20,13 +20,14 @@ package frazer;
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public class Genotype {
-    private final int count;
+public class FloatGenotype extends Genotype {
 
-    public Genotype(int count) {
-        this.count = count;
+    float[] genes;
+
+    public FloatGenotype(int count) {
+        super(count);
+        genes = new float[count];
+
     }
-    
+
 }
-
-

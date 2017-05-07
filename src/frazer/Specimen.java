@@ -20,6 +20,11 @@ package frazer;
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public class Specimen {
+public class Specimen implements Comparable{
+
+    @Override
+    public int compareTo(Object t) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

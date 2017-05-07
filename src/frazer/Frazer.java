@@ -15,15 +15,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+package frazer;
+
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-package frazer;
 public class Frazer {
     
-    
-    
+    /**
+     *
+     * @param i
+     * @param przecinek
+     * @param ss
+     */
     public void javadocTest(int i, float przecinek, String ss)
     {
     
