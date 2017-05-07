@@ -16,6 +16,8 @@
  */
 package frazer;
 
+import java.util.Random;
+
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
@@ -29,4 +31,14 @@ public class BitGenotype extends Genotype {
         genes = new boolean[count];
     }
 
+    @Override
+    public void randomInit() {
+        Random r  = new Random();
+        for (int i = 0; i < count; i++) {
+            genes[i] = r.nextBoolean();
+        }
+    }
+
+    
+    
 }

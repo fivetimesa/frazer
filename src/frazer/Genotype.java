@@ -21,7 +21,7 @@ package frazer;
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 public class Genotype {
-    private final int count;
+    protected final int count;
 
     public Genotype(int count) {
         this.count = count;

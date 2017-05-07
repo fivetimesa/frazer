@@ -32,7 +32,7 @@ public class FloatGenotype extends Genotype {
         genes = new float[count];
     }
 
-    @override
+    @Override
     public void randomInit() {
     	Random generator = new Random();
     	for(int i = 0; i < count; i++)
