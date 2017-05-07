@@ -20,11 +20,76 @@ package frazer;
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public class Specimen implements Comparable{
+public class Specimen implements Comparable<Specimen> {
 
-    @Override
-    public int compareTo(Object t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    Genotype genes;
+
+    final static byte BITGENOTYPE = 1;
+    final static byte FLOATGENOTYPE = 0;
+    final static byte PARETOSCORE = 1;
+
+    float fitnessScore;
+    float[] fitnessParetoScores = null;
+
+    /**
+     *
+     * @param geneCount
+     * @param geneType
+     */
+    public Specimen(int geneCount, byte geneType) {
+        if (geneType == BITGENOTYPE) {
+            genes = new BitGenotype(geneCount);
+        } else {
+            genes = new FloatGenotype(geneCount);
+        }
+        fitnessScore = 0;
+    }
+
+    /**
+     *
+     * @param geneCount
+     * @param geneType
+     * @param paretoScoreSize
+     * @throws Exception
+     */
+    public Specimen(int geneCount, byte geneType, int paretoScoreSize) throws Exception
+    {
+        this(geneCount, geneType);
+        if(paretoScoreSize > 1)
+        {
+            fitnessParetoScores = new float[paretoScoreSize];
+        }
+        else
+            throw new Exception("Pareto score size must be greater than 1.");
     }
     
+    /**
+     * Compares specimens by thier <code>fitnessScore</code>.
+     *
+     * @param otherSpecimen
+     * @return
+     */
+    @Override
+    public int compareTo(Specimen otherSpecimen) {
+        if (otherSpecimen == null)
+            throw new NullPointerException("Can't compere Specimen to null.");
+
+        if (this.equals(otherSpecimen))
+            return 0;
+
+        return Float.compare(this.fitnessScore, otherSpecimen.fitnessScore);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+
+        if (!(obj instanceof Specimen))
+            return false;
+
+        final Specimen s = (Specimen) obj;
+        return this.fitnessScore == s.fitnessScore;
+    }
+
 }
