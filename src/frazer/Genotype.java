@@ -26,6 +26,9 @@ public class Genotype {
     public Genotype(int count) {
         this.count = count;
     }
+
+    public void randomInit() {
+    }
     
 }
 
