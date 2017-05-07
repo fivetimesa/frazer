@@ -16,11 +16,14 @@
  */
 package frazer;
 
+import frazer.interfaces.Mating;
+
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 public class Population {
+
     int count;
     Specimen[] specimens;
 
@@ -46,7 +49,41 @@ public class Population {
         this.specimens = specimens;
         this.count = specimens.length;
     }
-    
-    
-    
+
+    /* STATIC PRIVATE CLASSES */
+    static private class RouletteWheelMating implements Mating {
+
+        @Override
+        public Specimen[] selectParent(Specimen[] specimens) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+    }
+
+    static private class TournamentMating implements Mating {
+
+        @Override
+        public Specimen[] selectParent(Specimen[] specimens) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+    }
+
+    static private class CrossoverBreeding implements Mating {
+
+        @Override
+        public Specimen[] selectParent(Specimen[] specimens) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+    }
+
+    static private class ExtrapolatedBreeding implements Mating {
+
+        @Override
+        public Specimen[] selectParent(Specimen[] specimens) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+    }
 }
