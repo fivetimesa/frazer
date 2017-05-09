@@ -4,15 +4,15 @@ Frazer frazer;
 
 Population pop;
 
-Genotype myGenom;
+Genotype myGenome;
 int geneCount = 20;
 
 void setup()
 {
   frazer = new Frazer(this);
-  myGenom = new BitGenotype(geneCount);
+  myGenome = new BitGenotype(geneCount);
   
-  println("GENOM:");
+  println("GENOME:");
   for(int i = 0; i < geneCount; i++)
-    print((boolean)myGenom.getGene(i) ? '0' : '1');
+    print((boolean)myGenome.getGene(i) ? '0' : '1');
 }
