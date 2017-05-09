@@ -58,5 +58,20 @@ public class BitGenotype extends Genotype<Boolean> {
     public boolean[] getGenes() {
         return Arrays.copyOf(genes, genes.length);
     }
-
+    
+    /**
+     * Creates "00101011110" type text representation.
+     * @return a String of <code>count</code> size 
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder(count + 2);
+        for (int i = 0; i < count; i++) {
+            if (genes[i])
+                sb.append('1');
+            else
+                sb.append('0');
+        }
+        return sb.toString(); //To change body of generated methods, choose Tools | Templates.
+    }
 }
