@@ -25,6 +25,9 @@ import frazer.interfaces.Mating;
 public class Population {
 
     int count;
+    /**
+     * Population of specimens.
+     */
     Specimen[] specimens;
 
     /**
@@ -60,6 +63,9 @@ public class Population {
 
     }
 
+    /**
+     * 
+     */
     static private class TournamentMating implements Mating {
 
         @Override
@@ -69,6 +75,9 @@ public class Population {
 
     }
 
+    /**
+     * 
+     */
     static private class CrossoverBreeding implements Mating {
 
         @Override
@@ -78,6 +87,9 @@ public class Population {
 
     }
 
+    /**
+     * 
+     */
     static private class ExtrapolatedBreeding implements Mating {
 
         @Override
