@@ -17,22 +17,23 @@
 
 
 package frazer;
+import java.util.ArrayList;
+import processing.core.*;
 
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 public class Frazer {
+    PApplet parent;
     
+    ArrayList<Population> populationList;
     /**
      *
-     * @param i
-     * @param przecinek
-     * @param ss
      */
-    public void javadocTest(int i, float przecinek, String ss)
+    public Frazer(PApplet parent)
     {
-    
+        this.parent = parent;
     }
     
 }
