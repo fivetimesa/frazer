@@ -16,10 +16,18 @@
  */
 package frazer.interfaces;
 
+import frazer.Genotype;
+
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 public interface Fitness {
-    public float evaluateFitness();
+
+    /**
+     *
+     * @param genotype
+     * @return fitness score
+     */
+    public float calculateFitness(Genotype genotype);
 }

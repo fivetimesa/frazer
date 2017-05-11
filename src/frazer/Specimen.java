@@ -17,22 +17,24 @@
 package frazer;
 
 import frazer.interfaces.Fitness;
+import frazer.interfaces.Mutation;
 
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public class Specimen implements Comparable<Specimen>, Fitness {
+public class Specimen implements Comparable<Specimen> {
 
-    Genotype genes;
+    private Genotype genes;
 
     final static byte BITGENOTYPE = 1;
     final static byte FLOATGENOTYPE = 0;
     final static byte PARETOSCORE = 1;
 
-    float fitnessScore;
-    float[] fitnessParetoScores = null;
+    private float fitnessScore;
+    private float[] fitnessParetoScores = null;
 
+// <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
      *
      * @param geneCount
@@ -58,15 +60,23 @@ public class Specimen implements Comparable<Specimen>, Fitness {
         this(geneCount, geneType);
         if (paretoScoreSize > 1) {
             fitnessParetoScores = new float[paretoScoreSize];
-        } else
+        } else {
             throw new Exception("Pareto score size must be greater than 1.");
+        }
+    }
+    
+    public float evaluateFitness(Fitness fitness) {
+        fitnessScore = fitness.calculateFitness(genes);
+        return fitnessScore;
+    }
+    
+    public void mutate(Mutation mutation) {
+        genes = mutation.mutate(genes);
     }
 
-    @Override
-    public float evaluateFitness() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+// </editor-fold>
 
+// <editor-fold defaultstate="collapsed" desc="Comparable interface methods">
     /**
      * Compares specimens by thier <code>fitnessScore</code>.
      *
@@ -75,25 +85,76 @@ public class Specimen implements Comparable<Specimen>, Fitness {
      */
     @Override
     public int compareTo(Specimen otherSpecimen) {
-        if (otherSpecimen == null)
+        if (otherSpecimen == null) {
             throw new NullPointerException("Can't compere Specimen to null.");
-
-        if (this.equals(otherSpecimen))
+        }
+        
+        if (this.equals(otherSpecimen)) {
             return 0;
-
-        return Float.compare(this.fitnessScore, otherSpecimen.fitnessScore);
+        }
+        
+        return Float.compare(this.getFitnessScore(), otherSpecimen.getFitnessScore());
     }
-
+    
     @Override
     public boolean equals(Object obj) {
-        if (obj == null)
+        if (obj == null) {
             return false;
-
-        if (!(obj instanceof Specimen))
+        }
+        
+        if (!(obj instanceof Specimen)) {
             return false;
-
+        }
+        
         final Specimen s = (Specimen) obj;
-        return this.fitnessScore == s.fitnessScore;
+        return this.getFitnessScore() == s.getFitnessScore();
     }
+
+// </editor-fold>
+
+// <editor-fold defaultstate="collapsed" desc="Getters & Setters">
+    /**
+     * @return the genes
+     */
+    public Genotype getGenes() {
+        return genes;
+    }
+
+    /**
+     * @param genes the genes to set
+     */
+    public void setGenes(Genotype genes) {
+        this.genes = genes;
+    }
+
+    /**
+     * @return the fitnessScore
+     */
+    public float getFitnessScore() {
+        return fitnessScore;
+    }
+
+    /**
+     * @param fitnessScore the fitnessScore to set
+     */
+    public void setFitnessScore(float fitnessScore) {
+        this.fitnessScore = fitnessScore;
+    }
+
+    /**
+     * @return the fitnessParetoScores
+     */
+    public float[] getFitnessParetoScores() {
+        return fitnessParetoScores;
+    }
+
+    /**
+     * @param fitnessParetoScores the fitnessParetoScores to set
+     */
+    public void setFitnessParetoScores(float[] fitnessParetoScores) {
+        this.fitnessParetoScores = fitnessParetoScores;
+    }
+
+// </editor-fold>
 
 }

@@ -16,11 +16,14 @@
  */
 package frazer.interfaces;
 
+import frazer.Specimen;
+
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 public interface Preselection {
-    public void preselect();
-    public void discard();
+    public boolean needsSorting();
+    public Specimen[] selectElite(Specimen[] specimen);
+    public Specimen[] discardWorst(Specimen[] specimen);
 }

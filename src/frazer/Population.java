@@ -15,8 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package frazer;
-
-import frazer.interfaces.Mating;
+import frazer.interfaces.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *
@@ -24,12 +25,13 @@ import frazer.interfaces.Mating;
  */
 public class Population {
 
-    int count;
+    private final int count;
     /**
      * Population of specimens.
      */
-    Specimen[] specimens;
+    private Specimen[] specimens;
 
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
      *
      * @param populationCount
@@ -48,54 +50,43 @@ public class Population {
      *
      * @param specimens
      */
-    public Population(Specimen[] specimens) {
+    public Population(Specimen[] specimens) throws Exception{
         this.specimens = specimens;
         this.count = specimens.length;
+        
+        if(count == 0) throw new IllegalArgumentException("Specimens array cannot be empty.");
     }
 
-    /* STATIC PRIVATE CLASSES */
-    static private class RouletteWheelMating implements Mating {
-
-        @Override
-        public Specimen[] selectParent(Specimen[] specimens) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+// </editor-fold>
+    
+    public Population nextGeneration(Preselection preselection, Fitness fitness, Mating mating, Breeding breeding, Mutation mutation) throws Exception {
+        ArrayList<Specimen> newSpecimens = new ArrayList<>();
+        
+        for (int i = 0; i < count; i++) {
+            specimens[i].evaluateFitness(fitness);
         }
-
-    }
-
-    /**
-     * 
-     */
-    static private class TournamentMating implements Mating {
-
-        @Override
-        public Specimen[] selectParent(Specimen[] specimens) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        if(mating.needsSorting() || preselection.needsSorting()) {
+            Arrays.sort(specimens);
         }
-
-    }
-
-    /**
-     * 
-     */
-    static private class CrossoverBreeding implements Mating {
-
-        @Override
-        public Specimen[] selectParent(Specimen[] specimens) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        Specimen[] elite = preselection.selectElite(specimens);
+        newSpecimens.addAll(Arrays.asList(elite));
+        
+        specimens = preselection.discardWorst(specimens);
+        
+        while(newSpecimens.size() < count) {
+            Specimen[] parents = mating.selectParents(specimens);
+            Specimen[] children = breeding.breed(parents);
+            newSpecimens.addAll(Arrays.asList(children));
         }
-
+        
+        newSpecimens.forEach((newSpecimen) -> {
+            newSpecimen.mutate(mutation);
+        });
+        
+        return new Population((Specimen[]) newSpecimens.toArray());
     }
-
-    /**
-     * 
-     */
-    static private class ExtrapolatedBreeding implements Mating {
-
-        @Override
-        public Specimen[] selectParent(Specimen[] specimens) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-    }
+        
+    
 }

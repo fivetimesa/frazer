@@ -16,10 +16,12 @@
  */
 package frazer.interfaces;
 
+import frazer.Specimen;
+
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 public interface Breeding {
-    public void breed();
+    public Specimen[] breed(Specimen[] parent);
 }

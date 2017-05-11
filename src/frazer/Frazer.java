@@ -17,6 +17,7 @@
 
 
 package frazer;
+import frazer.interfaces.*;
 import java.util.ArrayList;
 import processing.core.*;
 
@@ -25,15 +26,92 @@ import processing.core.*;
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 public class Frazer {
-    PApplet parent;
+    private PApplet parent;
+    private ArrayList<Population> populationList;
+    private Population currentPopulation;
     
-    ArrayList<Population> populationList;
     /**
      *
+     * @param parent reference to Processing sketch. Usually use "this".
      */
     public Frazer(PApplet parent)
     {
         this.parent = parent;
+        populationList = new ArrayList<>();
     }
     
+    //<editor-fold desc="Static private classes" defaultstate="collapsed">
+    /* STATIC PRIVATE CLASSES */
+    static private class RouletteWheelMating implements Mating {
+
+        @Override
+        public boolean needsSorting() {
+            return true;
+        }
+        
+        @Override
+        public Specimen[] selectParents(Specimen[] specimens) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+        
+    }
+
+    /**
+     * 
+     */
+    static private class TournamentMating implements Mating {
+
+        @Override
+        public boolean needsSorting() {
+            return false;
+        }
+
+        @Override
+        public Specimen[] selectParents(Specimen[] specimens) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+    }
+
+    /**
+     * 
+     */
+    static private class CrossoverBreeding implements Breeding {
+
+        @Override
+        public Specimen[] breed(Specimen[] parent) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+    }
+
+    /**
+     * 
+     */
+    static private class ExtrapolatedBreeding implements Breeding {
+
+        @Override
+        public Specimen[] breed(Specimen[] parent) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+    }
+    //</editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Getters & Setters">
+    /**
+     * @return the parent
+     */
+    public PApplet getParent() {
+        return parent;
+    }
+
+    /**
+     * @param parent the parent to set
+     */
+    public void setParent(PApplet parent) {
+        this.parent = parent;
+    }
+
+// </editor-fold>
 }
