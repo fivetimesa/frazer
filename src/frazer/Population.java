@@ -60,7 +60,7 @@ public class Population {
 
 // </editor-fold>
     
-    public void evaluate() {
+    public void evaluate(Fitness fitness) {
         if(!evaluated) {
             for (int i = 0; i < count; i++) {
                 specimens[i].evaluateFitness(fitness);
