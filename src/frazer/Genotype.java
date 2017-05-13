@@ -28,6 +28,13 @@ public class Genotype<T> {
     public Genotype(int count) {
         this.count = count;
     }
+    
+    public Genotype copy() {
+        Genotype<T> copy = new Genotype<>(count);
+        for(int i = 0; i < genes.length; i++)
+            copy.setGene(i, getGene(i));
+        return copy;
+    }
 
     public void randomInit() {
     }
@@ -36,11 +43,19 @@ public class Genotype<T> {
         rangeCheck(i);
         return genes[i];
     }
+    
+    public void setGene(int i, T value) {
+        rangeCheck(i);
+        genes[i] = value;
+    }
 
     protected void rangeCheck(int i) {
         if (i < 0 || i > count - 1)
             throw new IndexOutOfBoundsException(
                     "Genes index: " + i + ", Size: " + count);
     }
-
+    
+    public int getGeneCount() {
+        return count;
+    }
 }

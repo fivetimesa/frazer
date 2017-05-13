@@ -19,6 +19,8 @@
 package frazer;
 import frazer.interfaces.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 import processing.core.*;
 
 /**
@@ -30,6 +32,19 @@ public class Frazer {
     private ArrayList<Population> populationList;
     private Population currentPopulation;
     
+    private int generationCount;
+    
+    private byte genotypeType;
+    private byte minimise = 1;
+    private int populationCount;
+    
+    private Preselection preselection;
+    private Mating mating;
+    private Breeding breeding;
+    private Fitness fitness;
+    private Mutation mutation;
+    
+    
     /**
      *
      * @param parent reference to Processing sketch. Usually use "this".
@@ -38,6 +53,28 @@ public class Frazer {
     {
         this.parent = parent;
         populationList = new ArrayList<>();
+    }
+    
+    public Frazer(PApplet parent, int populationCount, int genotypeCount, byte genotypeType, Fitness fitness)
+    {
+        this.parent = parent;
+        populationList = new ArrayList<>();
+        
+        currentPopulation = new Population(populationCount, genotypeCount, genotypeType);
+        populationList.add(currentPopulation);
+        this.fitness = fitness;
+        
+        setDefaults();
+    }
+    
+    public void setDefaults() {
+        mating = new TournamentMating(minimise == 1);
+    }
+    
+    public void evolve(int maxGenerations) throws Exception {
+        for (int i = 0; i < maxGenerations; i++) {
+            currentPopulation = currentPopulation.nextGeneration(preselection, fitness, mating, breeding, mutation);
+        }
     }
     
     //<editor-fold desc="Static private classes" defaultstate="collapsed">
@@ -60,6 +97,12 @@ public class Frazer {
      * 
      */
     static private class TournamentMating implements Mating {
+        
+        boolean minimise;
+        
+        TournamentMating(boolean minimise) {
+            this.minimise = minimise;
+        }
 
         @Override
         public boolean needsSorting() {
@@ -68,7 +111,26 @@ public class Frazer {
 
         @Override
         public Specimen[] selectParents(Specimen[] specimens) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            final int parentsCount = 2;
+            final int candidateCount = 3;
+            Specimen[] parents = new Specimen[parentsCount];
+            Random random = new Random();
+            
+            for(int i = 0; i < parentsCount; i++) {
+                Specimen candidate = specimens[random.nextInt(specimens.length)];
+                float candidateScore = candidate.getFitnessScore();
+                for(int j = 1; j < candidateCount; j++) {
+                    Specimen newCandidate = specimens[random.nextInt(specimens.length)];
+                    float newCandidateScore = candidate.getFitnessScore();
+                    if((minimise && newCandidateScore < candidateScore) || 
+                      (!minimise && newCandidateScore < candidateScore)) {
+                        candidate = newCandidate;
+                        candidateScore = newCandidateScore;
+                    }
+                }
+                parents[i] = candidate;
+            }
+            return parents;
         }
 
     }
@@ -79,8 +141,40 @@ public class Frazer {
     static private class CrossoverBreeding implements Breeding {
 
         @Override
+        @SuppressWarnings("unchecked")
         public Specimen[] breed(Specimen[] parent) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            Specimen[] children;
+            
+            if(parent.length == 0) throw new IllegalArgumentException("No parents received");
+            children = new Specimen[parent.length];
+            
+            if(parent.length == 1) {
+                children[0] = parent[0].copy();
+                return children;
+            }
+            Random random = new Random();
+            int geneCount = parent[0].getGenes().getGeneCount();
+            int[] crossOverPoints = new int[parent.length - 1];
+            for (int i = 0; i < crossOverPoints.length; i++) {
+                crossOverPoints[i] = random.nextInt(geneCount);
+            }
+            Arrays.sort(crossOverPoints);
+            
+            for(int i = 0; i < children.length; i++) {
+                Genotype genes = parent[i].getGenes().copy();
+                int parentId = i;
+                for(int g = 0; g < geneCount; g++) {
+                    if(g < crossOverPoints.length) {
+                        if (g == crossOverPoints[parentId]) {
+                            parentId++;
+                        }
+                    }
+                    if(parentId >= parent.length) parentId -= parent.length;
+                    if(parentId != i) genes.setGene(g, parent[parentId].getGenes().getGene(g));
+                }
+                children[i] = new Specimen(genes);
+            }
+            return children;
         }
 
     }
