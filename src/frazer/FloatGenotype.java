@@ -25,7 +25,7 @@ import java.util.Arrays;
 
 public class FloatGenotype extends Genotype<Float> {
 
-    private float[] genes;
+    protected float[] genes;
 
     public FloatGenotype(int count) {
         super(count);
@@ -34,7 +34,7 @@ public class FloatGenotype extends Genotype<Float> {
     }
 
     @Override
-    public final void randomInit() {
+    public void randomInit() {
     	Random generator = new Random();
     	for(int i = 0; i < count; i++)
     		genes[i] = generator.nextFloat();

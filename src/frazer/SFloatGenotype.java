@@ -16,41 +16,46 @@
  */
 package frazer;
 
-import frazer.SFloatGenotype.Tuple;
-import java.lang.reflect.Array;
 import java.util.Random;
 
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public class SFloatGenotype extends Genotype<Tuple<Float, Float>> {
-    private Tuple<Float, Float>[] genes;
+public class SFloatGenotype extends FloatGenotype {
+
+    private float[] steps;
 
     public SFloatGenotype(int count) {
         super(count);
-        this.genes = (Tuple<Float, Float>[]) Array.newInstance(genes.getClass().getComponentType(), count);
+        this.steps = new float[count];
         this.randomInit();
     }
-/*
+
     @Override
-    public final void randomInit() {
-    	Random generator = new Random();
-    	for(int i = 0; i < count; i++)
-    		genes[i] = generator.nextFloat();
-    }
-  */  
-    
-    
-    
-    public static class Tuple<X, S> {
-
-        public final X x;
-        public final S s;
-
-        public Tuple(X x, S s) {
-            this.x = x;
-            this.s = s;
+    public void randomInit() {
+        Random generator = new Random();
+        for (int i = 0; i < count; i++) {
+            genes[i] = generator.nextFloat();
+            steps[i] = generator.nextFloat();
         }
     }
+
+    public void randomInit(float min, float max) {
+        Random generator = new Random();
+        for (int i = 0; i < count; i++) {
+            genes[i] = min + generator.nextFloat() * (max - min);
+            steps[i] = generator.nextFloat();
+        }
+    }
+
+    public Float getStep(int i) {
+        return steps[i]; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void setStep(int i, float step) {
+        this.steps[i] = step;
+    }
+    
+
 }
