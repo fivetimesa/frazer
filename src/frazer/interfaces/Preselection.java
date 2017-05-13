@@ -23,7 +23,9 @@ import frazer.Specimen;
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 public interface Preselection {
-    public boolean needsSorting();
+    public default boolean needsSorting() {
+        return false;
+    }
     public Specimen[] selectElite(Specimen[] specimen);
     public Specimen[] discardWorst(Specimen[] specimen);
 }

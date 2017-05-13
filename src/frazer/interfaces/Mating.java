@@ -23,6 +23,8 @@ import frazer.Specimen;
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 public interface Mating {
-    public boolean needsSorting();
+    public default boolean needsSorting() {
+        return false;
+    }
     public Specimen[] selectParents(Specimen[] specimens);
 }
