@@ -16,6 +16,7 @@
  */
 package frazer.interfaces;
 
+import frazer.Population;
 import frazer.Specimen;
 
 /**
@@ -26,5 +27,5 @@ public interface Mating {
     public default boolean needsSorting() {
         return false;
     }
-    public Specimen[] selectParents(Specimen[] specimens);
+    public Specimen[] selectParents(Population population);
 }

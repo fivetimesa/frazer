@@ -89,7 +89,7 @@ public class Population {
         specimens = preselection.discardWorst(specimens);
         
         while(newSpecimens.size() < count) {
-            Specimen[] parents = mating.selectParents(specimens);
+            Specimen[] parents = mating.selectParents(this);
             Specimen[] children = breeding.breed(parents);
             newSpecimens.addAll(Arrays.asList(children));
         }
@@ -100,6 +100,9 @@ public class Population {
         
         return new Population((Specimen[]) newSpecimens.toArray());
     }
-        
-    
+
+    public Specimen[] getSpecimens() {
+        return specimens;
+    }
+
 }

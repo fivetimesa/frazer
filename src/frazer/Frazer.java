@@ -106,7 +106,7 @@ public class Frazer {
         }
         
         @Override
-        public Specimen[] selectParents(Specimen[] specimens) {
+        public Specimen[] selectParents(Population population) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
         
@@ -153,7 +153,8 @@ public class Frazer {
         
 
         @Override
-        public Specimen[] selectParents(Specimen[] specimens) {
+        public Specimen[] selectParents(Population population) {
+            Specimen[] specimens = population.getSpecimens();
            
             Specimen[] parents = new Specimen[parentsCount];
             Random random = new Random();
