@@ -65,4 +65,10 @@ public class FloatGenotype extends Genotype<Float> {
     public float[] getGenes() {
     	return Arrays.copyOf(genes, genes.length);
     }
+    
+    @Override
+    public String toString()
+    {
+        return Arrays.toString(genes);
+    }
 }
