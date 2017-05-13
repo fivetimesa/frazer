@@ -27,6 +27,11 @@ public class Population {
 
     private final int count;
     private boolean evaluated = false;
+    private float maxScore;
+    private float minScore;
+    private Specimen minSpecimen;
+    private Specimen maxSpecimen;
+    
     /**
      * Population of specimens.
      */
@@ -61,9 +66,19 @@ public class Population {
 // </editor-fold>
     
     public void evaluate(Fitness fitness) {
+        maxScore = Float.MIN_VALUE;
+        minScore = Float.MAX_VALUE;
         if(!evaluated) {
             for (int i = 0; i < count; i++) {
-                specimens[i].evaluateFitness(fitness);
+                float score = specimens[i].evaluateFitness(fitness);
+                if(score < minScore) {
+                    minScore = score;
+                    minSpecimen = specimens[i];
+                }
+                if(score > maxScore) {
+                    maxScore = score;
+                    maxSpecimen = specimens[i];
+                }
             }
             evaluated = true;
         }
@@ -72,12 +87,7 @@ public class Population {
     public Population nextGeneration(Preselection preselection, Fitness fitness, Mating mating, Breeding breeding, Mutation mutation) throws Exception {
         ArrayList<Specimen> newSpecimens = new ArrayList<>();
         
-        if(!evaluated) {
-            for (int i = 0; i < count; i++) {
-                specimens[i].evaluateFitness(fitness);
-            }
-            evaluated = true;
-        }
+        evaluate(fitness);
         
         if(mating.needsSorting() || preselection.needsSorting()) {
             Arrays.sort(specimens);
@@ -99,6 +109,10 @@ public class Population {
         });
         
         return new Population((Specimen[]) newSpecimens.toArray());
+    }
+    
+    private void evaluateFitness() {
+        
     }
 
     public Specimen[] getSpecimens() {
