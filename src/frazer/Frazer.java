@@ -30,6 +30,15 @@ public class Frazer {
     private ArrayList<Population> populationList;
     private Population currentPopulation;
     
+    private byte genotypeType;
+    
+    private Preselection preselection;
+    private Mating mating;
+    private Breeding breeding;
+    private Fitness fitness;
+    private Mutation mutation;
+    
+    
     /**
      *
      * @param parent reference to Processing sketch. Usually use "this".
@@ -38,6 +47,19 @@ public class Frazer {
     {
         this.parent = parent;
         populationList = new ArrayList<>();
+    }
+    
+    public Frazer(PApplet parent, int populationCount, int genotypeCount, byte genotypeType)
+    {
+        this.parent = parent;
+        populationList = new ArrayList<>();
+        
+        currentPopulation = new Population(populationCount, genotypeCount, genotypeType);
+        populationList.add(currentPopulation);
+    }
+    
+    public void setDefaults() {
+        mating = new TournamentMating();
     }
     
     //<editor-fold desc="Static private classes" defaultstate="collapsed">
