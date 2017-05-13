@@ -35,6 +35,16 @@ public class Specimen implements Comparable<Specimen> {
     private float[] fitnessParetoScores = null;
 
 // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    public Specimen(Genotype genes) {
+        this.genes = genes;
+        fitnessScore = 0;
+    }
+    
+    public Specimen(Genotype genes, float fitnessScore) {
+        this.genes = genes;
+        this.fitnessScore = fitnessScore;
+    }
     /**
      *
      * @param geneCount
@@ -64,6 +74,11 @@ public class Specimen implements Comparable<Specimen> {
             throw new Exception("Pareto score size must be greater than 1.");
         }
     }
+    
+    public Specimen copy() {
+        Specimen copy = new Specimen(genes.copy(), fitnessScore);
+        return copy;
+    } 
     
     public float evaluateFitness(Fitness fitness) {
         fitnessScore = fitness.calculateFitness(genes);
