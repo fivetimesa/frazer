@@ -26,6 +26,7 @@ import java.util.Arrays;
 public class Population {
 
     private final int count;
+    private boolean evaluated = false;
     /**
      * Population of specimens.
      */
@@ -59,11 +60,23 @@ public class Population {
 
 // </editor-fold>
     
+    public void evaluate() {
+        if(!evaluated) {
+            for (int i = 0; i < count; i++) {
+                specimens[i].evaluateFitness(fitness);
+            }
+            evaluated = true;
+        }
+    }
+    
     public Population nextGeneration(Preselection preselection, Fitness fitness, Mating mating, Breeding breeding, Mutation mutation) throws Exception {
         ArrayList<Specimen> newSpecimens = new ArrayList<>();
         
-        for (int i = 0; i < count; i++) {
-            specimens[i].evaluateFitness(fitness);
+        if(!evaluated) {
+            for (int i = 0; i < count; i++) {
+                specimens[i].evaluateFitness(fitness);
+            }
+            evaluated = true;
         }
         
         if(mating.needsSorting() || preselection.needsSorting()) {
