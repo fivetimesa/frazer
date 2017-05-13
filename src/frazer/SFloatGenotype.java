@@ -15,60 +15,47 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package frazer;
+
 import java.util.Random;
-import java.util.Arrays;
 
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
+public class SFloatGenotype extends FloatGenotype {
 
-public class FloatGenotype extends Genotype<Float> {
+    private float[] steps;
 
-    protected float[] genes;
-
-    public FloatGenotype(int count) {
+    public SFloatGenotype(int count) {
         super(count);
-        genes = new float[count];
+        this.steps = new float[count];
         this.randomInit();
     }
 
     @Override
     public void randomInit() {
-    	Random generator = new Random();
-    	for(int i = 0; i < count; i++)
-    		genes[i] = generator.nextFloat();
+        Random generator = new Random();
+        for (int i = 0; i < count; i++) {
+            genes[i] = generator.nextFloat();
+            steps[i] = generator.nextFloat();
+        }
     }
 
-    /**
-     *
-     * @param min
-     * @param max
-     */
     public void randomInit(float min, float max) {
-    	Random generator = new Random();
-    	for(int i = 0; i < count; i++)
-    		genes[i] = min + generator.nextFloat() * (max - min);
+        Random generator = new Random();
+        for (int i = 0; i < count; i++) {
+            genes[i] = min + generator.nextFloat() * (max - min);
+            steps[i] = generator.nextFloat();
+        }
     }
 
-    @Override
-    public Float getGene(int i) {
-        rangeCheck(i);
-    	return genes[i];
+    public Float getStep(int i) {
+        return steps[i]; //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void setGene(int i, float v) {
-        rangeCheck(i);
-    	genes[i] = v;
-    }
-
-    public float[] getGenes() {
-    	return Arrays.copyOf(genes, genes.length);
+    public void setStep(int i, float step) {
+        this.steps[i] = step;
     }
     
-    @Override
-    public String toString()
-    {
-        return Arrays.toString(genes);
-    }
+
 }
