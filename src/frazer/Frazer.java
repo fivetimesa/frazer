@@ -53,6 +53,7 @@ public class Frazer {
     {
         this.parent = parent;
         populationList = new ArrayList<>();
+        setDefaults();
     }
     
     public Frazer(PApplet parent, int populationCount, int genotypeCount, byte genotypeType, Fitness fitness)
@@ -67,8 +68,11 @@ public class Frazer {
         setDefaults();
     }
     
-    public void setDefaults() {
+    private void setDefaults() {
+        preselection = new NoPreselection();
         mating = new TournamentMating(minimise == 1);
+        breeding = new CrossoverBreeding();
+        mutation = new NoMutation();
     }
     
     public void evolve(int maxGenerations) throws Exception {
@@ -79,6 +83,21 @@ public class Frazer {
     
     //<editor-fold desc="Static private classes" defaultstate="collapsed">
     /* STATIC PRIVATE CLASSES */
+    
+    static private class NoPreselection implements Preselection {
+
+        @Override
+        public Specimen[] selectElite(Specimen[] specimen) {
+            return new Specimen[0];
+        }
+
+        @Override
+        public Specimen[] discardWorst(Specimen[] specimen) {
+            return specimen;
+        }
+        
+    }
+    
     static private class RouletteWheelMating implements Mating {
 
         @Override
@@ -98,21 +117,44 @@ public class Frazer {
      */
     static private class TournamentMating implements Mating {
         
-        boolean minimise;
+        private boolean minimise;
+        private int parentsCount;
+        private int candidateCount;
         
         TournamentMating(boolean minimise) {
+            this.candidateCount = 3;
+            this.parentsCount = 2;
             this.minimise = minimise;
         }
-
-        @Override
-        public boolean needsSorting() {
-            return false;
+        
+        TournamentMating(boolean minimise, int parentsCount, int candidateCount) {
+            this.candidateCount = 3;
+            this.parentsCount = 2;
+            this.minimise = minimise;
+            this.parentsCount = parentsCount;
+            this.candidateCount = candidateCount;
         }
+
+        public int getParentsCount() {
+            return parentsCount;
+        }
+        
+        public int getCandidateCount() {
+            return candidateCount;
+        }
+
+        public void setCandidateCount(int candidateCount) {
+            this.candidateCount = candidateCount;
+        }
+
+        public void setParentsCount(int parentsCount) {
+            this.parentsCount = parentsCount;
+        }
+        
 
         @Override
         public Specimen[] selectParents(Specimen[] specimens) {
-            final int parentsCount = 2;
-            final int candidateCount = 3;
+           
             Specimen[] parents = new Specimen[parentsCount];
             Random random = new Random();
             
@@ -190,6 +232,14 @@ public class Frazer {
         }
 
     }
+    
+    static private class NoMutation implements Mutation {
+
+        @Override
+        public Genotype mutate(Genotype genes) {
+            return genes;
+        }
+    }
     //</editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters & Setters">
@@ -206,6 +256,11 @@ public class Frazer {
     public void setParent(PApplet parent) {
         this.parent = parent;
     }
+    
+    public Population getCurrentPopulation() {
+        return currentPopulation;
+    }
 
 // </editor-fold>
+
 }
