@@ -33,6 +33,16 @@ public class SFloatGenotype extends FloatGenotype {
     }
 
     @Override
+    public Genotype copy() {
+        SFloatGenotype copy = new SFloatGenotype(genes.length);
+        for (int i = 0; i < genes.length; i++) {
+            copy.setGene(i, getGene(i));
+            copy.setStep(i, getStep(i));
+        }
+        return copy;
+    }
+
+    @Override
     public void randomInit() {
         Random generator = new Random();
         for (int i = 0; i < genes.length; i++) {
@@ -47,15 +57,6 @@ public class SFloatGenotype extends FloatGenotype {
             genes[i] = min + generator.nextFloat() * (max - min);
             steps[i] = generator.nextFloat();
         }
-    }
-
-    @Override
-    public Genotype copy() {
-        Genotype<Float> copy = super.copy();
-        for (int i = 0; i < genes.length; i++) {
-            ((SFloatGenotype) copy).steps[i] = steps[i];
-        }
-        return copy; //To change body of generated methods, choose Tools | Templates.
     }
 
     public Float getStep(int i) {

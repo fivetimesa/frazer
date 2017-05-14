@@ -30,6 +30,15 @@ public class BitGenotype extends Genotype<Boolean> {
         this.randomInit();
     }
 
+    @Override
+    public Genotype copy() {
+        BitGenotype copy = new BitGenotype(genes.length);
+        for (int i = 0; i < genes.length; i++) {
+            copy.setGene(i, getGene(i));
+        }
+        return copy;
+    }
+
     /**
      *
      */
@@ -55,10 +64,11 @@ public class BitGenotype extends Genotype<Boolean> {
     public Boolean[] getGenes() {
         return Arrays.copyOf(genes, genes.length);
     }
-    
+
     /**
      * Creates "00101011110" type text representation.
-     * @return a String of genotype length 
+     *
+     * @return a String of genotype length
      */
     @Override
     public String toString() {

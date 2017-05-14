@@ -24,9 +24,18 @@ import java.util.Random;
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 public class IntegerGenotype extends Genotype<Integer> {
-    
+
     public IntegerGenotype(int count) {
         super(Integer.class, count);
+    }
+
+    @Override
+    public Genotype copy() {
+        IntegerGenotype copy = new IntegerGenotype(genes.length);
+        for (int i = 0; i < genes.length; i++) {
+            copy.setGene(i, getGene(i));
+        }
+        return copy;
     }
 
     public void randomInit(int min, int max) {
