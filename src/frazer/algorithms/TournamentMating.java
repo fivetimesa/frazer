@@ -16,6 +16,7 @@
  */
 package frazer.algorithms;
 
+import frazer.Goal;
 import frazer.Population;
 import frazer.Specimen;
 import frazer.interfaces.Mating;
@@ -26,20 +27,20 @@ import java.util.Random;
  */
 public class TournamentMating implements Mating {
 
-    private boolean minimise;
+    private Goal goal;
     private int parentsCount;
     private int candidateCount;
 
-    public TournamentMating(boolean minimise) {
+    public TournamentMating(Goal goal) {
         this.candidateCount = 3;
         this.parentsCount = 2;
-        this.minimise = minimise;
+        this.goal = goal;
     }
 
-    public TournamentMating(boolean minimise, int parentsCount, int candidateCount) {
+    public TournamentMating(Goal goal, int parentsCount, int candidateCount) {
         this.candidateCount = 3;
         this.parentsCount = 2;
-        this.minimise = minimise;
+        this.goal = goal;
         this.parentsCount = parentsCount;
         this.candidateCount = candidateCount;
     }
@@ -71,7 +72,7 @@ public class TournamentMating implements Mating {
             for (int j = 1; j < candidateCount; j++) {
                 Specimen newCandidate = specimens[random.nextInt(specimens.length)];
                 float newCandidateScore = candidate.getFitnessScore();
-                if ((minimise && newCandidateScore < candidateScore) || (!minimise && newCandidateScore < candidateScore)) {
+                if ((goal == Goal.MINIMISE && newCandidateScore < candidateScore) || (goal == Goal.MAXIMISE && newCandidateScore < candidateScore)) {
                     candidate = newCandidate;
                     candidateScore = newCandidateScore;
                 }
