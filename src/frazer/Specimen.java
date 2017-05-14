@@ -19,6 +19,7 @@ package frazer;
 import frazer.genotypes.BitGenotype;
 import frazer.genotypes.Genotype;
 import frazer.genotypes.FloatGenotype;
+import frazer.genotypes.GenotypeType;
 import frazer.interfaces.Fitness;
 import frazer.interfaces.Mutation;
 
@@ -53,8 +54,8 @@ public class Specimen implements Comparable<Specimen> {
      * @param geneCount
      * @param geneType
      */
-    public Specimen(int geneCount, byte geneType) {
-        if (geneType == BITGENOTYPE) {
+    public Specimen(int geneCount, GenotypeType geneType) {
+        if (geneType == GenotypeType.BIT) {
             genes = new BitGenotype(geneCount);
         } else {
             genes = new FloatGenotype(geneCount);
@@ -69,7 +70,7 @@ public class Specimen implements Comparable<Specimen> {
      * @param paretoScoreSize
      * @throws Exception
      */
-    public Specimen(int geneCount, byte geneType, int paretoScoreSize) throws Exception {
+    public Specimen(int geneCount, GenotypeType geneType, int paretoScoreSize) throws Exception {
         this(geneCount, geneType);
         if (paretoScoreSize > 1) {
             fitnessParetoScores = new float[paretoScoreSize];

@@ -34,7 +34,7 @@ public class RouletteWheelMating implements Mating {
     }
 
     @Override
-    public void initialize() {
+    public void initialize(Population population) {
     }
 
     @Override

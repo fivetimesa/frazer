@@ -18,6 +18,7 @@ package frazer;
 import frazer.interfaces.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import frazer.genotypes.*;
 
 /**
  *
@@ -45,7 +46,7 @@ public class Population {
      * @param geneCount
      * @param geneType
      */
-    public Population(int populationCount, int geneCount, byte geneType) {
+    public Population(int populationCount, int geneCount, GenotypeType geneType) {
         this.count = populationCount;
         specimens = new Specimen[populationCount];
         for (int i = 0; i < populationCount; i++) {

@@ -28,22 +28,23 @@ import processing.core.*;
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 public class Frazer {
-    
-    final static byte BITGENOTYPE = 0;
-    final static byte FLOATGENOTYPE = 1;
-    final static byte SFLOATGENOTYPE = 2;
-    final static byte INTGENOTYPE = 3;
-        
+
+// <editor-fold defaultstate="collapsed" desc="CONSTANTS">
+
+//    final static byte BITGENOTYPE = 0;
+//    final static byte FLOATGENOTYPE = 1;
+//    final static byte SFLOATGENOTYPE = 2;
+//    final static byte INTGENOTYPE = 3;
+// </editor-fold>    
     
     private PApplet parent;
     private ArrayList<Population> populationList;
     private Population currentPopulation;
     private GenotypeDescription gD;
-    
+    private GenotypeType genotypeType;
     
     private int generationCount;
     
-    private byte genotypeType;
     private byte minimise = 1;
     private int populationCount;
     
@@ -65,7 +66,7 @@ public class Frazer {
         setDefaults();
     }
     
-    public Frazer(PApplet parent, int populationCount, int geneCount, byte genotypeType, Fitness fitness)
+    public Frazer(PApplet parent, int populationCount, int geneCount, GenotypeType genotypeType, Fitness fitness)
     {
         this.parent = parent;
         populationList = new ArrayList<>();
