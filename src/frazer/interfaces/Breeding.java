@@ -23,5 +23,11 @@ import frazer.Specimen;
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 public interface Breeding {
+
+    /**
+     *
+     * @param parent
+     * @return
+     */
     public Specimen[] breed(Specimen[] parent);
 }

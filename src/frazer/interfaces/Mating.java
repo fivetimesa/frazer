@@ -27,5 +27,6 @@ public interface Mating {
     public default boolean needsSorting() {
         return false;
     }
+    public default void initialize() {}
     public Specimen[] selectParents(Population population);
 }

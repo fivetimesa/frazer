@@ -100,10 +100,18 @@ public class Frazer {
     
     static private class RouletteWheelMating implements Mating {
 
+        float[] roulette;
+        
         @Override
         public boolean needsSorting() {
             return true;
         }
+
+        @Override
+        public void initialize() {
+            Mating.super.initialize(); //To change body of generated methods, choose Tools | Templates.
+        }
+        
         
         @Override
         public Specimen[] selectParents(Population population) {
