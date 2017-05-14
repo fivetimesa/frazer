@@ -28,6 +28,13 @@ import processing.core.*;
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 public class Frazer {
+    
+    final static byte BITGENOTYPE = 0;
+    final static byte FLOATGENOTYPE = 1;
+    final static byte SFLOATGENOTYPE = 2;
+    final static byte INTGENOTYPE = 3;
+        
+    
     private PApplet parent;
     private ArrayList<Population> populationList;
     private Population currentPopulation;
