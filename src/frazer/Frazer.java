@@ -80,15 +80,26 @@ public class Frazer {
     }
     
     private void setDefaults() {
+        goal = Goal.MINIMISE;
         preselection = new NoPreselection();
         mating = new TournamentMating(goal);
         breeding = new CrossoverBreeding();
         mutation = new NoMutation();
     }
     
-    public Specimen evolve(int maxGenerations) throws Exception {
+    public Specimen evolve(int maxGenerations) {
         for (int i = 0; i < maxGenerations; i++) {
-            currentPopulation = currentPopulation.nextGeneration(preselection, fitness, mating, breeding, mutation);
+            try {
+                
+                System.out.print("Evolving… \n");
+                Population nextPopulation = currentPopulation.nextGeneration(preselection, fitness, mating, breeding, mutation);
+                generationCount++;
+                System.out.print("Generation " + generationCount + "\n");
+                currentPopulation = nextPopulation;
+            }
+                catch (Exception e) {
+                    System.out.print("Something went wrong. Evolution stopped at generation " + generationCount + "\n");
+            }
         }
         return currentPopulation.getBestSpecimen(goal);
     }
