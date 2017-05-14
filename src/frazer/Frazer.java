@@ -17,15 +17,10 @@
 
 
 package frazer;
-import frazer.algorithms.NoPreselection;
-import frazer.algorithms.NoMutation;
-import frazer.algorithms.CrossoverBreeding;
-import frazer.algorithms.TournamentMating;
-import frazer.genotypes.Genotype;
+import frazer.algorithms.*;
+import frazer.genotypes.*;
 import frazer.interfaces.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
 import processing.core.*;
 
 /**
@@ -36,6 +31,8 @@ public class Frazer {
     private PApplet parent;
     private ArrayList<Population> populationList;
     private Population currentPopulation;
+    private GenotypeDescription gD;
+    
     
     private int generationCount;
     
