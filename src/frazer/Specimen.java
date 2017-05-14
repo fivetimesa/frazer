@@ -16,6 +16,9 @@
  */
 package frazer;
 
+import frazer.genotypes.BitGenotype;
+import frazer.genotypes.Genotype;
+import frazer.genotypes.FloatGenotype;
 import frazer.interfaces.Fitness;
 import frazer.interfaces.Mutation;
 

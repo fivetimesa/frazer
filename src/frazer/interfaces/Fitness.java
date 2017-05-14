@@ -16,7 +16,7 @@
  */
 package frazer.interfaces;
 
-import frazer.Genotype;
+import frazer.genotypes.Genotype;
 
 /**
  *

@@ -17,6 +17,11 @@
 
 
 package frazer;
+import frazer.algorithms.NoPreselection;
+import frazer.algorithms.NoMutation;
+import frazer.algorithms.CrossoverBreeding;
+import frazer.algorithms.TournamentMating;
+import frazer.genotypes.Genotype;
 import frazer.interfaces.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -80,176 +85,6 @@ public class Frazer {
             currentPopulation = currentPopulation.nextGeneration(preselection, fitness, mating, breeding, mutation);
         }
     }
-    
-    //<editor-fold desc="Static private classes" defaultstate="collapsed">
-    /* STATIC PRIVATE CLASSES */
-    
-    static private class NoPreselection implements Preselection {
-
-        @Override
-        public Specimen[] selectElite(Specimen[] specimen) {
-            return new Specimen[0];
-        }
-
-        @Override
-        public Specimen[] discardWorst(Specimen[] specimen) {
-            return specimen;
-        }
-        
-    }
-    
-    static private class RouletteWheelMating implements Mating {
-
-        float[] roulette;
-        
-        @Override
-        public boolean needsSorting() {
-            return true;
-        }
-
-        @Override
-        public void initialize() {
-            Mating.super.initialize(); //To change body of generated methods, choose Tools | Templates.
-        }
-        
-        
-        @Override
-        public Specimen[] selectParents(Population population) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-        
-    }
-
-    /**
-     * 
-     */
-    static private class TournamentMating implements Mating {
-        
-        private boolean minimise;
-        private int parentsCount;
-        private int candidateCount;
-        
-        TournamentMating(boolean minimise) {
-            this.candidateCount = 3;
-            this.parentsCount = 2;
-            this.minimise = minimise;
-        }
-        
-        TournamentMating(boolean minimise, int parentsCount, int candidateCount) {
-            this.candidateCount = 3;
-            this.parentsCount = 2;
-            this.minimise = minimise;
-            this.parentsCount = parentsCount;
-            this.candidateCount = candidateCount;
-        }
-
-        public int getParentsCount() {
-            return parentsCount;
-        }
-        
-        public int getCandidateCount() {
-            return candidateCount;
-        }
-
-        public void setCandidateCount(int candidateCount) {
-            this.candidateCount = candidateCount;
-        }
-
-        public void setParentsCount(int parentsCount) {
-            this.parentsCount = parentsCount;
-        }
-        
-
-        @Override
-        public Specimen[] selectParents(Population population) {
-            Specimen[] specimens = population.getSpecimens();
-           
-            Specimen[] parents = new Specimen[parentsCount];
-            Random random = new Random();
-            
-            for(int i = 0; i < parentsCount; i++) {
-                Specimen candidate = specimens[random.nextInt(specimens.length)];
-                float candidateScore = candidate.getFitnessScore();
-                for(int j = 1; j < candidateCount; j++) {
-                    Specimen newCandidate = specimens[random.nextInt(specimens.length)];
-                    float newCandidateScore = candidate.getFitnessScore();
-                    if((minimise && newCandidateScore < candidateScore) || 
-                      (!minimise && newCandidateScore < candidateScore)) {
-                        candidate = newCandidate;
-                        candidateScore = newCandidateScore;
-                    }
-                }
-                parents[i] = candidate;
-            }
-            return parents;
-        }
-
-    }
-
-    /**
-     * 
-     */
-    static private class CrossoverBreeding implements Breeding {
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public Specimen[] breed(Specimen[] parent) {
-            Specimen[] children;
-            
-            if(parent.length == 0) throw new IllegalArgumentException("No parents received");
-            children = new Specimen[parent.length];
-            
-            if(parent.length == 1) {
-                children[0] = parent[0].copy();
-                return children;
-            }
-            Random random = new Random();
-            int geneCount = parent[0].getGenes().getGeneCount();
-            int[] crossOverPoints = new int[parent.length - 1];
-            for (int i = 0; i < crossOverPoints.length; i++) {
-                crossOverPoints[i] = random.nextInt(geneCount);
-            }
-            Arrays.sort(crossOverPoints);
-            
-            for(int i = 0; i < children.length; i++) {
-                Genotype genes = parent[i].getGenes().copy();
-                int parentId = i;
-                for(int g = 0; g < geneCount; g++) {
-                    if(g < crossOverPoints.length) {
-                        if (g == crossOverPoints[parentId]) {
-                            parentId++;
-                        }
-                    }
-                    if(parentId >= parent.length) parentId -= parent.length;
-                    if(parentId != i) genes.setGene(g, parent[parentId].getGenes().getGene(g));
-                }
-                children[i] = new Specimen(genes);
-            }
-            return children;
-        }
-
-    }
-
-    /**
-     * 
-     */
-    static private class ExtrapolatedBreeding implements Breeding {
-
-        @Override
-        public Specimen[] breed(Specimen[] parent) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-    }
-    
-    static private class NoMutation implements Mutation {
-
-        @Override
-        public Genotype mutate(Genotype genes) {
-            return genes;
-        }
-    }
-    //</editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters & Setters">
     /**

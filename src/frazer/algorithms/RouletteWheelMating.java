@@ -14,14 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package frazer.interfaces;
+package frazer.algorithms;
 
-import frazer.genotypes.Genotype;
+import frazer.Population;
+import frazer.Specimen;
+import frazer.interfaces.Mating;
 
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public interface Mutation {
-    Genotype mutate(Genotype genes);
+public class RouletteWheelMating implements Mating {
+    
+    float[] roulette;
+
+    @Override
+    public boolean needsSorting() {
+        return true;
+    }
+
+    @Override
+    public void initialize() {
+    }
+
+    @Override
+    public Specimen[] selectParents(Population population) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
 }

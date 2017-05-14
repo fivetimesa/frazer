@@ -14,14 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package frazer.interfaces;
+package frazer.algorithms;
 
 import frazer.genotypes.Genotype;
+import frazer.interfaces.Mutation;
 
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public interface Mutation {
-    Genotype mutate(Genotype genes);
+public class NoMutation implements Mutation {
+    
+    @Override
+    public Genotype mutate(Genotype genes) {
+        return genes;
+    }
+    
 }
+//</editor-fold>

@@ -14,14 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package frazer.interfaces;
+package frazer.algorithms;
 
-import frazer.genotypes.Genotype;
+import frazer.Specimen;
+import frazer.interfaces.Preselection;
 
-/**
- *
- * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
- */
-public interface Mutation {
-    Genotype mutate(Genotype genes);
+//<editor-fold desc="Static private classes" defaultstate="collapsed">
+
+/* STATIC PRIVATE CLASSES */
+public class NoPreselection implements Preselection {
+
+    @Override
+    public Specimen[] selectElite(Specimen[] specimen) {
+        return new Specimen[0];
+    }
+
+    @Override
+    public Specimen[] discardWorst(Specimen[] specimen) {
+        return specimen;
+    }
+    
 }

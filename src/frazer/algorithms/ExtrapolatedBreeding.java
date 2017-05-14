@@ -14,14 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package frazer.interfaces;
+package frazer.algorithms;
 
-import frazer.genotypes.Genotype;
+import frazer.Specimen;
+import frazer.interfaces.Breeding;
 
 /**
  *
- * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public interface Mutation {
-    Genotype mutate(Genotype genes);
+public class ExtrapolatedBreeding implements Breeding {
+
+    @Override
+    public Specimen[] breed(Specimen[] parent) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
 }

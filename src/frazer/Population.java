@@ -29,6 +29,7 @@ public class Population {
     private boolean evaluated = false;
     private float maxScore;
     private float minScore;
+    private double scoreSum;
     private Specimen minSpecimen;
     private Specimen maxSpecimen;
     
@@ -66,6 +67,7 @@ public class Population {
 // </editor-fold>
     
     public void evaluate(Fitness fitness) {
+        scoreSum = 0;
         maxScore = Float.MIN_VALUE;
         minScore = Float.MAX_VALUE;
         if(!evaluated) {
@@ -79,6 +81,7 @@ public class Population {
                     maxScore = score;
                     maxSpecimen = specimens[i];
                 }
+                scoreSum += score;
             }
             evaluated = true;
         }
@@ -115,8 +118,31 @@ public class Population {
         
     }
 
+//<editor-fold defaultstate="collapsed" desc="Getters & Setters">
     public Specimen[] getSpecimens() {
         return specimens;
     }
+    
+    public Specimen getMinSpecimen() {
+        return minSpecimen;
+    }
+    
+    public Specimen getMaxSpecimen() {
+        return maxSpecimen;
+    }
+    
+    public float getMaxScore() {
+        return maxScore;
+    }
+    
+    public float getMinScore() {
+        return minScore;
+    }
+    
+    public double getScoreSum() {
+        return scoreSum;
+    }
+//</editor-fold>
 
+    
 }
