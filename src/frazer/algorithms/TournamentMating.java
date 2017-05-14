@@ -76,7 +76,7 @@ public class TournamentMating implements Mating {
             System.out.print("First candidate score: " + candidateScore + "\n");
             for (int j = 1; j < candidateCount; j++) {
                 Specimen newCandidate = specimens[random.nextInt(specimens.length)];
-                float newCandidateScore = candidate.getFitnessScore();
+                float newCandidateScore = newCandidate.getFitnessScore();
                 System.out.print("Next candidate score: " + newCandidateScore + "\n");
                 if ((goal == Goal.MINIMISE && newCandidateScore < candidateScore) || (goal == Goal.MAXIMISE && newCandidateScore < candidateScore)) {
                     candidate = newCandidate;

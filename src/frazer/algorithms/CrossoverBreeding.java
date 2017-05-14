@@ -43,7 +43,9 @@ public class CrossoverBreeding implements Breeding {
         }
         System.out.print("Choosing crossover points… \n");
         Random random = new Random();
-        System.out.print("Random ready. \n");
+        if(parent[0] != null) System.out.print("Parent is not null. \n");
+        if(parent[0].getGenes() != null) System.out.print("Genes are not null. \n");
+        System.out.print("Genotype length = " + parent[0].getGenes().getGeneCount());
         int geneCount = parent[0].getGenes().getGeneCount();
         System.out.print("Gene count = " + geneCount + " \n");
         int[] crossOverPoints = new int[parent.length - 1];

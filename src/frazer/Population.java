@@ -166,6 +166,10 @@ public class Population {
     public double getScoreSum() {
         return scoreSum;
     }
+    
+    public int getCount() {
+        return count;
+    }
 //</editor-fold>
 
     
