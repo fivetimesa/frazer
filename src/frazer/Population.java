@@ -53,6 +53,7 @@ public class Population {
         for (int i = 0; i < populationCount; i++) {
             specimens[i] = new Specimen(geneCount, geneType);
         }
+        System.out.print("New population created with " + count + " random specimen. \n");
     }
 
     /**
@@ -63,7 +64,10 @@ public class Population {
         this.specimens = specimens;
         this.count = specimens.length;
         
-        if(count == 0) throw new IllegalArgumentException("Specimens array cannot be empty.");
+        if(count == 0) {
+            System.out.print("Specimens array cannot be empty. \n");
+            throw new IllegalArgumentException("Specimens array cannot be empty. \n");
+        }
     }
 
 // </editor-fold>
@@ -74,6 +78,7 @@ public class Population {
         minScore = Float.MAX_VALUE;
         if(!evaluated) {
             for (int i = 0; i < count; i++) {
+                System.out.print("Evaluating specimen #" + i + "\n");
                 float score = specimens[i].evaluateFitness(fitness);
                 if(score < minScore) {
                     minScore = score;
@@ -92,27 +97,38 @@ public class Population {
     public Population nextGeneration(Preselection preselection, Fitness fitness, Mating mating, Breeding breeding, Mutation mutation) throws Exception {
         ArrayList<Specimen> newSpecimens = new ArrayList<>();
         
+        System.out.print("Evaluating… \n");
         evaluate(fitness);
+        System.out.print("Specimen evaluation done. \n");
         
         if(mating.needsSorting() || preselection.needsSorting()) {
             Arrays.sort(specimens);
+            System.out.print("Specimen array sorted \n");
         }
         
         Specimen[] elite = preselection.selectElite(specimens);
         newSpecimens.addAll(Arrays.asList(elite));
         
         specimens = preselection.discardWorst(specimens);
+        System.out.print("Preselection done. \n");
         
+        System.out.print("Mating & breeding… \n");
         while(newSpecimens.size() < count) {
             Specimen[] parents = mating.selectParents(this);
+            System.out.print("Parents ready. \n");
             Specimen[] children = breeding.breed(parents);
+            System.out.print("Children ready. \n");
             newSpecimens.addAll(Arrays.asList(children));
+            System.out.print("Children added to new generation. \n");
         }
         
+        System.out.print("Created " + newSpecimens.size() + " new specimens. \n");
+        System.out.print("Mutating… \n");
         newSpecimens.forEach((newSpecimen) -> {
             newSpecimen.mutate(mutation);
         });
         
+        System.out.print("New generation ready. \n");
         return new Population((Specimen[]) newSpecimens.toArray());
     }
     

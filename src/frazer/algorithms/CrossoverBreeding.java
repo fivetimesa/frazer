@@ -30,22 +30,32 @@ public class CrossoverBreeding implements Breeding {
     @Override
     @SuppressWarnings(value = "unchecked")
     public Specimen[] breed(Specimen[] parent) {
+        
+        System.out.print("Breeding children… \n");
+        System.out.print("Received " + parent.length + " parents. \n");
         Specimen[] children;
-        if (parent.length == 0)
+        if (parent.length == 0) 
             throw new IllegalArgumentException("No parents received");
         children = new Specimen[parent.length];
         if (parent.length == 1) {
             children[0] = parent[0].copy();
             return children;
         }
+        System.out.print("Choosing crossover points… \n");
         Random random = new Random();
+        System.out.print("Random ready. \n");
         int geneCount = parent[0].getGenes().getGeneCount();
+        System.out.print("Gene count = " + geneCount + " \n");
         int[] crossOverPoints = new int[parent.length - 1];
         for (int i = 0; i < crossOverPoints.length; i++) {
             crossOverPoints[i] = random.nextInt(geneCount);
+            System.out.print("Crossover point #i = " + crossOverPoints[i] + " \n");
         }
+        System.out.print("Sorting crossover points… \n");
         Arrays.sort(crossOverPoints);
+        System.out.print("Crossover points chosen. \n");
         for (int i = 0; i < children.length; i++) {
+            System.out.print("Making child #" + i + "… \n");
             Genotype genes = parent[i].getGenes().copy();
             int parentId = i;
             for (int g = 0; g < geneCount; g++) {
@@ -60,6 +70,7 @@ public class CrossoverBreeding implements Breeding {
                     genes.setGene(g, parent[parentId].getGenes().getGene(g));
             }
             children[i] = new Specimen(genes);
+            System.out.print("Child #" + i + "ready. \n");
         }
         return children;
     }

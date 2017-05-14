@@ -15,12 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package frazer.genotypes;
+import java.util.Iterator;
 
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
+ * @param <T>
  */
-public class Genotype<T> {
+public class Genotype<T> implements Iterable {
 
     T[] genes;
 
@@ -55,5 +57,30 @@ public class Genotype<T> {
     
     public int getGeneCount() {
         return genes.length;
+    }
+
+    @Override
+    public Iterator iterator() {
+        return new GeneIterator<T>();
+    }
+    
+    private class GeneIterator <T> implements Iterator<T> {
+        int cursor;
+        
+        public GeneIterator() {
+            cursor = 0;
+        }
+        @Override
+        public boolean hasNext() {
+            if(cursor < genes.length)
+                return true;
+            else return false;
+        }
+
+        @Override
+        public T next() {
+            cursor++;
+            return (T) genes[cursor-1];
+        }
     }
 }

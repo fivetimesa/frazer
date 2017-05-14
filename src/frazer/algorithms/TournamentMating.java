@@ -63,21 +63,28 @@ public class TournamentMating implements Mating {
 
     @Override
     public Specimen[] selectParents(Population population) {
+        System.out.print("Preparing " + parentsCount + " parents… \n");
         Specimen[] specimens = population.getSpecimens();
         Specimen[] parents = new Specimen[parentsCount];
         Random random = new Random();
+        
+        System.out.print("Population loaded.\n");
         for (int i = 0; i < parentsCount; i++) {
+            System.out.print("Chosing parent #" + i + "… \n");
             Specimen candidate = specimens[random.nextInt(specimens.length)];
             float candidateScore = candidate.getFitnessScore();
+            System.out.print("First candidate score: " + candidateScore + "\n");
             for (int j = 1; j < candidateCount; j++) {
                 Specimen newCandidate = specimens[random.nextInt(specimens.length)];
                 float newCandidateScore = candidate.getFitnessScore();
+                System.out.print("Next candidate score: " + newCandidateScore + "\n");
                 if ((goal == Goal.MINIMISE && newCandidateScore < candidateScore) || (goal == Goal.MAXIMISE && newCandidateScore < candidateScore)) {
                     candidate = newCandidate;
                     candidateScore = newCandidateScore;
                 }
             }
             parents[i] = candidate;
+            System.out.print("Parent #" + i + " chosen. \n");
         }
         return parents;
     }
