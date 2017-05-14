@@ -171,9 +171,6 @@ public class Population {
         return scoreSum;
     }
     
-    public int getCount() {
-        return count;
-    }
 //</editor-fold>
 
     
