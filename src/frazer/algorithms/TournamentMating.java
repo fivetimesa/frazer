@@ -16,7 +16,7 @@
  */
 package frazer.algorithms;
 
-import frazer.Goal;
+import frazer.constants.Goal;
 import frazer.Population;
 import frazer.Specimen;
 import frazer.interfaces.Mating;

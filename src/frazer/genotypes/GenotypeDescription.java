@@ -16,42 +16,41 @@
  */
 package frazer.genotypes;
 
+import frazer.constants.GenotypeType;
+
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 public class GenotypeDescription {
-    final static byte BITGENOTYPE = 1;
-    final static byte FLOATGENOTYPE = 0;
-    final static byte SFLOATGENOTYPE = 2;
-
-    byte geneType;
+    GenotypeType genotypeType;
+    
     int geneCount;
     float max, min;
     float[] maxs, mins;
     
-    GenotypeDescription(int geneCount, byte geneType) 
+    public GenotypeDescription(int geneCount, GenotypeType geneType) 
     {
+        this.genotypeType = geneType;
         this.geneCount = geneCount;
-        this.geneType = geneType;
     }
     
-    GenotypeDescription(int geneCount, byte geneType, int min, int max)
+    public GenotypeDescription(int geneCount, GenotypeType geneType, int min, int max)
     {
         this(geneCount, geneType);
         this.min = min;
         this.max = max;
     }
     
-    GenotypeDescription(int geneCount, byte geneType, float[] minGeneLimits, float[] maxGeneLimits)
+    public GenotypeDescription(int geneCount, GenotypeType geneType, float[] minGeneLimits, float[] maxGeneLimits)
     {
         this(geneCount, geneType);
         this.mins = minGeneLimits;
         this.maxs = maxGeneLimits;
     }
 
-    public byte getGeneType() {
-        return geneType;
+    public GenotypeType getGenotypeType() {
+        return genotypeType;
     }
 
     public int getGeneCount() {

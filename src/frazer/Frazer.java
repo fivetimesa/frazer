@@ -17,6 +17,7 @@
 
 
 package frazer;
+import frazer.constants.*;
 import frazer.algorithms.*;
 import frazer.genotypes.*;
 import frazer.interfaces.*;
