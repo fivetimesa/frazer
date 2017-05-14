@@ -26,7 +26,7 @@ import java.util.Random;
 public class IntegerGenotype extends Genotype<Integer> {
     
     public IntegerGenotype(int count) {
-        super(count);
+        super(Integer.class, count);
     }
 
     public void randomInit(int min, int max) {

@@ -28,15 +28,28 @@ public class Genotype<T> implements Iterable {
 
     T[] genes;
 
-    public Genotype(int count) {
-        genes = (T[]) Array.newInstance(genes.getClass().getComponentType(), count);
+    public Genotype(Class<T> c, int count) {
+        @SuppressWarnings("unchecked")
+        final T[] genericGenes = (T[]) Array.newInstance(c, count);
+        this.genes = genericGenes;
     }
     
     public Genotype copy() {
-        Genotype<T> copy = new Genotype<>(genes.length);
+        Class c;
+        c = genes.getClass().getComponentType();
+        Genotype<T> copy = new Genotype<T>(c, genes.length);
+        
         for(int i = 0; i < genes.length; i++)
+        {
             copy.setGene(i, getGene(i));
+        }    
         return copy;
+//            copy.setGene(i, getGene(i));
+        
+//        Genotype<T> copy = new Genotype<>(genes.length);
+//        for(int i = 0; i < genes.length; i++)
+//            copy.setGene(i, getGene(i));
+//        return copy;
     }
 
     public void randomInit() {

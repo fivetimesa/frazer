@@ -26,10 +26,22 @@ import java.util.Arrays;
 public class FloatGenotype extends Genotype<Float> {
     
     public FloatGenotype(int count) {
-        super(count);
+        super(Float.class, count);
         this.randomInit();
     }
 
+    @Override
+    public Genotype copy() {
+        FloatGenotype copy = new FloatGenotype(genes.length);        
+        for(int i = 0; i < genes.length; i++)
+        {
+            copy.setGene(i, getGene(i));
+        }    
+        return copy;
+    }
+
+    
+    
     @Override
     public void randomInit() {
     	Random generator = new Random();

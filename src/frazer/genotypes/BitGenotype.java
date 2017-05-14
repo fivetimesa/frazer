@@ -26,7 +26,7 @@ import java.util.Random;
 public class BitGenotype extends Genotype<Boolean> {
 
     public BitGenotype(int count) {
-        super(count);
+        super(Boolean.class, count);
         this.randomInit();
     }
 
