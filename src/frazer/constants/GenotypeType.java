@@ -3,12 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package frazer;
+package frazer.constants;
 
-/**
- *
- * @author Teodor Michalski
- */
-public enum Goal {
-    MINIMISE, MAXIMISE
+public enum GenotypeType {
+    BIT, FLOAT, SFLOAT, INTEGER    
 }

@@ -15,10 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package frazer;
+import frazer.constants.*;
+import frazer.genotypes.*;
 import frazer.interfaces.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import frazer.genotypes.*;
 
 /**
  *
