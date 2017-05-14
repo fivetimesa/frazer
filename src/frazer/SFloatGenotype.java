@@ -35,7 +35,7 @@ public class SFloatGenotype extends FloatGenotype {
     @Override
     public void randomInit() {
         Random generator = new Random();
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < genes.length; i++) {
             genes[i] = generator.nextFloat();
             steps[i] = generator.nextFloat();
         }
@@ -43,10 +43,19 @@ public class SFloatGenotype extends FloatGenotype {
 
     public void randomInit(float min, float max) {
         Random generator = new Random();
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < genes.length; i++) {
             genes[i] = min + generator.nextFloat() * (max - min);
             steps[i] = generator.nextFloat();
         }
+    }
+
+    @Override
+    public Genotype copy() {
+        Genotype<Float> copy = super.copy();
+        for (int i = 0; i < genes.length; i++) {
+            ((SFloatGenotype) copy).steps[i] = steps[i];
+        }
+        return copy; //To change body of generated methods, choose Tools | Templates.
     }
 
     public Float getStep(int i) {
@@ -56,6 +65,29 @@ public class SFloatGenotype extends FloatGenotype {
     public void setStep(int i, float step) {
         this.steps[i] = step;
     }
-    
+
+    /**
+     * Creates "[ [x_1,s_1], [x_2,s_2] ... [x_n,s_n] ]" type text
+     * representation.
+     *
+     * @return String
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[ ");
+        int n = genes.length;
+        for (int i = 0; i < n; i++) {
+            sb.append("[");
+            sb.append(genes[i]);
+            sb.append(",");
+            sb.append(genes[i]);
+            sb.append("]");
+            if (i < n - 1)
+                sb.append(", ");
+        }
+        sb.append(" ]");
+        return sb.toString(); //To change body of generated methods, choose Tools | Templates.
+    }
 
 }

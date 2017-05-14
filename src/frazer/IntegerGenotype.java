@@ -16,44 +16,32 @@
  */
 package frazer;
 
+import java.util.Arrays;
+import java.util.Random;
+
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public class Genotype<T> {
+public class IntegerGenotype extends Genotype<Integer> {
 
-    T[] genes;
+    protected int[] genes;
 
-    public Genotype(int count) {
-    }
-    
-    public Genotype copy() {
-        Genotype<T> copy = new Genotype<>(genes.length);
-        for(int i = 0; i < genes.length; i++)
-            copy.setGene(i, getGene(i));
-        return copy;
+    public IntegerGenotype(int count) {
+        super(count);
+        genes = new int[count];
     }
 
-    public void randomInit() {
+    public void randomInit(int min, int max) {
+        Random generator = new Random();
+        for (int i = 0; i < genes.length; i++) {
+            genes[i] = min + generator.nextInt() * (max - min);
+        }
     }
 
-    public T getGene(int i) {
-        rangeCheck(i);
-        return genes[i];
-    }
-    
-    public void setGene(int i, T value) {
-        rangeCheck(i);
-        genes[i] = value;
+    @Override
+    public String toString() {
+        return Arrays.toString(this.genes);
     }
 
-    protected void rangeCheck(int i) {
-        if (i < 0 || i > genes.length - 1)
-            throw new IndexOutOfBoundsException(
-                    "Genes index: " + i + ", Size: " + genes.length);
-    }
-    
-    public int getGeneCount() {
-        return genes.length;
-    }
 }

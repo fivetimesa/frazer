@@ -39,7 +39,7 @@ public class BitGenotype extends Genotype<Boolean> {
     @Override
     public void randomInit() {
         Random r = new Random();
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < genes.length; i++) {
             genes[i] = r.nextBoolean();
         }
     }
@@ -61,12 +61,12 @@ public class BitGenotype extends Genotype<Boolean> {
     
     /**
      * Creates "00101011110" type text representation.
-     * @return a String of <code>count</code> size 
+     * @return a String of genotype length 
      */
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(count + 2);
-        for (int i = 0; i < count; i++) {
+        StringBuilder sb = new StringBuilder(genes.length + 2);
+        for (int i = 0; i < genes.length; i++) {
             if (genes[i])
                 sb.append('1');
             else

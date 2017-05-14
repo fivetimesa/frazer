@@ -36,7 +36,7 @@ public class FloatGenotype extends Genotype<Float> {
     @Override
     public void randomInit() {
     	Random generator = new Random();
-    	for(int i = 0; i < count; i++)
+    	for(int i = 0; i < genes.length; i++)
     		genes[i] = generator.nextFloat();
     }
 
@@ -47,7 +47,7 @@ public class FloatGenotype extends Genotype<Float> {
      */
     public void randomInit(float min, float max) {
     	Random generator = new Random();
-    	for(int i = 0; i < count; i++)
+    	for(int i = 0; i < genes.length; i++)
     		genes[i] = min + generator.nextFloat() * (max - min);
     }
 
