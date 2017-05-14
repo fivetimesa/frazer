@@ -138,6 +138,10 @@ public class Population {
             return maxSpecimen;
         else return minSpecimen;
     }
+
+    public int getCount() {
+        return count;
+    }
     
     public float getMaxScore() {
         return maxScore;
