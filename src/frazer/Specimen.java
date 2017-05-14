@@ -176,4 +176,14 @@ public class Specimen implements Comparable<Specimen> {
 
 // </editor-fold>
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("fitnessScore");
+        sb.append("fitnessScore");
+        
+        return sb.toString(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
 }
