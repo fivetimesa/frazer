@@ -24,12 +24,9 @@ import java.util.Arrays;
  */
 
 public class FloatGenotype extends Genotype<Float> {
-
-    protected float[] genes;
-
+    
     public FloatGenotype(int count) {
         super(count);
-        genes = new float[count];
         this.randomInit();
     }
 
@@ -62,7 +59,7 @@ public class FloatGenotype extends Genotype<Float> {
     	genes[i] = v;
     }
 
-    public float[] getGenes() {
+    public Float[] getGenes() {
     	return Arrays.copyOf(genes, genes.length);
     }
     

@@ -16,6 +16,8 @@
  */
 package frazer.genotypes;
 
+import java.lang.reflect.Array;
+
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
@@ -25,6 +27,7 @@ public class Genotype<T> {
     T[] genes;
 
     public Genotype(int count) {
+        genes = (T[]) Array.newInstance(genes.getClass().getComponentType(), count);
     }
     
     public Genotype copy() {

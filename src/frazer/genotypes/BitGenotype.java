@@ -25,11 +25,8 @@ import java.util.Random;
  */
 public class BitGenotype extends Genotype<Boolean> {
 
-    boolean[] genes;
-
     public BitGenotype(int count) {
         super(count);
-        genes = new boolean[count];
         this.randomInit();
     }
 
@@ -55,7 +52,7 @@ public class BitGenotype extends Genotype<Boolean> {
         return genes[i];
     }
 
-    public boolean[] getGenes() {
+    public Boolean[] getGenes() {
         return Arrays.copyOf(genes, genes.length);
     }
     

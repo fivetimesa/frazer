@@ -24,12 +24,9 @@ import java.util.Random;
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 public class IntegerGenotype extends Genotype<Integer> {
-
-    protected int[] genes;
-
+    
     public IntegerGenotype(int count) {
         super(count);
-        genes = new int[count];
     }
 
     public void randomInit(int min, int max) {
