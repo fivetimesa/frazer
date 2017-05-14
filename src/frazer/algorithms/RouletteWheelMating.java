@@ -18,15 +18,25 @@ package frazer.algorithms;
 
 import frazer.Population;
 import frazer.Specimen;
+import frazer.constants.Goal;
 import frazer.interfaces.Mating;
+import java.util.Arrays;
+import java.util.Random;
 
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 public class RouletteWheelMating implements Mating {
-    
-    float[] roulette;
+
+    double[] roulette;
+    private Goal goal;
+    private int parentsCount;
+
+    public RouletteWheelMating(Goal goal) {
+        this.parentsCount = 2;
+        this.goal = goal;
+    }
 
     @Override
     public boolean needsSorting() {
@@ -35,11 +45,56 @@ public class RouletteWheelMating implements Mating {
 
     @Override
     public void initialize(Population population) {
+        int n = population.getCount();
+        Specimen[] specimens = population.getSpecimens();
+        roulette = new double[n];
+
+        if (goal == Goal.MAXIMISE) {
+            double len = 0;
+            for (int i = 0; i < n; i++) {
+                len += specimens[i].getFitnessScore();
+                roulette[i] = len;
+            }
+        }
+
+        if (goal == Goal.MINIMISE) {
+            double len = 0;
+            double rangeValue
+                    = specimens[0].getFitnessScore() + specimens[n - 1].getFitnessScore();
+            for (int i = 0; i < n; i++) {
+                len += (rangeValue - specimens[i].getFitnessScore());
+                roulette[i] = len;
+            }
+        }
     }
 
     @Override
     public Specimen[] selectParents(Population population) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Specimen[] specimens = population.getSpecimens();
+        Specimen[] parents = new Specimen[parentsCount];
+        Random random = new Random();
+        for (int i = 0; i < parentsCount; i++) {
+            double r = random.nextDouble();
+            int index = Arrays.binarySearch(roulette, r);
+            int insertionIndex;
+            if (index < 0)
+                insertionIndex = ((-index) - 1);
+            else
+                insertionIndex = index;
+            if(index == specimens.length)
+                index--;
+            parents[i] = specimens[i];
+        }
+
+        return parents;
     }
-    
+
+    public int getParentsCount() {
+        return parentsCount;
+    }
+
+    public void setParentsCount(int parentsCount) {
+        this.parentsCount = parentsCount;
+    }
+
 }
