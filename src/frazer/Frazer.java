@@ -84,7 +84,9 @@ public class Frazer {
         preselection = new NoPreselection();
         mating = new TournamentMating(goal);
         breeding = new CrossoverBreeding();
-        mutation = new NoMutation();
+        if(gD.getGenotypeType() == GenotypeType.FLOAT)
+            mutation = new SimpleFloatMutation();
+        else mutation = new NoMutation();
     }
     
     public Specimen evolve(int maxGenerations) {

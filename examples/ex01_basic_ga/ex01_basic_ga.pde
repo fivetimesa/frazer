@@ -4,30 +4,33 @@ Frazer frazer;
 Specimen best;
 
 int geneCount = 20;
-int populationCount = 100;
+int populationCount = 1000;
 String goal = "It seems to be working!";
 
 void setup()
 {
+  size(500, 200);
+  textAlign(CENTER);
   geneCount = goal.length();
   frazer = new Frazer(this, populationCount, geneCount, GenotypeType.FLOAT, new MyFitness());
 }
 
 void draw() {
+  background(0);
   Specimen best = frazer.evolve(1);
-  println(geontypeToString(best.getGenes()));
+  text(geontypeToString(best.getGenes()), width/2, height/2);
 }
 
 
 class MyFitness implements Fitness {
   float calculateFitness(Genotype genes) {
-    float difference = random(1);
-    /*
+    float difference = 0;
+    
     for(int i = 0; i < geneCount; i++) {
       char currentChar = geneToChar((float)genes.getGene(i));
       char goalChar = goal.charAt(i);
       difference += abs(int(goalChar) - int(currentChar));
-    }*/
+    }
     return difference;
   }
 }
