@@ -61,12 +61,12 @@ public class Frazer {
         setDefaults();
     }
     
-    public Frazer(PApplet parent, int populationCount, int genotypeCount, byte genotypeType, Fitness fitness)
+    public Frazer(PApplet parent, int populationCount, int geneCount, byte genotypeType, Fitness fitness)
     {
         this.parent = parent;
         populationList = new ArrayList<>();
         
-        currentPopulation = new Population(populationCount, genotypeCount, genotypeType);
+        currentPopulation = new Population(populationCount, geneCount, genotypeType);
         populationList.add(currentPopulation);
         this.fitness = fitness;
         
