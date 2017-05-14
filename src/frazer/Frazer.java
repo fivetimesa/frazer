@@ -79,6 +79,7 @@ public class Frazer {
     }
     
     private void setDefaults() {
+        goal = Goal.MINIMISE;
         preselection = new NoPreselection();
         mating = new TournamentMating(goal);
         breeding = new CrossoverBreeding();
