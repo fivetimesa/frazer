@@ -31,8 +31,8 @@ public class CrossoverBreeding implements Breeding {
     @SuppressWarnings(value = "unchecked")
     public Specimen[] breed(Specimen[] parent) {
         
-        System.out.print("Breeding children… \n");
-        System.out.print("Received " + parent.length + " parents. \n");
+        //System.out.print("Breeding children… \n");
+        //System.out.print("Received " + parent.length + " parents. \n");
         Specimen[] children;
         if (parent.length == 0) 
             throw new IllegalArgumentException("No parents received");
@@ -41,38 +41,43 @@ public class CrossoverBreeding implements Breeding {
             children[0] = parent[0].copy();
             return children;
         }
-        System.out.print("Choosing crossover points… \n");
+        //System.out.print("Choosing crossover points… \n");
         Random random = new Random();
-        if(parent[0] != null) System.out.print("Parent is not null. \n");
-        if(parent[0].getGenes() != null) System.out.print("Genes are not null. \n");
-        System.out.print("Genotype length = " + parent[0].getGenes().getGeneCount());
+        //if(parent[0] != null) //System.out.print("Parent is not null. \n");
+        //if(parent[0].getGenes() != null) //System.out.print("Genes are not null. \n");
+        //System.out.print("Genotype length = " + parent[0].getGenes().getGeneCount());
         int geneCount = parent[0].getGenes().getGeneCount();
-        System.out.print("Gene count = " + geneCount + " \n");
+        //System.out.print("Gene count = " + geneCount + " \n");
         int[] crossOverPoints = new int[parent.length - 1];
         for (int i = 0; i < crossOverPoints.length; i++) {
             crossOverPoints[i] = random.nextInt(geneCount);
-            System.out.print("Crossover point #i = " + crossOverPoints[i] + " \n");
+            //System.out.print("Crossover point #" + i + " = " + crossOverPoints[i] + " \n");
         }
-        System.out.print("Sorting crossover points… \n");
+        //System.out.print("Sorting crossover points… \n");
         Arrays.sort(crossOverPoints);
-        System.out.print("Crossover points chosen. \n");
+        //System.out.print("Crossover points chosen. \n");
         for (int i = 0; i < children.length; i++) {
-            System.out.print("Making child #" + i + "… \n");
+            //System.out.print("Making child #" + i + "… \n");
             Genotype genes = parent[i].getGenes().copy();
             int parentId = i;
+            int crossOver = 0;
             for (int g = 0; g < geneCount; g++) {
-                if (g < crossOverPoints.length) {
-                    if (g == crossOverPoints[parentId]) {
+                if (crossOver < crossOverPoints.length) {
+                    if (g == crossOverPoints[crossOver]) {
+                        //System.out.print("c");
                         parentId++;
+                        crossOver++;
                     }
                 }
+                
                 if (parentId >= parent.length)
                     parentId -= parent.length;
                 if (parentId != i)
                     genes.setGene(g, parent[parentId].getGenes().getGene(g));
+                //System.out.print(parentId + "|");
             }
             children[i] = new Specimen(genes);
-            System.out.print("Child #" + i + "ready. \n");
+            //System.out.print("\nChild #" + i + " ready. \n");
         }
         return children;
     }
