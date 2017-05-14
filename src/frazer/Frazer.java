@@ -41,7 +41,6 @@ public class Frazer {
     private ArrayList<Population> populationList;
     private Population currentPopulation;
     private GenotypeDescription gD;
-    private GenotypeType genotypeType;
     
     private int generationCount;
     
@@ -71,6 +70,7 @@ public class Frazer {
         this.parent = parent;
         populationList = new ArrayList<>();
         
+        this.gD = new GenotypeDescription(geneCount, genotypeType);
         currentPopulation = new Population(populationCount, geneCount, genotypeType);
         populationList.add(currentPopulation);
         this.fitness = fitness;
