@@ -132,6 +132,12 @@ public class Population {
         return maxSpecimen;
     }
     
+    public Specimen getBestSpecimen(Goal goal) {
+        if(goal == Goal.MAXIMISE)
+            return maxSpecimen;
+        else return minSpecimen;
+    }
+    
     public float getMaxScore() {
         return maxScore;
     }

@@ -44,7 +44,7 @@ public class Frazer {
     
     private int generationCount;
     
-    private byte minimise = 1;
+    private Goal goal;
     private int populationCount;
     
     private Preselection preselection;
@@ -80,15 +80,16 @@ public class Frazer {
     
     private void setDefaults() {
         preselection = new NoPreselection();
-        mating = new TournamentMating(minimise == 1);
+        mating = new TournamentMating(goal);
         breeding = new CrossoverBreeding();
         mutation = new NoMutation();
     }
     
-    public void evolve(int maxGenerations) throws Exception {
+    public Specimen evolve(int maxGenerations) throws Exception {
         for (int i = 0; i < maxGenerations; i++) {
             currentPopulation = currentPopulation.nextGeneration(preselection, fitness, mating, breeding, mutation);
         }
+        return currentPopulation.getBestSpecimen(goal);
     }
     
     // <editor-fold defaultstate="collapsed" desc="Getters & Setters">
