@@ -26,6 +26,16 @@ import java.util.Random;
  *
  */
 public class CrossoverBreeding implements Breeding {
+    
+    private int crossoverPointsCount;
+    
+    public CrossoverBreeding() {
+        this.crossoverPointsCount = -1;
+    }
+
+    public CrossoverBreeding(int crossoverPointsCount) {
+        this.crossoverPointsCount = crossoverPointsCount;
+    }
 
     @Override
     @SuppressWarnings(value = "unchecked")
@@ -48,7 +58,8 @@ public class CrossoverBreeding implements Breeding {
         //System.out.print("Genotype length = " + parent[0].getGenes().getGeneCount());
         int geneCount = parent[0].getGenes().getGeneCount();
         //System.out.print("Gene count = " + geneCount + " \n");
-        int[] crossOverPoints = new int[parent.length - 1];
+        if(crossoverPointsCount == -1) crossoverPointsCount = parent.length - 1;
+        int[] crossOverPoints = new int[crossoverPointsCount];
         for (int i = 0; i < crossOverPoints.length; i++) {
             crossOverPoints[i] = random.nextInt(geneCount);
             //System.out.print("Crossover point #" + i + " = " + crossOverPoints[i] + " \n");
@@ -80,6 +91,20 @@ public class CrossoverBreeding implements Breeding {
             //System.out.print("\nChild #" + i + " ready. \n");
         }
         return children;
+    }
+
+    /**
+     * @return the crossoverPointsCount
+     */
+    public int getCrossoverPointsCount() {
+        return crossoverPointsCount;
+    }
+
+    /**
+     * @param crossoverPointsCount the crossoverPointsCount to set
+     */
+    public void setCrossoverPointsCount(int crossoverPointsCount) {
+        this.crossoverPointsCount = crossoverPointsCount;
     }
     
 }
