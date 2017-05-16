@@ -16,69 +16,110 @@
  */
 package frazer.genotypes;
 
-import frazer.constants.GenotypeType;
+import frazer.constants.*;
 
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 public class GenotypeDescription {
-    GenotypeType genotypeType;
-    
-    int geneCount;
-    float max, min;
-    float[] maxs, mins;
-    
-    public GenotypeDescription(int geneCount, GenotypeType geneType) 
-    {
-        this.genotypeType = geneType;
-        this.geneCount = geneCount;
-    }
-    
-    public GenotypeDescription(int geneCount, GenotypeType geneType, int min, int max)
-    {
-        this(geneCount, geneType);
-        this.min = min;
-        this.max = max;
-    }
-    
-    public GenotypeDescription(int geneCount, GenotypeType geneType, float[] minGeneLimits, float[] maxGeneLimits)
-    {
-        this(geneCount, geneType);
-        this.mins = minGeneLimits;
-        this.maxs = maxGeneLimits;
-    }
 
-    public GenotypeType getGenotypeType() {
-        return genotypeType;
-    }
+   private GenotypeType genotypeType;
+   private MutationType mutationType;
+   private MutationValue mutationValue;
+   float mutationScale;
+   float mutationScales[];
 
-    public int getGeneCount() {
-        return geneCount;
-    }
-    
-    public float getMax()
-    {
-        return max;
-    }
-            
-    public float getMax(int i)
-    {
-        return maxs[i];
-    }
-    public float getMin()
-    {
-        return min;
-    }
-            
-    public float getMin(int i)
-    {
-        return mins[i];
-    }
-    
-    private void rangeCheck(int i) {
-        if (i < 0 || i > geneCount - 1)
-            throw new IndexOutOfBoundsException(
-                    "GenotypeDescription index: " + i + ", Size: " + geneCount);
-    }
+   int geneCount;
+   float max, min;
+   float[] maxs, mins;
+
+   public GenotypeDescription(int geneCount, GenotypeType geneType) {
+      this.genotypeType = geneType;
+      this.geneCount = geneCount;
+      this.mutationValue = mutationValue.PERCENTAGE;
+
+      if (geneType == geneType.BIT) {
+         mutationType = MutationType.BIT;
+      }
+      if (geneType == geneType.BIT) {
+         mutationType = MutationType.CONSTANTVALUE;
+         mutationScale = 0.01f;
+      }
+   }
+
+   public GenotypeDescription(int geneCount, GenotypeType geneType, int min, int max) {
+      this(geneCount, geneType);
+      this.min = min;
+      this.max = max;
+   }
+
+   public GenotypeDescription(int geneCount, GenotypeType geneType, float[] minGeneLimits, float[] maxGeneLimits) {
+      this(geneCount, geneType);
+      this.mins = minGeneLimits;
+      this.maxs = maxGeneLimits;
+   }
+
+   public GenotypeType getGenotypeType() {
+      return genotypeType;
+   }
+
+   public int getGeneCount() {
+      return geneCount;
+   }
+
+   public float getMax() {
+      return max;
+   }
+
+   public float getMax(int i) {
+      return maxs[i];
+   }
+
+   public float getMin() {
+      return min;
+   }
+
+   public float getMin(int i) {
+      return mins[i];
+   }
+
+   public MutationType getMutationType() {
+      return mutationType;
+   }
+
+   public MutationValue getMutationValue() {
+      return mutationValue;
+   }
+
+   public void setMutationScale(float mutationScale) {
+      this.mutationScale = mutationScale;
+   }
+
+   public void setMutationType(MutationType mutationType) {
+      this.mutationType = mutationType;
+   }
+
+   public void setMutationValue(MutationValue mutationValue) {
+      this.mutationValue = mutationValue;
+   }
+
+   public void setMutationScales(float[] mutationScales) {
+      mutationType = MutationType.INDIVIDUALRANGEVALUE;
+      this.mutationScales = mutationScales;
+   }
+
+   public float getMutationScale() {
+      return mutationScale;
+   }
+
+   public float getMutationScale(int i) {
+      return mutationScale;
+   }
+
+   private void rangeCheck(int i) {
+      if (i < 0 || i > geneCount - 1)
+         throw new IndexOutOfBoundsException(
+                 "GenotypeDescription index: " + i + ", Size: " + geneCount);
+   }
 }

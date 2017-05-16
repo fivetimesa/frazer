@@ -15,6 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package frazer.genotypes;
+
 import java.util.Random;
 import java.util.Arrays;
 
@@ -22,62 +23,59 @@ import java.util.Arrays;
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-
 public class FloatGenotype extends Genotype<Float> {
-    
-    public FloatGenotype(int count) {
-        super(Float.class, count);
-        this.randomInit();
-    }
 
-    @Override
-    public Genotype copy() {
-        FloatGenotype copy = new FloatGenotype(genes.length);        
-        for(int i = 0; i < genes.length; i++)
-        {
-            copy.setGene(i, getGene(i));
-        }    
-        return copy;
-    }
+   public FloatGenotype(int count) {
+      super(Float.class, count);
+      this.randomInit();
+   }
 
-    
-    
-    @Override
-    public void randomInit() {
-    	Random generator = new Random();
-    	for(int i = 0; i < genes.length; i++)
-    		genes[i] = generator.nextFloat();
-    }
+   @Override
+   public Genotype copy() {
+      FloatGenotype copy = new FloatGenotype(genes.length);
+      for (int i = 0; i < genes.length; i++) {
+         copy.setGene(i, getGene(i));
+      }
+      return copy;
+   }
 
-    /**
-     *
-     * @param min
-     * @param max
-     */
-    public void randomInit(float min, float max) {
-    	Random generator = new Random();
-    	for(int i = 0; i < genes.length; i++)
-    		genes[i] = min + generator.nextFloat() * (max - min);
-    }
+   @Override
+   public void randomInit() {
+      Random generator = new Random();
+      for (int i = 0; i < genes.length; i++) {
+         genes[i] = generator.nextFloat();
+      }
+   }
 
-    @Override
-    public Float getGene(int i) {
-        rangeCheck(i);
-    	return genes[i];
-    }
+   /**
+    *
+    * @param min
+    * @param max
+    */
+   public void randomInit(float min, float max) {
+      Random generator = new Random();
+      for (int i = 0; i < genes.length; i++) {
+         genes[i] = min + generator.nextFloat() * (max - min);
+      }
+   }
 
-    public void setGene(int i, float v) {
-        rangeCheck(i);
-    	genes[i] = v;
-    }
+   @Override
+   public Float getGene(int i) {
+      rangeCheck(i);
+      return genes[i];
+   }
 
-    public Float[] getGenes() {
-    	return Arrays.copyOf(genes, genes.length);
-    }
-    
-    @Override
-    public String toString()
-    {
-        return Arrays.toString(genes);
-    }
+   public void setGene(int i, float v) {
+      rangeCheck(i);
+      genes[i] = v;
+   }
+
+   public Float[] getGenes() {
+      return Arrays.copyOf(genes, genes.length);
+   }
+
+   @Override
+   public String toString() {
+      return Arrays.toString(genes);
+   }
 }
