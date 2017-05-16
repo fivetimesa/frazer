@@ -37,24 +37,14 @@ public class GenotypeDescription {
    public GenotypeDescription(int geneCount, GenotypeType geneType) {
       this.genotypeType = geneType;
       this.geneCount = geneCount;
-<<<<<<< .merge_file_RaEjCJ
-      this.mutationValue = MutationValue.PERCENTAGE;
-=======
       this.mutationValueType = mutationValueType.PERCENTAGE;
->>>>>>> .merge_file_oKVby5
 
-      if (geneType == GenotypeType.BIT) {
+      if (geneType == geneType.BIT) {
          mutationType = MutationType.BIT;
       }
-<<<<<<< .merge_file_RaEjCJ
-      if (geneType == GenotypeType.BIT) {
-         mutationType = MutationType.CONSTANTVALUE;
-         mutationScale = 0.01f;
-=======
       else {
          mutationType = MutationType.CONSTANT;
          mutationStrength = 0.01f;
->>>>>>> .merge_file_oKVby5
       }
    }
 

@@ -16,16 +16,8 @@
  */
 package frazer.interfaces;
 
-<<<<<<< .merge_file_MpHxJV
-import frazer.genotypes.Genotype;
-import frazer.genotypes.GenotypeDescription;
-import frazer.constants.*;
-import frazer.genotypes.FloatGenotype;
-import frazer.genotypes.BitGenotype;
-=======
 import frazer.constants.*;
 import frazer.genotypes.*;
->>>>>>> .merge_file_ERxtg2
 import java.util.Random;
 
 /**
@@ -38,53 +30,6 @@ public interface Mutation {
 
    public default void mutateGene(int i, Genotype genes, GenotypeDescription gD) {
       MutationType mT = gD.getMutationType();
-<<<<<<< .merge_file_MpHxJV
-      MutationValue mV = gD.getMutationValue();
-
-      switch (mT) {
-         case BIT:
-            BitGenotype bitGenes = (BitGenotype) genes;
-            boolean booleanValue = bitGenes.getGene(i);
-            bitGenes.setGene(i, booleanValue);
-            break;
-         case CONSTANTVALUE:
-         case RANGEVALUE:
-         case INDIVIDUALRANGEVALUE:
-            //sprawdzać za pomocą instanceOf
-            if (!genes.getClass().equals(FloatGenotype.class)) {
-               System.err.print("Genotype type mismatch. Mutation expected: FloatGenotype");
-            }
-            FloatGenotype floatGenes = (FloatGenotype) genes;
-
-            float newValue = 0;
-            float mutationScale = 0;
-
-            Random random = new Random();
-            if (mT == MutationType.RANGEVALUE) {
-               mutationScale = gD.getMutationScale();
-               mutationScale = random.nextFloat() * mutationScale * 2 - mutationScale;
-            }
-            if (mT == MutationType.INDIVIDUALRANGEVALUE) {
-               mutationScale = gD.getMutationScale(i);
-               mutationScale = random.nextFloat() * mutationScale * 2 - mutationScale;
-            }
-            if (mT == MutationType.CONSTANTVALUE) {
-               mutationScale = gD.getMutationScale();
-               if (random.nextFloat() > 0.5)
-                  mutationScale = -mutationScale;
-            }
-
-            float value = floatGenes.getGene(i);
-
-            if (mV == MutationValue.PERCENTAGE) {
-               newValue = value * (1 + mutationScale);
-            }
-            if (mV == MutationValue.VALUE) {
-               newValue = value + mutationScale;
-            }
-
-            floatGenes.setGene(i, newValue);
-=======
       ValueType mV = gD.getMutationValueType();
 
       switch (mT) {
@@ -149,7 +94,6 @@ public interface Mutation {
                floatGenes.setGene(i, newValue);
             }
 
->>>>>>> .merge_file_ERxtg2
             break;
       }
    }

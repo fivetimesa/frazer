@@ -41,7 +41,9 @@ public class Frazer {
     private PApplet parent;
     private ArrayList<Population> populationList;
     private Population currentPopulation;
+    
     private GenotypeDescription gD;
+    private StopCondition stopCondition;
     
     /** Generation counter. Keeps track of the number of evaluated generations. */
     private int generationCount;
@@ -96,13 +98,21 @@ public class Frazer {
     }
     
     private void setDefaults() {
-        goal = Goal.MINIMISE;
-        setPreselection(new NoPreselection());
-        setMating(new TournamentMating(goal));
-        setBreeding(new CrossoverBreeding());
-        if(gD.getGenotypeType() == GenotypeType.FLOAT)
-            setMutation(new SimpleFloatMutation());
-        else setMutation(new NoMutation());
+        if(goal == null) 
+            goal = Goal.MINIMISE;
+        if(preselection == null) 
+            setPreselection(new NoPreselection());
+        if(mating == null) 
+            setMating(new TournamentMating(goal));
+        if(breeding == null) 
+            setBreeding(new CrossoverBreeding());
+        if(mutation == null) {
+            if(gD.getGenotypeType() == GenotypeType.FLOAT)
+                setMutation(new SimpleFloatMutation());
+            else setMutation(new NoMutation());
+        }
+        if(stopCondition == null)
+            stopCondition = new StopCondition();
     }
     
     /**
