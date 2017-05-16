@@ -37,12 +37,12 @@ public class GenotypeDescription {
    public GenotypeDescription(int geneCount, GenotypeType geneType) {
       this.genotypeType = geneType;
       this.geneCount = geneCount;
-      this.mutationValue = mutationValue.PERCENTAGE;
+      this.mutationValue = MutationValue.PERCENTAGE;
 
-      if (geneType == geneType.BIT) {
+      if (geneType == GenotypeType.BIT) {
          mutationType = MutationType.BIT;
       }
-      if (geneType == geneType.BIT) {
+      if (geneType == GenotypeType.BIT) {
          mutationType = MutationType.CONSTANTVALUE;
          mutationScale = 0.01f;
       }
