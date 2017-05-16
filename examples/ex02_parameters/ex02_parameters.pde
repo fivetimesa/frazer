@@ -3,34 +3,34 @@ import frazer.*;
 Frazer frazer;
 Specimen best;
 
+int geneCount = 20;
+int populationCount = 1000;
 String goal = "It seems to be working!";
-boolean finished = false;
 
 void setup()
 {
   size(500, 200);
   textAlign(CENTER);
-  
-  int populationCount = 100;
-  int geneCount = goal.length();
+  geneCount = goal.length();
   frazer = new Frazer(this, populationCount, geneCount, GenotypeType.FLOAT, new MyFitness());
+  
+  ((TournamentMating) frazer.getMating()).setParentsCount(3);
+  ((CrossoverBreeding) frazer.getBreeding()).setCrossoverPointsCount(5);
 }
 
 void draw() {
-  if(!finished) best = frazer.evolve(1);
-  if(best.getFitnessScore() == 0) finished = true;
-  
   background(0);
+  Specimen best = frazer.evolve(1);
   text(Utility.floatGeontypeToString(best.getGenes()), width/2, height/2);
 }
+
 
 class MyFitness implements Fitness {
   float calculateFitness(Genotype genes) {
     float difference = 0;
-    String phenotype = Utility.floatGeontypeToString(genes);
     
-    for(int i = 0; i < phenotype.length(); i++) {
-      char currentChar = phenotype.charAt(i);
+    for(int i = 0; i < geneCount; i++) {
+      char currentChar = Utility.floatGeneToChar((float)genes.getGene(i));
       char goalChar = goal.charAt(i);
       difference += abs(int(goalChar) - int(currentChar));
     }
