@@ -21,10 +21,6 @@ package frazer.constants;
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 public enum MutationType {
-<<<<<<< .merge_file_LmF5ma
-    CONSTANTVALUE, RANGEVALUE, PERCENTAGEVALUE, BIT,
-    INDIVIDUALRANGEVALUE, PERCENTAGERANGEVALUE
-=======
    /**
     * The simpleset mutation - 0 to 1 or 1 to 0.
     */
@@ -53,5 +49,4 @@ public enum MutationType {
     * individual for spcific gene.
     */
    INDIVIDUALRANGE
->>>>>>> .merge_file_6r7P9N
 }
