@@ -28,6 +28,13 @@ public interface Mutation {
 
    Genotype mutate(Genotype genes);
 
+   /**
+    * Mutate 
+    * 
+    * @param i
+    * @param genes
+    * @param gD
+    */
    public default void mutateGene(int i, Genotype genes, GenotypeDescription gD) {
       MutationType mT = gD.getMutationType();
       ValueType mV = gD.getMutationValueType();
@@ -78,8 +85,8 @@ public interface Mutation {
                if (mV == ValueType.ABSOLUTE) {
                   newValue = value + mutationStrength;
                }
+               integerGenes.setGene(i, (int) limitValue(i, newValue, gD));
 
-               integerGenes.setGene(i, (int) newValue);
             } else {
                FloatGenotype floatGenes = (FloatGenotype) genes;
                float value = floatGenes.getGene(i);
@@ -90,11 +97,59 @@ public interface Mutation {
                if (mV == ValueType.ABSOLUTE) {
                   newValue = value + mutationStrength;
                }
-
-               floatGenes.setGene(i, newValue);
+               floatGenes.setGene(i, limitValue(i, newValue, gD));
             }
-
             break;
       }
+   }
+
+   public default void mutateOneRandomGene(Genotype genes, GenotypeDescription gD)
+   {
+      Random r = new Random();
+      mutateGene(r.nextInt(gD.geneCount), genes, gD);
+   }
+   
+   public default void mutateNRandomGenes(int n, Genotype genes, GenotypeDescription gD)
+   {
+      Random r = new Random();
+      for (int i = 0; i < n; i++) {
+         mutateGene(r.nextInt(gD.geneCount), genes, gD);
+      }
+   }
+   public default void mutateNRandomUniqueGenes(int n, Genotype genes, GenotypeDescription gD)
+   {
+      
+   }
+   
+   public default float limitValue(int i, float value, GenotypeDescription gD) {
+      switch (gD.getLimit()) {
+         case NOLIMIT:
+            return value;
+         case NORMALIZE:
+            if (value < 0)
+               return 0;
+            if (value > 1)
+               return 1;
+            break;
+         case FORALL:
+            float max;
+            float min;
+            max = gD.getMax();
+            min = gD.getMin();
+            if (value < min)
+               return min;
+            if (value > max)
+               return max;
+            break;
+         case INDIVIDUAL:
+            max = gD.getMax(i);
+            min = gD.getMin(i);
+            if (value < min)
+               return min;
+            if (value > max)
+               return max;
+            break;
+      }
+      return value;
    }
 }
