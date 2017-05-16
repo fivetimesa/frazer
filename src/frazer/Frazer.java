@@ -43,6 +43,8 @@ public class Frazer {
     private Population currentPopulation;
     
     private GenotypeDescription gD;
+
+    /** StopCondition options. */
     private StopCondition stopCondition;
     
     /** Generation counter. Keeps track of the number of evaluated generations. */
@@ -111,8 +113,8 @@ public class Frazer {
                 setMutation(new SimpleFloatMutation());
             else setMutation(new NoMutation());
         }
-        if(stopCondition == null)
-            stopCondition = new StopCondition();
+        if(getStopCondition() == null)
+            setStopCondition(new StopCondition());
     }
     
     /**
@@ -154,6 +156,20 @@ public class Frazer {
         this.parent = parent;
     }
     
+    /**
+     * @return the stopCondition
+     */
+    public StopCondition getStopCondition() {
+        return stopCondition;
+    }
+
+    /**
+     * @param stopCondition the stopCondition to set
+     */
+    public void setStopCondition(StopCondition stopCondition) {
+        this.stopCondition = stopCondition;
+    }
+
     /**
      *
      * @return

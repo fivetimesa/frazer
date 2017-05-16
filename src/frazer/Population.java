@@ -74,6 +74,11 @@ public class Population {
     }
 
 // </editor-fold>
+
+    /**
+     *
+     * @param fitness
+     */
     
     public void evaluate(Fitness fitness) {
         scoreSum = 0;
@@ -97,6 +102,16 @@ public class Population {
         }
     }
     
+    /**
+     *
+     * @param preselection
+     * @param fitness
+     * @param mating
+     * @param breeding
+     * @param mutation
+     * @return
+     * @throws Exception
+     */
     public Population nextGeneration(Preselection preselection, Fitness fitness, Mating mating, Breeding breeding, Mutation mutation) throws Exception {
         Specimen[] newSpecimens = new Specimen[count];
         
@@ -104,19 +119,20 @@ public class Population {
         evaluate(fitness);
         //System.out.print("Specimen evaluation done. \n");
         
-        if(mating.needsSorting() || preselection.needsSorting()) {
+        if(preselection.needsSorting() || fitness.needsSorting() || 
+                 mating.needsSorting() || breeding.needsSorting()) {
             Arrays.sort(specimens);
             //System.out.print("Specimen array sorted \n");
         }
         
-        Specimen[] elite = preselection.selectElite(specimens);
+        Specimen[] elite = preselection.selectElite(this);
         int newSpecimensCount = 0;
         for(int i = 0; i < elite.length; i++) {
             newSpecimens[i] = elite[i];
             newSpecimensCount++;
         }
         
-        specimens = preselection.discardWorst(specimens);
+        specimens = preselection.discardWorst(this);
         //System.out.print("Preselection done. \n");
         
         //System.out.print("Mating & breeding… \n");
@@ -145,9 +161,6 @@ public class Population {
         return nextPopulation;
     }
     
-    private void evaluateFitness() {
-        
-    }
 
 //<editor-fold defaultstate="collapsed" desc="Getters & Setters">
     public Specimen[] getSpecimens() {
