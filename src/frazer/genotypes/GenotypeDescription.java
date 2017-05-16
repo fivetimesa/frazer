@@ -27,10 +27,11 @@ public class GenotypeDescription {
    private GenotypeType genotypeType;
    private MutationType mutationType;
    private ValueType mutationValueType;
+   private Limit limit;
    float mutationStrength;
    float[] individualMutationStrength;
 
-   int geneCount;
+   public final int geneCount;
    float max, min;
    float[] maxs, mins;
 
@@ -46,18 +47,25 @@ public class GenotypeDescription {
          mutationType = MutationType.CONSTANT;
          mutationStrength = 0.01f;
       }
+      limit = Limit.NOLIMIT;
    }
 
-   public GenotypeDescription(int geneCount, GenotypeType geneType, int min, int max) {
+   public GenotypeDescription(int geneCount, GenotypeType geneType, float min, float max) {
       this(geneCount, geneType);
       this.min = min;
       this.max = max;
+      limit = Limit.FORALL;
    }
 
+   public GenotypeDescription(int geneCount, GenotypeType geneType, int min, int max) {
+      this(geneCount, geneType, (float) min, (float) max);
+   }
+   
    public GenotypeDescription(int geneCount, GenotypeType geneType, float[] minGeneLimits, float[] maxGeneLimits) {
       this(geneCount, geneType);
       this.mins = minGeneLimits;
       this.maxs = maxGeneLimits;
+      limit = Limit.INDIVIDUAL;
    }
 
    public GenotypeType getGenotypeType() {
@@ -82,6 +90,10 @@ public class GenotypeDescription {
 
    public float getMin(int i) {
       return mins[i];
+   }
+
+   public Limit getLimit() {
+      return limit;
    }
 
    public MutationType getMutationType() {
