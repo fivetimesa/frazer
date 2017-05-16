@@ -21,5 +21,5 @@ package frazer.constants;
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 public enum Limit {
-    FORALL, INDIVIDUAL, NOLIMIT
+    FORALL, INDIVIDUAL, NOLIMIT, NORMALIZE
 }
