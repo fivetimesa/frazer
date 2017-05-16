@@ -43,15 +43,23 @@ public class Frazer {
     private Population currentPopulation;
     private GenotypeDescription gD;
     
+    /** Generation counter. Keeps track of the number of evaluated generations. */
     private int generationCount;
     
+    /** The goal of the optimisation process (either to minimise of to maximise). */
     private Goal goal;
+    /** Population counter. Specifies the number of specimen in a population. */
     private int populationCount;
     
+    /** Algorithm for preselection. */
     private Preselection preselection;
+    /** Algorithm for mating. */
     private Mating mating;
+    /** Algorithm for breeding. */
     private Breeding breeding;
+    /** Algorithm for fitness, to be specified by the user. */
     private Fitness fitness;
+    /** Algorithm for mutation. */
     private Mutation mutation;
     
     
@@ -66,6 +74,14 @@ public class Frazer {
         setDefaults();
     }
     
+    /**
+     *
+     * @param parent
+     * @param populationCount
+     * @param geneCount
+     * @param genotypeType
+     * @param fitness
+     */
     public Frazer(PApplet parent, int populationCount, int geneCount, GenotypeType genotypeType, Fitness fitness)
     {
         this.parent = parent;
@@ -89,6 +105,13 @@ public class Frazer {
         else setMutation(new NoMutation());
     }
     
+    /**
+     * Primary evolution method. Creates and evaluates a number of generations specified by 
+     * maxGenerations parameter. Generation stops if one of the stop conditions is met.
+     * @param maxGenerations Number of generations to iterate over.
+     * @return Best Specimen of the last generation.
+     * @see StopCondition
+     */
     public Specimen evolve(int maxGenerations) {
         for (int i = 0; i < maxGenerations; i++) {
             try {
@@ -121,6 +144,10 @@ public class Frazer {
         this.parent = parent;
     }
     
+    /**
+     *
+     * @return
+     */
     public Population getCurrentPopulation() {
         return currentPopulation;
     }
@@ -195,5 +222,171 @@ public class Frazer {
         this.mutation = mutation;
     }
 // </editor-fold>
+    
+    /**
+     * Inner class for specifing stop conditions.
+     * Three conditions implemented: generation limit, fitness convergence, fitness goal.
+     * Each of these can be turned off or on, and each has a separate threshold to specify.
+     */
+    public class StopCondition {
+        private boolean stopOnGeneration;
+        private boolean stopOnConvergence;
+        private boolean stopOnFitnessScore;
+        private int generationLimit;
+        private float convergenceThreshold;
+        private float fitnessThreshold;
 
+        /**
+         * Constructor setting the default setup: <br>
+         * {@linkplain #stopOnGeneration} - false <br>
+         * {@linkplain #stopOnConvergence} - true with {@linkplain #convergenceThreshold} = 0.0f <br>
+         * {@linkplain #stopOnFitnessScore} - true if goal is set to MINIMISE <br>
+         * 
+         * @see Frazer.goal
+         */
+        public StopCondition() {
+            stopOnConvergence = true;
+            stopOnGeneration = false;
+            
+            if(goal == Goal.MINIMISE) {
+                stopOnFitnessScore = true;
+                fitnessThreshold = 0.0f;
+            }
+            else stopOnFitnessScore = false;
+            
+            convergenceThreshold = 0.0f;
+            generationLimit = Integer.MAX_VALUE;
+        }
+        
+        /**
+         * Checks if the specified conditions are met. 
+         * This method is invoked upon calling {@linkplain Frazer#evolve(int)}.
+         * @return True when any of the conditions are met, false otherwise.
+         */
+        public boolean stopConditionCheck() {
+            if(stopOnConvergence)
+                if(fitnessConvergenceCheck()) return true;
+            if(stopOnGeneration)
+                if(generationLimitCheck()) return true;
+            if(stopOnFitnessScore)
+                if(fitnessThresholdCheck()) return true;
+            return false;
+        }
+        
+        /**
+         * Checks if the range fitness scores of current population is below 
+         * convergence threshold.
+         * @return 
+         * @see #convergenceThreshold
+         * @see Population#minScore
+         * @see Population#maxScore
+         */
+        public boolean fitnessConvergenceCheck() {
+            return Math.abs(currentPopulation.getMaxScore() 
+                    - currentPopulation.getMinScore()) <= convergenceThreshold;
+        }
+        
+        /**
+         * Checks if the best fitness score of current population is below 
+         * or above fitness threshold (depending on the goal).
+         * @return 
+         * @see #fitnessThreshold
+         * @see Population#minScore
+         * @see Population#maxScore
+         */
+        public boolean fitnessThresholdCheck() {
+            if(goal == Goal.MINIMISE && currentPopulation.getMinScore() <= fitnessThreshold)
+                return true;
+            if(goal == Goal.MAXIMISE && currentPopulation.getMaxScore() >= fitnessThreshold)
+                return true;
+            return false;
+        }
+        
+        /**
+         * Checks if the number of generations is above generation limit.
+         * @return 
+         * @see #generationLimit
+         * @see Frazer#generationCount
+         */
+        public boolean generationLimitCheck() {
+            return generationCount >= generationLimit;
+        }
+
+        /**
+         * @param stopOnGeneration the stopOnGeneration to set
+         */
+        public void setStopOnGeneration(boolean stopOnGeneration) {
+            this.stopOnGeneration = stopOnGeneration;
+        }
+
+        /**
+         * @param stopOnConvergence the stopOnConvergence to set
+         */
+        public void setStopOnConvergence(boolean stopOnConvergence) {
+            this.stopOnConvergence = stopOnConvergence;
+        }
+
+        /**
+         * @param stopOnFitnessScore the stopOnFitnessScore to set
+         */
+        public void setStopOnFitnessScore(boolean stopOnFitnessScore) {
+            this.stopOnFitnessScore = stopOnFitnessScore;
+        }
+
+        /**
+         * @return the generationLimit
+         */
+        public int getGenerationLimit() {
+            if(stopOnGeneration) 
+                return generationLimit;
+            else return 0;
+        }
+
+        /**
+         * Set and enable generation limit stop condition.
+         * @param generationLimit the generationLimit to set
+         */
+        public void setGenerationLimit(int generationLimit) {
+            this.generationLimit = generationLimit;
+            stopOnGeneration = true;
+        }
+
+        /**
+         * @return the convergenceThreshold
+         */
+        public float getConvergenceThreshold() {
+            if(stopOnConvergence)
+                return convergenceThreshold;
+            else return 0.0f;
+        }
+
+        /**
+         * Set and enable the convergence threshold stop condition.
+         * @param convergenceThreshold the convergenceThreshold to set
+         */
+        public void setConvergenceThreshold(float convergenceThreshold) {
+            this.convergenceThreshold = convergenceThreshold;
+            stopOnConvergence = true;
+        }
+
+        /**
+         * @return the fitnessThreshold
+         */
+        public float getFitnessThreshold() {
+            if(stopOnFitnessScore)
+                return fitnessThreshold;
+            else return 0.0f;
+        }
+
+        /**
+         * Set and enable the fitness threshold stop condition.
+         * @param fitnessThreshold the fitnessThreshold to set
+         */
+        public void setFitnessThreshold(float fitnessThreshold) {
+            this.fitnessThreshold = fitnessThreshold;
+            stopOnFitnessScore = true;
+        }
+        
+        
+    }
 }
