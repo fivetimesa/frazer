@@ -41,7 +41,11 @@ public class Frazer {
     private PApplet parent;
     private ArrayList<Population> populationList;
     private Population currentPopulation;
+    
     private GenotypeDescription gD;
+
+    /** StopCondition options. */
+    private StopCondition stopCondition;
     
     /** Generation counter. Keeps track of the number of evaluated generations. */
     private int generationCount;
@@ -96,13 +100,21 @@ public class Frazer {
     }
     
     private void setDefaults() {
-        goal = Goal.MINIMISE;
-        setPreselection(new NoPreselection());
-        setMating(new TournamentMating(goal));
-        setBreeding(new CrossoverBreeding());
-        if(gD.getGenotypeType() == GenotypeType.FLOAT)
-            setMutation(new SimpleFloatMutation());
-        else setMutation(new NoMutation());
+        if(goal == null) 
+            goal = Goal.MINIMISE;
+        if(preselection == null) 
+            setPreselection(new NoPreselection());
+        if(mating == null) 
+            setMating(new TournamentMating(goal));
+        if(breeding == null) 
+            setBreeding(new CrossoverBreeding());
+        if(mutation == null) {
+            if(gD.getGenotypeType() == GenotypeType.FLOAT)
+                setMutation(new SimpleFloatMutation());
+            else setMutation(new NoMutation());
+        }
+        if(getStopCondition() == null)
+            setStopCondition(new StopCondition());
     }
     
     /**
@@ -125,6 +137,7 @@ public class Frazer {
                 catch (Exception e) {
                     System.out.print("Something went wrong. Evolution stopped at generation " + generationCount + "\n");
             }
+            if(stopCondition.check()) break;
         }
         return currentPopulation.getBestSpecimen(goal);
     }
@@ -144,6 +157,20 @@ public class Frazer {
         this.parent = parent;
     }
     
+    /**
+     * @return the stopCondition
+     */
+    public StopCondition getStopCondition() {
+        return stopCondition;
+    }
+
+    /**
+     * @param stopCondition the stopCondition to set
+     */
+    public void setStopCondition(StopCondition stopCondition) {
+        this.stopCondition = stopCondition;
+    }
+
     /**
      *
      * @return
@@ -263,7 +290,7 @@ public class Frazer {
          * This method is invoked upon calling {@linkplain Frazer#evolve(int)}.
          * @return True when any of the conditions are met, false otherwise.
          */
-        public boolean stopConditionCheck() {
+        public boolean check() {
             if(stopOnConvergence)
                 if(fitnessConvergenceCheck()) return true;
             if(stopOnGeneration)

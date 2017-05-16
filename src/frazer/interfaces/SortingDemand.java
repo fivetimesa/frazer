@@ -16,18 +16,17 @@
  */
 package frazer.interfaces;
 
-import frazer.genotypes.Genotype;
-
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public interface Fitness extends SortingDemand {
+abstract interface SortingDemand {
 
     /**
      *
-     * @param genotype
-     * @return fitness score
+     * @return
      */
-    public float calculateFitness(Genotype genotype);
+    public default boolean needsSorting() {
+        return false;
+    }
 }

@@ -16,16 +16,26 @@
  */
 package frazer.interfaces;
 
+import frazer.Population;
 import frazer.Specimen;
 
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public interface Preselection {
-    public default boolean needsSorting() {
-        return false;
-    }
-    public Specimen[] selectElite(Specimen[] specimen);
-    public Specimen[] discardWorst(Specimen[] specimen);
+public interface Preselection extends SortingDemand {
+    
+    /**
+     *
+     * @param population
+     * @return
+     */
+    public Specimen[] selectElite(Population population);
+    
+    /**
+     *
+     * @param population
+     * @return
+     */
+    public Specimen[] discardWorst(Population population);
 }
