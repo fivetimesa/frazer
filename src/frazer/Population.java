@@ -16,9 +16,7 @@
  */
 package frazer;
 import frazer.constants.*;
-import frazer.genotypes.*;
 import frazer.interfaces.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -136,6 +134,9 @@ public class Population {
         //System.out.print("Preselection done. \n");
         
         //System.out.print("Mating & breeding… \n");
+        mating.initialize(this);
+        //System.out.print("Mating initialized \n");
+        
         for(int i = newSpecimensCount; i < newSpecimens.length; i++) {
             Specimen[] parents = mating.selectParents(this);
             //System.out.print("Parents ready. \n");

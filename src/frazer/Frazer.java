@@ -137,6 +137,7 @@ public class Frazer {
                 catch (Exception e) {
                     System.out.print("Something went wrong. Evolution stopped at generation " + generationCount + "\n");
             }
+            if(stopCondition.check()) break;
         }
         return currentPopulation.getBestSpecimen(goal);
     }
@@ -289,7 +290,7 @@ public class Frazer {
          * This method is invoked upon calling {@linkplain Frazer#evolve(int)}.
          * @return True when any of the conditions are met, false otherwise.
          */
-        public boolean stopConditionCheck() {
+        public boolean check() {
             if(stopOnConvergence)
                 if(fitnessConvergenceCheck()) return true;
             if(stopOnGeneration)
