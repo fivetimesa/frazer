@@ -26,9 +26,9 @@ public class GenotypeDescription {
 
    private GenotypeType genotypeType;
    private MutationType mutationType;
-   private MutationValue mutationValue;
-   float mutationScale;
-   float mutationScales[];
+   private ValueType mutationValueType;
+   float mutationStrength;
+   float[] individualMutationStrength;
 
    int geneCount;
    float max, min;
@@ -37,14 +37,24 @@ public class GenotypeDescription {
    public GenotypeDescription(int geneCount, GenotypeType geneType) {
       this.genotypeType = geneType;
       this.geneCount = geneCount;
+<<<<<<< .merge_file_RaEjCJ
       this.mutationValue = MutationValue.PERCENTAGE;
+=======
+      this.mutationValueType = mutationValueType.PERCENTAGE;
+>>>>>>> .merge_file_oKVby5
 
       if (geneType == GenotypeType.BIT) {
          mutationType = MutationType.BIT;
       }
+<<<<<<< .merge_file_RaEjCJ
       if (geneType == GenotypeType.BIT) {
          mutationType = MutationType.CONSTANTVALUE;
          mutationScale = 0.01f;
+=======
+      else {
+         mutationType = MutationType.CONSTANT;
+         mutationStrength = 0.01f;
+>>>>>>> .merge_file_oKVby5
       }
    }
 
@@ -88,33 +98,33 @@ public class GenotypeDescription {
       return mutationType;
    }
 
-   public MutationValue getMutationValue() {
-      return mutationValue;
+   public ValueType getMutationValueType() {
+      return mutationValueType;
    }
 
-   public void setMutationScale(float mutationScale) {
-      this.mutationScale = mutationScale;
+   public void setMutationScale(float mutationStrength) {
+      this.mutationStrength = mutationStrength;
    }
 
    public void setMutationType(MutationType mutationType) {
       this.mutationType = mutationType;
    }
 
-   public void setMutationValue(MutationValue mutationValue) {
-      this.mutationValue = mutationValue;
+   public void setMutationValueType(ValueType mutationValueType) {
+      this.mutationValueType = mutationValueType;
    }
 
-   public void setMutationScales(float[] mutationScales) {
-      mutationType = MutationType.INDIVIDUALRANGEVALUE;
-      this.mutationScales = mutationScales;
+   public void setMutationStrength(float[] individualMutationStrength) {
+      mutationType = MutationType.INDIVIDUALRANGE;
+      this.individualMutationStrength = individualMutationStrength;
    }
 
-   public float getMutationScale() {
-      return mutationScale;
+   public float getMutationStrength() {
+      return mutationStrength;
    }
 
-   public float getMutationScale(int i) {
-      return mutationScale;
+   public float getMutationStrength(int i) {
+      return mutationStrength;
    }
 
    private void rangeCheck(int i) {

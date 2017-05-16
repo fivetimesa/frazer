@@ -20,6 +20,6 @@ package frazer.constants;
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public enum MutationValue {
-   VALUE, PERCENTAGE
+public enum ValueType {
+   ABSOLUTE, PERCENTAGE
 }

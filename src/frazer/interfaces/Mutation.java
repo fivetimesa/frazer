@@ -16,11 +16,16 @@
  */
 package frazer.interfaces;
 
+<<<<<<< .merge_file_MpHxJV
 import frazer.genotypes.Genotype;
 import frazer.genotypes.GenotypeDescription;
 import frazer.constants.*;
 import frazer.genotypes.FloatGenotype;
 import frazer.genotypes.BitGenotype;
+=======
+import frazer.constants.*;
+import frazer.genotypes.*;
+>>>>>>> .merge_file_ERxtg2
 import java.util.Random;
 
 /**
@@ -33,6 +38,7 @@ public interface Mutation {
 
    public default void mutateGene(int i, Genotype genes, GenotypeDescription gD) {
       MutationType mT = gD.getMutationType();
+<<<<<<< .merge_file_MpHxJV
       MutationValue mV = gD.getMutationValue();
 
       switch (mT) {
@@ -78,6 +84,72 @@ public interface Mutation {
             }
 
             floatGenes.setGene(i, newValue);
+=======
+      ValueType mV = gD.getMutationValueType();
+
+      switch (mT) {
+         case BIT:
+            if (!genes.getClass().equals(BitGenotype.class)) {
+               System.err.print("Genotype type mismatch. Mutation expected: BitGenotype");
+            }
+            BitGenotype bitGenes = (BitGenotype) genes;
+            bitGenes.setGene(i, !bitGenes.getGene(i));
+            break;
+         case CONSTANT:
+         case INDIVIDUALCONSTANT:
+         case RANGE:
+         case INDIVIDUALRANGE:
+            if ((genes.getClass().equals(BitGenotype.class))) {
+               System.err.print("Genotype type mismatch. "
+                       + "Mutation expected: FloatGenotype, SFloatGenotype, IntegerGenotype");
+            }
+
+            float newValue = 0;
+            float mutationStrength = 0;
+
+            Random random = new Random();
+
+            if (mT == MutationType.INDIVIDUALRANGE || mT == MutationType.INDIVIDUALCONSTANT)
+               mutationStrength = gD.getMutationStrength(i);
+
+            if (mT == MutationType.RANGE || mT == MutationType.CONSTANT)
+               mutationStrength = gD.getMutationStrength();
+
+            if (mT == MutationType.INDIVIDUALRANGE || mT == MutationType.RANGE)
+               mutationStrength = random.nextFloat() * mutationStrength * 2 - mutationStrength;
+
+            if (mT == MutationType.CONSTANT || mT == MutationType.INDIVIDUALCONSTANT) {
+               if (random.nextFloat() > 0.5)
+                  mutationStrength = -mutationStrength;
+            }
+
+            if (genes.getClass().equals(IntegerGenotype.class)) {
+               IntegerGenotype integerGenes = (IntegerGenotype) genes;
+               float value = (float) integerGenes.getGene(i);
+
+               if (mV == ValueType.PERCENTAGE) {
+                  newValue = value * (1 + mutationStrength);
+               }
+               if (mV == ValueType.ABSOLUTE) {
+                  newValue = value + mutationStrength;
+               }
+
+               integerGenes.setGene(i, (int) newValue);
+            } else {
+               FloatGenotype floatGenes = (FloatGenotype) genes;
+               float value = floatGenes.getGene(i);
+
+               if (mV == ValueType.PERCENTAGE) {
+                  newValue = value * (1 + mutationStrength);
+               }
+               if (mV == ValueType.ABSOLUTE) {
+                  newValue = value + mutationStrength;
+               }
+
+               floatGenes.setGene(i, newValue);
+            }
+
+>>>>>>> .merge_file_ERxtg2
             break;
       }
    }
