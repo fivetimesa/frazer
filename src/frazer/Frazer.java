@@ -81,12 +81,12 @@ public class Frazer {
     
     private void setDefaults() {
         goal = Goal.MINIMISE;
-        preselection = new NoPreselection();
-        mating = new TournamentMating(goal);
-        breeding = new CrossoverBreeding();
+        setPreselection(new NoPreselection());
+        setMating(new TournamentMating(goal));
+        setBreeding(new CrossoverBreeding());
         if(gD.getGenotypeType() == GenotypeType.FLOAT)
-            mutation = new SimpleFloatMutation();
-        else mutation = new NoMutation();
+            setMutation(new SimpleFloatMutation());
+        else setMutation(new NoMutation());
     }
     
     public Specimen evolve(int maxGenerations) {
@@ -94,7 +94,7 @@ public class Frazer {
             try {
                 
                 System.out.print("Evolving… \n");
-                Population nextPopulation = currentPopulation.nextGeneration(preselection, fitness, mating, breeding, mutation);
+                Population nextPopulation = currentPopulation.nextGeneration(getPreselection(), getFitness(), getMating(), getBreeding(), getMutation());
                 generationCount++;
                 System.out.print("Generation " + generationCount + "\n");
                 currentPopulation = nextPopulation;
@@ -125,6 +125,75 @@ public class Frazer {
         return currentPopulation;
     }
 
+    /**
+     * @return the preselection
+     */
+    public Preselection getPreselection() {
+        return preselection;
+    }
+
+    /**
+     * @param preselection the preselection to set
+     */
+    public void setPreselection(Preselection preselection) {
+        this.preselection = preselection;
+    }
+
+    /**
+     * @return the mating
+     */
+    public Mating getMating() {
+        return mating;
+    }
+
+    /**
+     * @param mating the mating to set
+     */
+    public void setMating(Mating mating) {
+        this.mating = mating;
+    }
+
+    /**
+     * @return the breeding
+     */
+    public Breeding getBreeding() {
+        return breeding;
+    }
+
+    /**
+     * @param breeding the breeding to set
+     */
+    public void setBreeding(Breeding breeding) {
+        this.breeding = breeding;
+    }
+
+    /**
+     * @return the fitness
+     */
+    public Fitness getFitness() {
+        return fitness;
+    }
+
+    /**
+     * @param fitness the fitness to set
+     */
+    public void setFitness(Fitness fitness) {
+        this.fitness = fitness;
+    }
+
+    /**
+     * @return the mutation
+     */
+    public Mutation getMutation() {
+        return mutation;
+    }
+
+    /**
+     * @param mutation the mutation to set
+     */
+    public void setMutation(Mutation mutation) {
+        this.mutation = mutation;
+    }
 // </editor-fold>
 
 }
