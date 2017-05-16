@@ -21,6 +21,32 @@ package frazer.constants;
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 public enum MutationType {
-    CONSTANTVALUE, RANGEVALUE, PERCENTAGEVALUE, BIT,
-    INDIVIDUALRANGEVALUE, PERCENTAGERANGEVALUE
+   /**
+    * The simpleset mutation - 0 to 1 or 1 to 0.
+    */
+   BIT,
+
+   /**
+    * Mutation with constant value [-mutationStrength, mutationStrength]
+    * the same for all genes.
+    */
+    CONSTANT, 
+
+   /**
+    * Mutation with constant value [-mutationStrength_i, mutationStrength_i]
+    * individual for spcific gene.
+    */
+   INDIVIDUALCONSTANT,
+
+   /**
+    * Mutation by random value in range [-mutationStrength, ..., mutationStrength]
+    * the same for all genes.
+    */
+   RANGE,
+
+   /**
+    * Mutation by random value in range [-mutationStrength, ..., mutationStrength]
+    * individual for spcific gene.
+    */
+   INDIVIDUALRANGE
 }
