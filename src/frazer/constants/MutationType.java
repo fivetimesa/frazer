@@ -20,6 +20,7 @@ package frazer.constants;
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public enum Limit {
-    FORALL, INDIVIDUAL, NOLIMIT
+public enum MutationType {
+    CONSTANTVALUE, RANGEVALUE, PERCENTAGEVALUE, BIT,
+    INDIVIDUALRANGEVALUE, PERCENTAGERANGEVALUE
 }
