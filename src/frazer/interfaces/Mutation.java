@@ -118,6 +118,28 @@ public interface Mutation {
    }
    public default void mutateNRandomUniqueGenes(int n, Genotype genes, GenotypeDescription gD)
    {
+      if(n > gD.geneCount)
+         throw new IndexOutOfBoundsException("There are " + gD.geneCount
+                 + "genes. Not more.");
+      Random r = new Random();
+      int[] swaped = new int[n];
+      //swap gene and remember swaped
+      for(int i = 0; i < n; i++) {
+         int iRandom = r.nextInt(gD.geneCount - i);
+         swaped[i] = iRandom;
+         mutateGene(iRandom, genes, gD);
+         
+         Object temp = genes.getGene(gD.geneCount - i);
+         genes.setGene(gD.geneCount - i, genes.getGene(iRandom));
+         genes.setGene(iRandom, temp);
+      }
+      
+      //unswap
+      for(int i = n-1; i >= 0; i--) {
+         Object temp = genes.getGene(gD.geneCount - i);
+         genes.setGene(gD.geneCount - i, genes.getGene(swaped[i]));
+         genes.setGene(swaped[i], temp);
+      }
       
    }
    
