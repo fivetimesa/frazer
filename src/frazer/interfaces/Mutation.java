@@ -29,11 +29,11 @@ public interface Mutation {
    Genotype mutate(Genotype genes);
 
    /**
-    * Mutate 
+    * Mutates ith gene in genotype.
     * 
-    * @param i
-    * @param genes
-    * @param gD
+    * @param i gene index
+    * @param genes genotype
+    * @param gD genotype description
     */
    public default void mutateGene(int i, Genotype genes, GenotypeDescription gD) {
       MutationType mT = gD.getMutationType();
@@ -103,12 +103,26 @@ public interface Mutation {
       }
    }
 
+   /**
+    * Mutates one random gene in genotype.
+    * 
+    * @param genes genotype
+    * @param gD genotype description
+    */
    public default void mutateOneRandomGene(Genotype genes, GenotypeDescription gD)
    {
       Random r = new Random();
       mutateGene(r.nextInt(gD.geneCount), genes, gD);
    }
    
+   /**
+    * Mutates <code>n</code> random genes in genotype.
+    * Gene can mutate more than once.
+    * 
+    * @param n number of genes to mutate
+    * @param genes genotype
+    * @param gD genotype description
+    */
    public default void mutateNRandomGenes(int n, Genotype genes, GenotypeDescription gD)
    {
       Random r = new Random();
@@ -116,6 +130,15 @@ public interface Mutation {
          mutateGene(r.nextInt(gD.geneCount), genes, gD);
       }
    }
+   
+   /**
+    * Mutates <code>n</code> random unique genes in genotype.
+    * Gene mutates only once.
+    * 
+    * @param n number of genes to mutate (must be smaller than <code>geneCount</code>)
+    * @param genes
+    * @param gD
+    */
    public default void mutateNRandomUniqueGenes(int n, Genotype genes, GenotypeDescription gD)
    {
       if(n > gD.geneCount)
