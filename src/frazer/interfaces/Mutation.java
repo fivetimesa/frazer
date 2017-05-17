@@ -16,185 +16,35 @@
  */
 package frazer.interfaces;
 
+import frazer.Population;
 import frazer.constants.*;
 import frazer.genotypes.*;
 import java.util.Random;
 
 /**
- *
+ * Describes Mutation for population of specimen.
+ * 
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 public interface Mutation {
 
+   /**
+    * This method should select specimen from population and run on it
+    * {@link frazer.interfaces.Mutation#mutate(frazer.genotypes.Genotype)}
+    * 
+    * @param population
+    * @return
+    */
+   default Population mutate(Population population){
+      return population;
+   }
+   
+   /**
+    * This method should change genotype in some way.
+    * 
+    * @param genes
+    * @return
+    */
    Genotype mutate(Genotype genes);
 
-   /**
-    * Mutates ith gene in genotype.
-    * 
-    * @param i gene index
-    * @param genes genotype
-    * @param gD genotype description
-    */
-   public default void mutateGene(int i, Genotype genes, GenotypeDescription gD) {
-      MutationType mT = gD.getMutationType();
-      ValueType mV = gD.getMutationValueType();
-
-      switch (mT) {
-         case BIT:
-            if (!genes.getClass().equals(BitGenotype.class)) {
-               System.err.print("Genotype type mismatch. Mutation expected: BitGenotype");
-            }
-            BitGenotype bitGenes = (BitGenotype) genes;
-            bitGenes.setGene(i, !bitGenes.getGene(i));
-            break;
-         case CONSTANT:
-         case INDIVIDUALCONSTANT:
-         case RANGE:
-         case INDIVIDUALRANGE:
-            if ((genes.getClass().equals(BitGenotype.class))) {
-               System.err.print("Genotype type mismatch. "
-                       + "Mutation expected: FloatGenotype, SFloatGenotype, IntegerGenotype");
-            }
-
-            float newValue = 0;
-            float mutationStrength = 0;
-
-            Random random = new Random();
-
-            if (mT == MutationType.INDIVIDUALRANGE || mT == MutationType.INDIVIDUALCONSTANT)
-               mutationStrength = gD.getMutationStrength(i);
-
-            if (mT == MutationType.RANGE || mT == MutationType.CONSTANT)
-               mutationStrength = gD.getMutationStrength();
-
-            if (mT == MutationType.INDIVIDUALRANGE || mT == MutationType.RANGE)
-               mutationStrength = random.nextFloat() * mutationStrength * 2 - mutationStrength;
-
-            if (mT == MutationType.CONSTANT || mT == MutationType.INDIVIDUALCONSTANT) {
-               if (random.nextFloat() > 0.5)
-                  mutationStrength = -mutationStrength;
-            }
-
-            if (genes.getClass().equals(IntegerGenotype.class)) {
-               IntegerGenotype integerGenes = (IntegerGenotype) genes;
-               float value = (float) integerGenes.getGene(i);
-
-               if (mV == ValueType.PERCENTAGE) {
-                  newValue = value * (1 + mutationStrength);
-               }
-               if (mV == ValueType.ABSOLUTE) {
-                  newValue = value + mutationStrength;
-               }
-               integerGenes.setGene(i, (int) limitValue(i, newValue, gD));
-
-            } else {
-               FloatGenotype floatGenes = (FloatGenotype) genes;
-               float value = floatGenes.getGene(i);
-
-               if (mV == ValueType.PERCENTAGE) {
-                  newValue = value * (1 + mutationStrength);
-               }
-               if (mV == ValueType.ABSOLUTE) {
-                  newValue = value + mutationStrength;
-               }
-               floatGenes.setGene(i, limitValue(i, newValue, gD));
-            }
-            break;
-      }
-   }
-
-   /**
-    * Mutates one random gene in genotype.
-    * 
-    * @param genes genotype
-    * @param gD genotype description
-    */
-   public default void mutateOneRandomGene(Genotype genes, GenotypeDescription gD)
-   {
-      Random r = new Random();
-      mutateGene(r.nextInt(gD.geneCount), genes, gD);
-   }
-   
-   /**
-    * Mutates <code>n</code> random genes in genotype.
-    * Gene can mutate more than once.
-    * 
-    * @param n number of genes to mutate
-    * @param genes genotype
-    * @param gD genotype description
-    */
-   public default void mutateNRandomGenes(int n, Genotype genes, GenotypeDescription gD)
-   {
-      Random r = new Random();
-      for (int i = 0; i < n; i++) {
-         mutateGene(r.nextInt(gD.geneCount), genes, gD);
-      }
-   }
-   
-   /**
-    * Mutates <code>n</code> random unique genes in genotype.
-    * Gene mutates only once.
-    * 
-    * @param n number of genes to mutate (must be smaller than <code>geneCount</code>)
-    * @param genes
-    * @param gD
-    */
-   public default void mutateNRandomUniqueGenes(int n, Genotype genes, GenotypeDescription gD)
-   {
-      if(n > gD.geneCount)
-         throw new IndexOutOfBoundsException("There are " + gD.geneCount
-                 + "genes. Not more.");
-      Random r = new Random();
-      int[] swaped = new int[n];
-      //swap gene and remember swaped
-      for(int i = 0; i < n; i++) {
-         int iRandom = r.nextInt(gD.geneCount - i);
-         swaped[i] = iRandom;
-         mutateGene(iRandom, genes, gD);
-         
-         Object temp = genes.getGene(gD.geneCount - i);
-         genes.setGene(gD.geneCount - i, genes.getGene(iRandom));
-         genes.setGene(iRandom, temp);
-      }
-      
-      //unswap
-      for(int i = n-1; i >= 0; i--) {
-         Object temp = genes.getGene(gD.geneCount - i);
-         genes.setGene(gD.geneCount - i, genes.getGene(swaped[i]));
-         genes.setGene(swaped[i], temp);
-      }
-      
-   }
-   
-   public default float limitValue(int i, float value, GenotypeDescription gD) {
-      switch (gD.getLimit()) {
-         case NOLIMIT:
-            return value;
-         case NORMALIZE:
-            if (value < 0)
-               return 0;
-            if (value > 1)
-               return 1;
-            break;
-         case FORALL:
-            float max;
-            float min;
-            max = gD.getMax();
-            min = gD.getMin();
-            if (value < min)
-               return min;
-            if (value > max)
-               return max;
-            break;
-         case INDIVIDUAL:
-            max = gD.getMax(i);
-            min = gD.getMin(i);
-            if (value < min)
-               return min;
-            if (value > max)
-               return max;
-            break;
-      }
-      return value;
-   }
 }
