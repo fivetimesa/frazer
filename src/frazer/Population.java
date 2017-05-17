@@ -18,6 +18,7 @@ package frazer;
 import frazer.constants.*;
 import frazer.interfaces.*;
 import java.util.Arrays;
+import frazer.genotypes.GenotypeDescription;
 
 /**
  *
@@ -32,7 +33,7 @@ public class Population {
     private double scoreSum;
     private Specimen minSpecimen;
     private Specimen maxSpecimen;
-    
+    private GenotypeDescription gD;
     /**
      * Population of specimens.
      */
@@ -45,11 +46,12 @@ public class Population {
      * @param geneCount
      * @param geneType
      */
-    public Population(int populationCount, int geneCount, GenotypeType geneType) {
+    public Population(int populationCount, GenotypeDescription gD) {
+        this.gD = gD;
         this.count = populationCount;
         specimens = new Specimen[populationCount];
         for (int i = 0; i < populationCount; i++) {
-            specimens[i] = new Specimen(geneCount, geneType);
+            specimens[i] = new Specimen(gD.geneCount, gD.getGenotypeType());
         }
         //System.out.print("New population created with " + count + " random specimen. \n");
     }
@@ -182,6 +184,10 @@ public class Population {
         else return minSpecimen;
     }
 
+   public GenotypeDescription getGenotypeDescription() {
+      return gD;
+   }
+    
     public int getCount() {
         return count;
     }

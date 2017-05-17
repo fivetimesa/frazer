@@ -92,7 +92,7 @@ public class Frazer {
         populationList = new ArrayList<>();
         
         this.gD = new GenotypeDescription(geneCount, genotypeType);
-        currentPopulation = new Population(populationCount, geneCount, genotypeType);
+        currentPopulation = new Population(populationCount, gD);
         populationList.add(currentPopulation);
         this.fitness = fitness;
         
