@@ -269,7 +269,7 @@ public class Frazer {
          * {@linkplain #stopOnConvergence} - true with {@linkplain #convergenceThreshold} = 0.0f <br>
          * {@linkplain #stopOnFitnessScore} - true if goal is set to MINIMISE <br>
          * 
-         * @see Frazer.goal
+         * @see frazer.constants.Goal
          */
         public StopCondition() {
             stopOnConvergence = true;

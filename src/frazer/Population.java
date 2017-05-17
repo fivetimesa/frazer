@@ -43,8 +43,7 @@ public class Population {
     /**
      *
      * @param populationCount
-     * @param geneCount
-     * @param geneType
+     * @param gD
      */
     public Population(int populationCount, GenotypeDescription gD) {
         this.gD = gD;
