@@ -103,6 +103,12 @@ abstract public class AbstractMutation {
       }
    }
 
+   /**
+    * Mutates genotype according to genotype description constants.
+    * 
+    * @param genes
+    * @param gD
+    */
    public void mutateGenotypeByMutationType(Genotype genes, GenotypeDescription gD) {
       GenotypeMutationType genotypeMT = gD.getGenotypeMutationType();
       switch (genotypeMT) {
@@ -197,6 +203,14 @@ abstract public class AbstractMutation {
 
    }
 
+   /**
+    * Limit gene value according to <code>GenotypeDescription</code>
+    * 
+    * @param i ith gene in genotype
+    * @param value gene vale
+    * @param gD gene description
+    * @return limited gene value
+    */
    protected float limitValue(int i, float value, GenotypeDescription gD) {
       switch (gD.getLimit()) {
          case NOLIMIT:
