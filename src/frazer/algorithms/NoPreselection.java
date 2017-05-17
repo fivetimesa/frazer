@@ -16,22 +16,21 @@
  */
 package frazer.algorithms;
 
+import frazer.Population;
 import frazer.Specimen;
 import frazer.interfaces.Preselection;
 
-//<editor-fold desc="Static private classes" defaultstate="collapsed">
 
-/* STATIC PRIVATE CLASSES */
 public class NoPreselection implements Preselection {
 
     @Override
-    public Specimen[] selectElite(Specimen[] specimen) {
+    public Specimen[] selectElite(Population population) {
         return new Specimen[0];
     }
 
     @Override
-    public Specimen[] discardWorst(Specimen[] specimen) {
-        return specimen;
+    public Specimen[] discardWorst(Population population) {
+        return population.getSpecimens();
     }
     
 }
