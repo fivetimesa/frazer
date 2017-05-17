@@ -77,7 +77,7 @@ public class Genotype<T> implements Iterable {
 
     @Override
     public Iterator iterator() {
-        return new GeneIterator<T>();
+        return new GeneIterator<>();
     }
     
     private class GeneIterator <T> implements Iterator<T> {
