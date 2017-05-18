@@ -15,18 +15,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package frazer.interfaces;
-
+import frazer.Population;
+import frazer.Specimen;
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-abstract interface SortingDemand {
-
-    /**
-     *
-     * @return
-     */
-    public default boolean needsSorting() {
-        return false;
-    }
+public interface MutantSelection extends AlgorithmsInterface{
+   public Specimen[] selectMutants(Population population);
+   
+   public default boolean needFitness()
+   {
+      return false;
+   }
 }

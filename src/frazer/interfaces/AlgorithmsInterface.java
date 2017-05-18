@@ -16,18 +16,17 @@
  */
 package frazer.interfaces;
 
-import frazer.genotypes.Genotype;
-
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public interface Fitness extends AlgorithmsInterface {
+abstract interface AlgorithmsInterface {
 
     /**
      *
-     * @param genotype
-     * @return fitness score
+     * @return
      */
-    public float calculateFitness(Genotype genotype);
+    public default boolean needsSorting() {
+        return false;
+    }
 }
