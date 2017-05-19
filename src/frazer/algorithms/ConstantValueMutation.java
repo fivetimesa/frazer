@@ -14,27 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package frazer.interfaces;
-import frazer.Population;
-import frazer.Specimen;
+package frazer.algorithms;
+
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public interface MutantSelection extends AlgorithmsInterface{
+public class ConstantValueMutation {
    
-      /**
-    * This method should select specimen from population to mutate.
-    * Mutation is provided by 
-    * {@link frazer.interfaces.Mutation#mutate(frazer.genotypes.Genotype)}.
-    * 
-    * @param population
-    * @return specimens to mutate
-    */
-   public Specimen[] selectMutants(Population population);
-   
-   public default boolean needFitness()
-   {
-      return false;
-   }
 }

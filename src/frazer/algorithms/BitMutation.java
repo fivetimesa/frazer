@@ -15,24 +15,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package frazer.algorithms;
-
-import frazer.Population;
+import frazer.genotypes.BitGenotype;
 import frazer.genotypes.Genotype;
 import frazer.interfaces.Mutation;
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public class ChanceMutation extends AbstractMutation implements Mutation{
-
-   @Override
-   public Population mutate(Population population) {
-      return Mutation.super.mutate(population); //To change body of generated methods, choose Tools | Templates.
-   }
+public class BitMutation extends AbstractMutation implements Mutation{
 
    @Override
    public Genotype mutate(Genotype genes) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      
+      
+      boolean[] mutationPattern = selectGenes(genes);
+      BitGenotype bitGenes = (BitGenotype) genes;
+      
+      for (int i = 0; i < mutationPattern.length; i++) {
+            if(mutationPattern[i])
+               bitGenes.setGene(i, !bitGenes.getGene(i));
+      }
+      return genes;
    }
    
 }

@@ -28,6 +28,34 @@ import java.util.Random;
  */
 abstract public class AbstractMutation {
 
+   GenotypeMutationType genotypeMutationType;
+   int mutationCount;
+   float mutationChance;
+   float mutationStrength;
+   float[] individualMutationStrength;
+
+   public AbstractMutation() {
+      genotypeMutationType = GenotypeMutationType.CHANCE;
+      mutationChance = 0.01f;
+   }
+
+   
+   public void mutateGenes() {
+      
+   }
+   
+   /**
+    * Selects genes in genotype according to genotype description constants.
+    *
+    * @param genes
+    * @return mutataion pattern with
+    */
+   public boolean[] selectGenes(Genotype genes) {
+      boolean[] mutationPattern = new boolean[genes.getGeneCount()];
+      
+      return mutationPattern;
+   }
+
    /**
     * Mutates ith gene in genotype.
     *
@@ -105,7 +133,7 @@ abstract public class AbstractMutation {
 
    /**
     * Mutates genotype according to genotype description constants.
-    * 
+    *
     * @param genes
     * @param gD
     */
@@ -136,10 +164,11 @@ abstract public class AbstractMutation {
    private void mutateGeneWithChance(Genotype genes, GenotypeDescription gD) {
       float mutatinoChance = gD.getMutationChance();
       Random random = new Random();
-        for(int i = 0; i < gD.geneCount; i++) {
-            if(random.nextFloat() > mutatinoChance) continue;
-            mutateGene(i, genes, gD);
-        }
+      for (int i = 0; i < gD.geneCount; i++) {
+         if (random.nextFloat() > mutatinoChance)
+            continue;
+         mutateGene(i, genes, gD);
+      }
    }
 
    /**
@@ -205,7 +234,7 @@ abstract public class AbstractMutation {
 
    /**
     * Limit gene value according to <code>GenotypeDescription</code>
-    * 
+    *
     * @param i ith gene in genotype
     * @param value gene vale
     * @param gD gene description

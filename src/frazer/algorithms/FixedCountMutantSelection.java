@@ -22,26 +22,27 @@ import frazer.genotypes.Genotype;
 import frazer.genotypes.GenotypeDescription;
 import frazer.interfaces.Mutation;
 import java.util.Random;
+import frazer.interfaces.MutantSelection;
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public class FixedCountMutation extends AbstractMutation implements Mutation{
+public class FixedCountMutantSelection extends AbstractMutation implements MutantSelection{
    ValueType mutationCountType;
    int mutatedSpecimenCount;
    float populationPrecentage;
    
-   public FixedCountMutation() {
+   public FixedCountMutantSelection() {
       this.mutatedSpecimenCount = 1;
       this.mutationCountType = ValueType.ABSOLUTE;
    }
 
-   public FixedCountMutation(int mutationCount) {
+   public FixedCountMutantSelection(int mutationCount) {
       this.mutatedSpecimenCount = mutationCount;
       this.mutationCountType = ValueType.ABSOLUTE;
    }
 
-   public FixedCountMutation(float precentage, Population population) {
+   public FixedCountMutantSelection(float precentage, Population population) {
       this.mutationCountType = ValueType.PERCENTAGE;
       this.populationPrecentage = precentage;
       this.mutatedSpecimenCount = (int)(population.getCount()*populationPrecentage);

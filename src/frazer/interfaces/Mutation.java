@@ -27,23 +27,12 @@ import java.util.Random;
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 public interface Mutation {
-
-   /**
-    * This method should select specimen from population and run on it
-    * {@link frazer.interfaces.Mutation#mutate(frazer.genotypes.Genotype)}
-    * 
-    * @param population
-    * @return
-    */
-   default Population mutate(Population population){
-      return population;
-   }
    
    /**
     * This method should change genotype in some way.
     * 
     * @param genes
-    * @return
+    * @return mutated genes
     */
    Genotype mutate(Genotype genes);
 

@@ -18,11 +18,12 @@ package frazer.algorithms;
 import frazer.Population;
 import frazer.genotypes.Genotype;
 import frazer.interfaces.Mutation;
+import frazer.interfaces.MutantSelection;
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public class WorstFitnessMutation extends AbstractMutation implements Mutation {
+public class WorstFitnessMutantSelection extends AbstractMutation implements MutantSelection {
 
    @Override
    public Population mutate(Population population) {

@@ -21,12 +21,13 @@ import frazer.constants.*;
 import frazer.genotypes.Genotype;
 import frazer.genotypes.GenotypeDescription;
 import frazer.interfaces.Mutation;
+import frazer.interfaces.MutantSelection;
 import java.util.Random;
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public class UniqueFixedCountMutation extends AbstractMutation implements Mutation{
+public class UniqueFixedCountMutation extends AbstractMutation implements MutantSelection{
    ValueType mutationCountType;
    int mutatedSpecimenCount;
    float populationPrecentage;
