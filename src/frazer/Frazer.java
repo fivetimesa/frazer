@@ -30,13 +30,6 @@ import processing.core.*;
  */
 public class Frazer {
 
-// <editor-fold defaultstate="collapsed" desc="CONSTANTS">
-
-//    final static byte BITGENOTYPE = 0;
-//    final static byte FLOATGENOTYPE = 1;
-//    final static byte SFLOATGENOTYPE = 2;
-//    final static byte INTGENOTYPE = 3;
-// </editor-fold>    
     
     private PApplet parent;
     private ArrayList<Population> populationList;
@@ -75,6 +68,20 @@ public class Frazer {
     {
         this.parent = parent;
         populationList = new ArrayList<>();
+        setDefaults();
+    }
+    
+    
+    public Frazer(PApplet parent, int populationCount, int geneCount)
+    {
+        this.parent = parent;
+        populationList = new ArrayList<>();
+        if(findFitnessFunction()) {
+            GenotypeType genotypeType = ((ReflectionFitness) fitness).getGeontypeType();
+            this.gD = new GenotypeDescription(geneCount, genotypeType);
+            currentPopulation = new Population(populationCount, gD);
+            populationList.add(currentPopulation);
+        }
         setDefaults();
     }
     
@@ -118,6 +125,24 @@ public class Frazer {
     }
     
     /**
+     * Try to find a fitness method inside the Processing sketch. If 
+     * a function with name "fitness", that returns a float, is found it will
+     * be stored in a {@linkplain frazer.algorithms.ReflectionFitness} object.
+     * It will be then invoked by the {@linkplain #evolve(int)} method in order
+     * to evaluate specimen during evolution.
+     * 
+     * @return true if a proper fitness function is found, false otherwise.
+     */
+    public final boolean findFitnessFunction() {
+        ReflectionFitness reflectionFitness = new ReflectionFitness();
+        if(reflectionFitness.findUserFitness(parent)) {
+            fitness = reflectionFitness;
+            return true;
+        }
+        else return false;
+    }
+    
+    /**
      * Primary evolution method. Creates and evaluates a number of generations specified by 
      * maxGenerations parameter. Generation stops if one of the stop conditions is met.
      * @param maxGenerations Number of generations to iterate over.
@@ -125,6 +150,11 @@ public class Frazer {
      * @see StopCondition
      */
     public Specimen evolve(int maxGenerations) {
+        if(fitness == null)
+            if(!findFitnessFunction()) {
+                System.err.print("ERROR! No Fitness funtion specified.\n Aborting evolution.\n");
+                return null;
+            }
         for (int i = 0; i < maxGenerations; i++) {
             try {
                 
