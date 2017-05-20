@@ -20,7 +20,7 @@ import frazer.constants.*;
 
 /**
  *
- * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
+ * @author Teodor Michalski, Paweł Sikorski
  */
 public class GenotypeDescription {
 

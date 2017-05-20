@@ -23,7 +23,7 @@ import java.util.Random;
 
 /**
  *
- * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
+ * @author Teodor Michalski, Paweł Sikorski
  */
 public class IntegerGenotype extends Genotype<Integer> {
 
@@ -98,29 +98,83 @@ public class IntegerGenotype extends Genotype<Integer> {
       }
    }
 
+   /**
+    * Returns genotype length.
+    *
+    * @return array length
+    */
    @Override
    public int getGeneCount() {
       return genes.length;
    }
 
+   /**
+    * Returns ith gene from genotype. Uses Integer object.
+    *
+    * @param i gene index
+    * @return warped float
+    */
    @Override
    public Integer getGene(int i) {
       return genes[i];
    }
 
+   /**
+    * Sets gene value with use of Integer.
+    *
+    * @param i gene index
+    * @param value new gene value
+    */
    @Override
    public void setGene(int i, Integer value) {
       genes[i] = value;
    }
 
+   /**
+    * Returns all genes in int array.
+    *
+    * @return
+    */
    public int[] getGenes() {
       return Arrays.copyOf(genes, genes.length);
    }
 
+   /**
+    * Uses in copy method.
+    *
+    * @param thatGenes
+    */
    private void setGenes(int[] thatGenes) {
       this.genes = thatGenes;
    }
 
+      /**
+    * Sets new value for ith gene. Uses primitive data type int.
+    *
+    * @param i gene index
+    * @param value new value to set
+    */
+   @Override
+   public void setInt(int i, int value) {
+      genes[i] = value;
+   }
+
+   /**
+    * Gets ith gene value. Uses primitive data type int.
+    *
+    * @param i gene index
+    * @return
+    */
+   @Override
+   public int getInt(int i) {
+      return genes[i];
+   }
+   
+   /**
+    * Returns genotype as array's string.
+    * 
+    * @return
+    */
    @Override
    public String toString() {
       return Arrays.toString(this.genes);

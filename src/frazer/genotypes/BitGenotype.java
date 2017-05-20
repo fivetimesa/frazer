@@ -24,7 +24,7 @@ import java.util.Random;
 
 /**
  *
- * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
+ * @author Teodor Michalski, Paweł Sikorski
  */
 public class BitGenotype extends Genotype<Boolean> {
 
@@ -48,6 +48,13 @@ public class BitGenotype extends Genotype<Boolean> {
       this.randomInit();
    }
 
+   /**
+    * Creates genotype with bit values. Genes are stored in array. One gene is
+    * represented by primitive type boolean. Genes has random value.
+    *
+    * @param count genotype's size
+    * @param randomInitialize if true, fires randomInit
+    */
    public BitGenotype(int count, boolean randomInitialize) {
       genes = new boolean[count];
       if (randomInitialize)
@@ -105,9 +112,10 @@ public class BitGenotype extends Genotype<Boolean> {
    }
 
    /**
+    * Sets gene value with use of Boolean.
     *
     * @param i gene index
-    * @param b
+    * @param b new gene value
     */
    public void setGene(int i, Boolean b) {
       rangeCheck(i);
@@ -123,6 +131,11 @@ public class BitGenotype extends Genotype<Boolean> {
       return Arrays.copyOf(genes, genes.length);
    }
 
+   /**
+    * Uses in copy method.
+    *
+    * @param thatGenes
+    */
    private void setGenes(boolean[] thatGenes) {
       this.genes = thatGenes;
    }

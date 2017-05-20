@@ -20,7 +20,7 @@ import java.lang.reflect.Array;
 
 /**
  *
- * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
+ * @author Teodor Michalski, Paweł Sikorski
  */
 public abstract class Genotype<T> implements Iterable<T> {
 
@@ -60,7 +60,7 @@ public abstract class Genotype<T> implements Iterable<T> {
                  "Genes index: " + i + ", Size: " + getGeneCount());
    }
 
-   public int getInteger(int i) {
+   public int getInt(int i) {
       throw new UnsupportedOperationException("Method getInteger() is not supported by this type of genotype.");
    }
 
@@ -76,7 +76,7 @@ public abstract class Genotype<T> implements Iterable<T> {
       throw new UnsupportedOperationException("Method getStep() is not supported by this type of genotype.");
    }
 
-   public void setInteger(int i, int value) {
+   public void setInt(int i, int value) {
       throw new UnsupportedOperationException("Method getInteger() is not supported by this type of genotype.");
    }
 

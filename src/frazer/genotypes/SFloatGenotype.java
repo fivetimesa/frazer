@@ -18,13 +18,11 @@ package frazer.genotypes;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.PrimitiveIterator;
 import java.util.Random;
 
 /**
  *
- * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
+ * @author Teodor Michalski, Paweł Sikorski
  */
 public class SFloatGenotype extends FloatGenotype {
 

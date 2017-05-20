@@ -24,7 +24,7 @@ import java.util.PrimitiveIterator;
 
 /**
  *
- * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
+ * @author Teodor Michalski, Paweł Sikorski
  */
 public class FloatGenotype extends Genotype<Float> {
 
@@ -128,10 +128,10 @@ public class FloatGenotype extends Genotype<Float> {
    }
 
    /**
-    * 
-    * 
+    * Sets gene value with use of Float.
+    *
     * @param i gene index
-    * @param value
+    * @param value new gene value
     */
    @Override
    public void setGene(int i, Float value) {
@@ -150,7 +150,7 @@ public class FloatGenotype extends Genotype<Float> {
 
    /**
     * Uses in copy method.
-    * 
+    *
     * @param thatGenes
     */
    protected void setGenes(float[] thatGenes) {
@@ -158,7 +158,7 @@ public class FloatGenotype extends Genotype<Float> {
    }
 
    /**
-    * Sets new value for ith gene.
+    * Sets new value for ith gene. Uses primitive data type float.
     *
     * @param i gene index
     * @param value new value to set
@@ -169,7 +169,7 @@ public class FloatGenotype extends Genotype<Float> {
    }
 
    /**
-    * Gets ith gene value.
+    * Gets ith gene value. Uses primitive data type float.
     *
     * @param i gene index
     * @return
@@ -180,6 +180,7 @@ public class FloatGenotype extends Genotype<Float> {
    }
 
    /**
+    * Returns genotype as array's string.
     *
     * @return
     */

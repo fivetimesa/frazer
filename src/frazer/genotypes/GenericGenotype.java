@@ -22,7 +22,7 @@ import java.util.Iterator;
 /**
  *
  *
- * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
+ * @author Teodor Michalski, Paweł Sikorski
  * @param <T> object contains gene information
  */
 public class GenericGenotype<T> extends Genotype<T> {
@@ -41,12 +41,17 @@ public class GenericGenotype<T> extends Genotype<T> {
       final T[] genericGenes = (T[]) Array.newInstance(c, count);
       this.genes = genericGenes;
    }
-   
+
    @Override
    protected Object getArrayInstance() {
       return genes;
    }
-   
+
+   /**
+    * Copies genotype.
+    *
+    * @return copy of GenericGenotype<T> instance
+    */
    @Override
    public Genotype copy() {
       Class c;
@@ -66,7 +71,7 @@ public class GenericGenotype<T> extends Genotype<T> {
    public void randomInit() {
       //empty
    }
-   
+
    /**
     * Returns genotype length. Should be override for best performance.
     *
@@ -76,12 +81,12 @@ public class GenericGenotype<T> extends Genotype<T> {
    public int getGeneCount() {
       return genes.length;
    }
-   
+
    /**
     * Returns ith gene from genotype.
-    * 
+    *
     * @param i gene index
-    * @return 
+    * @return
     */
    @Override
    public T getGene(int i) {
@@ -89,7 +94,12 @@ public class GenericGenotype<T> extends Genotype<T> {
       return genes[i];
    }
 
-   
+   /**
+    * Sets gene value with use of <T>.
+    *
+    * @param i gene index
+    * @param value new gene value
+    */
    @Override
    public void setGene(int i, T value) {
       rangeCheck(i);
