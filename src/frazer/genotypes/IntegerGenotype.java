@@ -104,11 +104,6 @@ public class IntegerGenotype extends Genotype<Integer> {
    }
 
    @Override
-   public String toString() {
-      return Arrays.toString(this.genes);
-   }
-
-   @Override
    public Integer getGene(int i) {
       return genes[i];
    }
@@ -124,6 +119,11 @@ public class IntegerGenotype extends Genotype<Integer> {
 
    private void setGenes(int[] thatGenes) {
       this.genes = thatGenes;
+   }
+
+   @Override
+   public String toString() {
+      return Arrays.toString(this.genes);
    }
 
    @Override

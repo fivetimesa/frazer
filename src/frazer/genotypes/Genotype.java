@@ -91,38 +91,4 @@ public abstract class Genotype<T> implements Iterable<T> {
    public void setStep(int i, float value) {
       throw new UnsupportedOperationException("Method getStep() is not supported by this type of genotype.");
    }
-
-   /*   @Override
-   public Iterator<T> iterator() {
-      return new GeneIterator<>();
-   }
-
-   private class GeneIterator<T> implements Iterator<T> {
-      int cursor;
-      int length = getGeneCount();
-      Object objectArray = getArrayInstance();
-      Class arrayType = objectArray.getClass().getComponentType();
-      
-      int[] intArray;
-      float[] floatArray;
-      boolean[] bitArray;
-      
-      public GeneIterator() {
-         cursor = 0;
-      }
-
-      @Override
-      public boolean hasNext() {
-         if (cursor < length)
-            return true;
-         else
-            return false;
-      }
-
-      @Override
-      public T next() {
-         cursor++;
-         return (T) genes[cursor - 1];
-      }
-   }*/
 }

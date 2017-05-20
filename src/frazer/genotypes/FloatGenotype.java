@@ -28,13 +28,13 @@ import java.util.PrimitiveIterator;
  */
 public class FloatGenotype extends Genotype<Float> {
 
-   private float[] genes;
+   protected float[] genes;
 
    /**
     * Used only for copy method.
     */
-   private FloatGenotype() {
-      //private constructor
+   protected FloatGenotype() {
+      //protected constructor
    }
 
    /**
@@ -148,7 +148,12 @@ public class FloatGenotype extends Genotype<Float> {
       return Arrays.copyOf(genes, genes.length);
    }
 
-   private void setGenes(float[] thatGenes) {
+   /**
+    * Uses in copy method.
+    * 
+    * @param thatGenes
+    */
+   protected void setGenes(float[] thatGenes) {
       this.genes = thatGenes;
    }
 
