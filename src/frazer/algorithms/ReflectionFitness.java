@@ -125,28 +125,27 @@ public class ReflectionFitness implements Fitness {
                         fitness = (float) userFitness.invoke(parent, new Object[] {genotype});
                         break;
                     case BITARRAY:
-                        //boolean[] arguments = ((BitGenotype)genotype).getGenes();
-                        //fitness = (float) userFitness.invoke(parent, new Object[] {arguments});
-                        System.err.println("Not supported yet");
+                        boolean[] bitArguments = ((BitGenotype)genotype).getGenes();
+                        fitness = (float) userFitness.invoke(parent, new Object[] {bitArguments});
                         break;
                     case INTARRAY:
-                        //int[] arguments = ((IntegerGenotype)genotype).getGenes();
-                        //fitness = (float) userFitness.invoke(parent, new Object[] {arguments});
-                        System.err.println("Not supported yet");
+                        int[] intArguments = ((IntegerGenotype)genotype).getGenes();
+                        fitness = (float) userFitness.invoke(parent, new Object[] {intArguments});
                         break;
                     case FLOATARRAY:
-                        float[] arguments = ((FloatGenotype)genotype).getFloatGenes();
-                        fitness = (float) userFitness.invoke(parent, new Object[] {arguments});
-                        //System.out.println("Fitness function returned: " + fitness);
+                        float[] floatArguments = ((FloatGenotype)genotype).getGenes();
+                        fitness = (float) userFitness.invoke(parent, new Object[] {floatArguments});
                         break;
                     case CHARARRAY:
-                        //char[] arguments = ((FloatGenotype)genotype).getGenes();
-                        //fitness = (float) userFitness.invoke(parent, new Object[] {arguments});
-                        System.err.println("Not supported yet");
+                        float[] genes = ((FloatGenotype)genotype).getGenes();
+                        char[] charArguments = new char[genes.length];
+                        for(int i = 0; i < genes.length; i++)
+                            charArguments[i] = Utility.floatGeneToChar(genes[i]);
+                        fitness = (float) userFitness.invoke(parent, new Object[] {charArguments});
                         break;
                     case STRING:
-                        String argument = Utility.floatGeontypeToString(genotype);
-                        fitness = (float) userFitness.invoke(parent, new Object[] {argument});
+                        String stringArgument = Utility.floatGeontypeToString(genotype);
+                        fitness = (float) userFitness.invoke(parent, new Object[] {stringArgument});
                         break;
                 }
             }
