@@ -15,19 +15,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package frazer.interfaces;
-
-import frazer.genotypes.Genotype;
-
+import frazer.Population;
+import frazer.Specimen;
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public interface Fitness extends AlgorithmsInterface {
-
-    /**
-     *
-     * @param genotype
-     * @return fitness score
-     */
-    public float calculateFitness(Genotype genotype);
+public interface MutantSelection extends AlgorithmsInterface{
+   
+      /**
+    * This method should select specimen from population to mutate.
+    * Mutation is provided by 
+    * {@link frazer.interfaces.Mutation#mutate(frazer.genotypes.Genotype)}.
+    * 
+    * @param population
+    * @return specimens to mutate
+    */
+   public Specimen[] selectMutants(Population population);
+   
+   public default boolean needFitness()
+   {
+      return false;
+   }
 }

@@ -20,21 +20,12 @@ import frazer.constants.*;
 
 /**
  *
- * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
+ * @author Teodor Michalski, Paweł Sikorski
  */
 public class GenotypeDescription {
 
    private GenotypeType genotypeType;
    public final int geneCount;
-   
-   //MUTATION CONSTANTS
-   private GeneMutationType geneMutationType;
-   private GenotypeMutationType genotypeMutationType;
-   private ValueType mutationValueType;
-   int mutationCount;
-   float mutationChance;
-   float mutationStrength;
-   float[] individualMutationStrength;
    
    //GENE LIMIT
    private Limit limit;
@@ -45,19 +36,7 @@ public class GenotypeDescription {
    public GenotypeDescription(int geneCount, GenotypeType geneType) {
       this.genotypeType = geneType;
       this.geneCount = geneCount;
-
-      this.genotypeMutationType = GenotypeMutationType.ONE;
-      this.mutationValueType = mutationValueType.PERCENTAGE;
-      this.mutationChance = 0.05f;
       
-      if (geneType == geneType.BIT) {
-         geneMutationType = GeneMutationType.BIT;
-      }
-      else {
-         geneMutationType = GeneMutationType.CONSTANT;
-         mutationStrength = 0.01f;
-      }
-
       limit = Limit.NOLIMIT;
    }
 
@@ -105,67 +84,6 @@ public class GenotypeDescription {
 
    public Limit getLimit() {
       return limit;
-   }
-
-   public GeneMutationType getGeneMutationType() {
-      return geneMutationType;
-   }
-
-   public GenotypeMutationType getGenotypeMutationType() {
-      return genotypeMutationType;
-   }
-   
-   public ValueType getMutationValueType() {
-      return mutationValueType;
-   }
-
-   public float getMutationChance() {
-      return mutationChance;
-   }
-
-   public int getMutationCount() {
-      return mutationCount;
-   }
-   
-   public void setMutationScale(float mutationStrength) {
-      this.mutationStrength = mutationStrength;
-   }
-
-   public void setGeneMutationType(GeneMutationType geneMutationType) {
-      this.geneMutationType = geneMutationType;
-   }
-
-   public void setMutationValueType(ValueType mutationValueType) {
-      this.mutationValueType = mutationValueType;
-   }
-
-   public void setMutationChance(float mutationChance) {
-      this.mutationChance = mutationChance;
-   }
-
-   public void setMutationCount(int mutationCount) {
-      this.mutationCount = mutationCount;
-   }
-
-   public void setMutationStrength(float mutationStrength) {
-      this.mutationStrength = mutationStrength;
-   }
-   
-   public void setMutationStrength(float[] individualMutationStrength) {
-      geneMutationType = GeneMutationType.INDIVIDUALRANGE;
-      this.individualMutationStrength = individualMutationStrength;
-   }
-
-   public void setGenotypeMutationType(GenotypeMutationType genotypeMutationType) {
-      this.genotypeMutationType = genotypeMutationType;
-   }
-   
-   public float getMutationStrength() {
-      return mutationStrength;
-   }
-
-   public float getMutationStrength(int i) {
-      return mutationStrength;
    }
 
    private void rangeCheck(int i) {

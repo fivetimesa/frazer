@@ -14,25 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package frazer.algorithms;
+package frazer.interfaces;
 
-import frazer.Population;
-import frazer.genotypes.Genotype;
-import frazer.interfaces.Mutation;
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public class ChanceMutation extends AbstractMutation implements Mutation{
+abstract interface AlgorithmsInterface {
 
-   @Override
-   public Population mutate(Population population) {
-      return Mutation.super.mutate(population); //To change body of generated methods, choose Tools | Templates.
-   }
-
-   @Override
-   public Genotype mutate(Genotype genes) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-   }
-   
+    /**
+     *
+     * @return
+     */
+    public default boolean needsSorting() {
+        return false;
+    }
 }

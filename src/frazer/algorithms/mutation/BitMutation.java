@@ -14,24 +14,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package frazer.algorithms;
-import frazer.Population;
+package frazer.algorithms.mutation;
+
+import frazer.genotypes.BitGenotype;
 import frazer.genotypes.Genotype;
 import frazer.interfaces.Mutation;
+
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public class WorstFitnessMutation extends AbstractMutation implements Mutation {
+public class BitMutation extends AbstractMutation implements Mutation {
 
-   @Override
-   public Population mutate(Population population) {
-      return Mutation.super.mutate(population); //To change body of generated methods, choose Tools | Templates.
+   public BitMutation() {
+      super();
+   }
+
+   public BitMutation(int mutationCount, boolean setUnique) {
+      super(mutationCount, setUnique);
+   }
+
+   public BitMutation(float mutationChance) {
+      super(mutationChance);
    }
 
    @Override
    public Genotype mutate(Genotype genes) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      mutateGenotypeByMutationType(genes);
+      return genes;
    }
-   
+
+   @Override
+   public void mutateGene(int i, Genotype genes) {
+      genes.setBoolean(i, !genes.getBoolean(i));
+   }
+
 }

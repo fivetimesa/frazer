@@ -39,5 +39,10 @@ public enum GenotypeMutationType {
    /**
     * Mutation of gene with chance to occure.
     */
-   CHANCE
+   CHANCE,
+   
+   /**
+    * No Mutation.
+    */
+   NOMUTATION
 }

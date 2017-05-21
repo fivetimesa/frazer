@@ -17,6 +17,7 @@
 
 
 package frazer;
+import frazer.algorithms.mutation.NoMutation;
 import frazer.constants.*;
 import frazer.algorithms.*;
 import frazer.genotypes.*;

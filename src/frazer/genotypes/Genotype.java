@@ -15,88 +15,80 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package frazer.genotypes;
-import java.util.Iterator;
 
 import java.lang.reflect.Array;
 
 /**
  *
- * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
- * @param <T>
+ * @author Teodor Michalski, Paweł Sikorski
  */
-public class Genotype<T> implements Iterable {
+public abstract class Genotype<T> implements Iterable<T> {
 
-    T[] genes;
+   /**
+    * Returns object reference to array with genes.
+    *
+    * @return array as object
+    */
+   protected abstract Object getArrayInstance();
 
-    public Genotype(Class<T> c, int count) {
-        @SuppressWarnings("unchecked")
-        final T[] genericGenes = (T[]) Array.newInstance(c, count);
-        this.genes = genericGenes;
-    }
-    
-    public Genotype copy() {
-        Class c;
-        c = genes.getClass().getComponentType();
-        Genotype<T> copy = new Genotype<T>(c, genes.length);
-        
-        for(int i = 0; i < genes.length; i++)
-        {
-            copy.setGene(i, getGene(i));
-        }    
-        return copy;
-//            copy.setGene(i, getGene(i));
-        
-//        Genotype<T> copy = new Genotype<>(genes.length);
-//        for(int i = 0; i < genes.length; i++)
-//            copy.setGene(i, getGene(i));
-//        return copy;
-    }
+   abstract public Genotype copy();
 
-    public void randomInit() {
-    }
+   abstract public void randomInit();
 
-    public T getGene(int i) {
-        rangeCheck(i);
-        return genes[i];
-    }
-    
-    public void setGene(int i, T value) {
-        rangeCheck(i);
-        genes[i] = value;
-    }
+   public void randomInit(float min, float max) {
+      throw new UnsupportedOperationException("Method "
+              + "randomInit(float min, float max) "
+              + "is not supported by this type of genotype.");
+   }
 
-    protected void rangeCheck(int i) {
-        if (i < 0 || i > genes.length - 1)
-            throw new IndexOutOfBoundsException(
-                    "Genes index: " + i + ", Size: " + genes.length);
-    }
-    
-    public int getGeneCount() {
-        return genes.length;
-    }
+   /**
+    * Returns genotype length. Should be override for best performance.
+    *
+    * @return array length
+    */
+   public int getGeneCount() {
+      return Array.getLength(getArrayInstance());
+   }
 
-    @Override
-    public Iterator iterator() {
-        return new GeneIterator<>();
-    }
-    
-    private class GeneIterator <T> implements Iterator<T> {
-        int cursor;
-        
-        public GeneIterator() {
-            cursor = 0;
-        }
-        @Override
-        public boolean hasNext() {
-            if(cursor < genes.length)
-                return true;
-            else return false;
-        }
+   abstract public T getGene(int i);
 
-        @Override
-        public T next() {
-            cursor++;
-            return (T) genes[cursor-1];
-        }
-    }
+   abstract public void setGene(int i, T value);
+
+   protected void rangeCheck(int i) {
+      if (i < 0 || i > getGeneCount() - 1)
+         throw new IndexOutOfBoundsException(
+                 "Genes index: " + i + ", Size: " + getGeneCount());
+   }
+
+   public int getInt(int i) {
+      throw new UnsupportedOperationException("Method getInteger() is not supported by this type of genotype.");
+   }
+
+   public boolean getBoolean(int i) {
+      throw new UnsupportedOperationException("Method getBoolean() is not supported by this type of genotype.");
+   }
+
+   public float getFloat(int i) {
+      throw new UnsupportedOperationException("Method getFloat() is not supported by this type of genotype.");
+   }
+
+   public float getStep(int i) {
+      throw new UnsupportedOperationException("Method getStep() is not supported by this type of genotype.");
+   }
+
+   public void setInt(int i, int value) {
+      throw new UnsupportedOperationException("Method getInteger() is not supported by this type of genotype.");
+   }
+
+   public void setBoolean(int i, boolean value) {
+      throw new UnsupportedOperationException("Method getBoolean() is not supported by this type of genotype.");
+   }
+
+   public void setFloat(int i, float value) {
+      throw new UnsupportedOperationException("Method getFloat() is not supported by this type of genotype.");
+   }
+
+   public void setStep(int i, float value) {
+      throw new UnsupportedOperationException("Method getStep() is not supported by this type of genotype.");
+   }
 }

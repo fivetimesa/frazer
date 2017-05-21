@@ -22,7 +22,7 @@ import frazer.Specimen;
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public interface Breeding extends SortingDemand {
+public interface Breeding extends AlgorithmsInterface {
 
     /**
      *

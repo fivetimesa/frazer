@@ -23,7 +23,7 @@ import frazer.Specimen;
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public interface Preselection extends SortingDemand {
+public interface Preselection extends AlgorithmsInterface {
     
     /**
      *

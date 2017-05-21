@@ -17,37 +17,194 @@
 package frazer.genotypes;
 
 import java.util.Arrays;
+import java.util.NoSuchElementException;
+import java.util.PrimitiveIterator;
 import java.util.Random;
 
 /**
  *
- * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
+ * @author Teodor Michalski, Paweł Sikorski
  */
 public class IntegerGenotype extends Genotype<Integer> {
 
-    public IntegerGenotype(int count) {
-        super(Integer.class, count);
-    }
+   int[] genes;
 
-    @Override
-    public Genotype copy() {
-        IntegerGenotype copy = new IntegerGenotype(genes.length);
-        for (int i = 0; i < genes.length; i++) {
-            copy.setGene(i, getGene(i));
-        }
-        return copy;
-    }
+   /**
+    * Used only for copy method.
+    */
+   private IntegerGenotype() {
+      //private constructor
+   }
 
-    public void randomInit(int min, int max) {
-        Random generator = new Random();
-        for (int i = 0; i < genes.length; i++) {
-            genes[i] = min + generator.nextInt() * (max - min);
-        }
-    }
+   /**
+    * Creates genotype with integer values. Genes are stored in array. One gene
+    * is represented by primitive type int.
+    *
+    * @param count genotype's size
+    */
+   public IntegerGenotype(int count) {
+      genes = new int[count];
+      this.randomInit();
+   }
 
-    @Override
-    public String toString() {
-        return Arrays.toString(this.genes);
-    }
+   /**
+    * Creates genotype with integer values. Genes are stored in array. One gene
+    * is represented by primitive type int.
+    *
+    * @param count genotype's size
+    * @param randomInitialize if true, fires randomInit
+    */
+   public IntegerGenotype(int count, boolean randomInitialize) {
+      genes = new int[count];
+      if (randomInitialize)
+         this.randomInit();
+   }
+
+   @Override
+   protected Object getArrayInstance() {
+      return genes;
+   }
+
+   /**
+    * Copies genotype. Uses Arrays.copyOf() method.
+    *
+    * @return copy of IntegerGenotype instance
+    */
+   @Override
+   public Genotype copy() {
+      IntegerGenotype copy = new IntegerGenotype();
+      copy.setGenes(Arrays.copyOf(genes, genes.length));
+      return copy;
+   }
+
+   /**
+    * Ranodomizes genes' values in range 0 to 100.
+    */
+   @Override
+   public void randomInit() {
+      randomInit(0, 100);
+   }
+
+   /**
+    * Ranodomizes genes' values in range <code>min</code> to <code>max</code>.
+    *
+    * @param min
+    * @param max
+    */
+   public void randomInit(int min, int max) {
+      Random generator = new Random();
+      for (int i = 0; i < genes.length; i++) {
+         genes[i] = min + generator.nextInt() * (max - min);
+      }
+   }
+
+   /**
+    * Returns genotype length.
+    *
+    * @return array length
+    */
+   @Override
+   public int getGeneCount() {
+      return genes.length;
+   }
+
+   /**
+    * Returns ith gene from genotype. Uses Integer object.
+    *
+    * @param i gene index
+    * @return warped float
+    */
+   @Override
+   public Integer getGene(int i) {
+      return genes[i];
+   }
+
+   /**
+    * Sets gene value with use of Integer.
+    *
+    * @param i gene index
+    * @param value new gene value
+    */
+   @Override
+   public void setGene(int i, Integer value) {
+      genes[i] = value;
+   }
+
+   /**
+    * Returns all genes in int array.
+    *
+    * @return
+    */
+   public int[] getGenes() {
+      return Arrays.copyOf(genes, genes.length);
+   }
+
+   /**
+    * Uses in copy method.
+    *
+    * @param thatGenes
+    */
+   private void setGenes(int[] thatGenes) {
+      this.genes = thatGenes;
+   }
+
+      /**
+    * Sets new value for ith gene. Uses primitive data type int.
+    *
+    * @param i gene index
+    * @param value new value to set
+    */
+   @Override
+   public void setInt(int i, int value) {
+      genes[i] = value;
+   }
+
+   /**
+    * Gets ith gene value. Uses primitive data type int.
+    *
+    * @param i gene index
+    * @return
+    */
+   @Override
+   public int getInt(int i) {
+      return genes[i];
+   }
+   
+   /**
+    * Returns genotype as array's string.
+    * 
+    * @return
+    */
+   @Override
+   public String toString() {
+      return Arrays.toString(this.genes);
+   }
+
+   @Override
+   public IntegerGenotypeIterator iterator() {
+      return new IntegerGenotypeIterator();
+   }
+
+   private class IntegerGenotypeIterator implements PrimitiveIterator.OfInt {
+
+      int index;
+
+      public IntegerGenotypeIterator() {
+         this.index = 0;
+      }
+
+      @Override
+      public int nextInt() {
+         if (hasNext()) {
+            return genes[index++]; //post-increment
+         } else
+            throw new NoSuchElementException();
+      }
+
+      @Override
+      public boolean hasNext() {
+         return index < genes.length;
+      }
+   }
 
 }
