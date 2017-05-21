@@ -14,28 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package frazer.algorithms;
-import frazer.genotypes.BitGenotype;
+package frazer.algorithms.mutantselection;
+import frazer.algorithms.mutation.AbstractMutation;
+import frazer.Population;
+import frazer.Specimen;
 import frazer.genotypes.Genotype;
 import frazer.interfaces.Mutation;
+import frazer.interfaces.MutantSelection;
+import java.util.ArrayList;
+import java.util.Random;
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public class BitMutation extends AbstractMutation implements Mutation{
+public class WorstFitnessMutantSelection implements MutantSelection {
+
+   public WorstFitnessMutantSelection() {
+   }
 
    @Override
-   public Genotype mutate(Genotype genes) {
+   public Specimen[] selectMutants(Population population) {
+      Random random = new Random();
+      ArrayList<Specimen> selectedMutants = new ArrayList<>();
+      Specimen[] specimens = population.getSpecimens();
       
+      //NEED IMPLEMENTATION!!
       
-      boolean[] mutationPattern = selectGenes(genes);
-      BitGenotype bitGenes = (BitGenotype) genes;
-      
-      for (int i = 0; i < mutationPattern.length; i++) {
-            if(mutationPattern[i])
-               bitGenes.setGene(i, !bitGenes.getGene(i));
-      }
-      return genes;
+      return (Specimen[]) selectedMutants.toArray();
    }
    
 }
