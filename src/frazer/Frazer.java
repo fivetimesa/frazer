@@ -106,6 +106,7 @@ public class Frazer {
         setDefaults();
     }
     
+    
     private void setDefaults() {
         if(goal == null) 
             goal = Goal.MINIMISE;
@@ -150,11 +151,10 @@ public class Frazer {
      * @see StopCondition
      */
     public Specimen evolve(int maxGenerations) {
-        if(fitness == null)
-            if(!findFitnessFunction()) {
-                System.err.print("ERROR! No Fitness funtion specified.\n Aborting evolution.\n");
-                return null;
-            }
+        if(fitness == null) {
+            System.err.print("ERROR! No Fitness funtion specified.\n Aborting evolution.\n");
+            return null;
+        }
         for (int i = 0; i < maxGenerations; i++) {
             try {
                 
