@@ -33,7 +33,7 @@ public interface MutantSelection extends AlgorithmsInterface{
     */
    public Specimen[] selectMutants(Population population);
    
-   public default boolean needFitness()
+   public default boolean needsFitness()
    {
       return false;
    }

@@ -20,6 +20,8 @@ package frazer;
 import frazer.algorithms.mutation.NoMutation;
 import frazer.constants.*;
 import frazer.algorithms.*;
+import frazer.algorithms.mutantselection.*;
+import frazer.algorithms.mutation.*;
 import frazer.genotypes.*;
 import frazer.interfaces.*;
 import java.util.ArrayList;
@@ -33,7 +35,7 @@ public class Frazer {
 
     
     private PApplet parent;
-    private ArrayList<Population> populationList;
+    private History history;
     private Population currentPopulation;
     
     private GenotypeDescription gD;
@@ -46,8 +48,6 @@ public class Frazer {
     
     /** The goal of the optimisation process (either to minimise of to maximise). */
     private Goal goal;
-    /** Population counter. Specifies the number of specimen in a population. */
-    private int populationCount;
     
     /** Algorithm for preselection. */
     private Preselection preselection;
@@ -57,6 +57,8 @@ public class Frazer {
     private Breeding breeding;
     /** Algorithm for fitness, to be specified by the user. */
     private Fitness fitness;
+    /** Algorithm for mutant selection. */
+    private MutantSelection mutantSelection;
     /** Algorithm for mutation. */
     private Mutation mutation;
     
@@ -68,7 +70,7 @@ public class Frazer {
     public Frazer(PApplet parent)
     {
         this.parent = parent;
-        populationList = new ArrayList<>();
+        history = new History();
         setDefaults();
     }
     
@@ -76,12 +78,15 @@ public class Frazer {
     public Frazer(PApplet parent, int populationCount, int geneCount)
     {
         this.parent = parent;
-        populationList = new ArrayList<>();
+        history = new History();
+        
         if(findFitnessFunction()) {
             GenotypeType genotypeType = ((ReflectionFitness) fitness).getGeontypeType();
             this.gD = new GenotypeDescription(geneCount, genotypeType);
             currentPopulation = new Population(populationCount, gD);
-            populationList.add(currentPopulation);
+            
+            currentPopulation.evaluate(fitness);
+            history.recordPopulation(currentPopulation);
         }
         setDefaults();
     }
@@ -97,12 +102,14 @@ public class Frazer {
     public Frazer(PApplet parent, int populationCount, int geneCount, GenotypeType genotypeType, Fitness fitness)
     {
         this.parent = parent;
-        populationList = new ArrayList<>();
+        history = new History();
         
         this.gD = new GenotypeDescription(geneCount, genotypeType);
         currentPopulation = new Population(populationCount, gD);
-        populationList.add(currentPopulation);
         this.fitness = fitness;
+        
+        currentPopulation.evaluate(fitness);
+        history.recordPopulation(currentPopulation);
         
         setDefaults();
     }
@@ -117,10 +124,24 @@ public class Frazer {
             setMating(new TournamentMating(goal));
         if(breeding == null) 
             setBreeding(new CrossoverBreeding());
+        if(getMutantSelection() == null)
+            setMutantSelection(new ChanceMutantSelection(0.05f));
         if(mutation == null) {
-            if(gD.getGenotypeType() == GenotypeType.FLOAT)
-                setMutation(new SimpleFloatMutation());
-            else setMutation(new NoMutation());
+            switch(gD.getGenotypeType()) {
+                case BIT:
+                    mutation = new BitMutation();
+                    break;
+                case INTEGER:
+                    mutation = new ConstantValueMutation(1f);
+                    break;
+                case SFLOAT:
+                case FLOAT:
+                    mutation = new RangeValueMutation(1f);
+                    break;
+                default:
+                    mutation = new NoMutation();
+                    break;
+            }
         }
         if(getStopCondition() == null)
             setStopCondition(new StopCondition());
@@ -160,10 +181,11 @@ public class Frazer {
             try {
                 
                 System.out.print("Evolving… \n");
-                Population nextPopulation = currentPopulation.nextGeneration(getPreselection(), getFitness(), getMating(), getBreeding(), getMutation());
+                Population nextPopulation = currentPopulation.nextGeneration(getPreselection(), getFitness(), getMating(), getBreeding(), getMutantSelection(), getMutation());
                 generationCount++;
                 System.out.print("Generation " + generationCount + "\n");
                 currentPopulation = nextPopulation;
+                getHistory().recordPopulation(currentPopulation);
             }
                 catch (Exception e) {
                     System.out.print("Something went wrong. Evolution stopped at generation " + generationCount + "\n");
@@ -267,6 +289,20 @@ public class Frazer {
     }
 
     /**
+     * @return the mutantSelection
+     */
+    public MutantSelection getMutantSelection() {
+        return mutantSelection;
+    }
+
+    /**
+     * @param mutantSelection the mutantSelection to set
+     */
+    public void setMutantSelection(MutantSelection mutantSelection) {
+        this.mutantSelection = mutantSelection;
+    }
+    
+    /**
      * @return the mutation
      */
     public Mutation getMutation() {
@@ -279,6 +315,13 @@ public class Frazer {
     public void setMutation(Mutation mutation) {
         this.mutation = mutation;
     }
+
+    /**
+     * @return the history
+     */
+    public History getHistory() {
+        return history;
+    }
 // </editor-fold>
     
     /**
@@ -287,6 +330,7 @@ public class Frazer {
      * Each of these can be turned off or on, and each has a separate threshold to specify.
      */
     public class StopCondition {
+        private boolean disabled;
         private boolean stopOnGeneration;
         private boolean stopOnConvergence;
         private boolean stopOnFitnessScore;
@@ -369,12 +413,17 @@ public class Frazer {
         public boolean generationLimitCheck() {
             return generationCount >= generationLimit;
         }
+        
+// <editor-fold defaultstate="collapsed" desc="Getters & Setters">
 
         /**
          * @param stopOnGeneration the stopOnGeneration to set
          */
         public void setStopOnGeneration(boolean stopOnGeneration) {
             this.stopOnGeneration = stopOnGeneration;
+            if (stopOnGeneration) {
+                disabled = false;
+            }
         }
 
         /**
@@ -382,6 +431,9 @@ public class Frazer {
          */
         public void setStopOnConvergence(boolean stopOnConvergence) {
             this.stopOnConvergence = stopOnConvergence;
+            if (stopOnConvergence) {
+                disabled = false;
+            }
         }
 
         /**
@@ -389,62 +441,109 @@ public class Frazer {
          */
         public void setStopOnFitnessScore(boolean stopOnFitnessScore) {
             this.stopOnFitnessScore = stopOnFitnessScore;
+            if (stopOnFitnessScore) {
+                disabled = false;
+            }
         }
 
         /**
          * @return the generationLimit
          */
         public int getGenerationLimit() {
-            if(stopOnGeneration) 
+            if (stopOnGeneration) {
                 return generationLimit;
-            else return 0;
+            } else {
+                return 0;
+            }
         }
 
         /**
          * Set and enable generation limit stop condition.
+         *
          * @param generationLimit the generationLimit to set
          */
         public void setGenerationLimit(int generationLimit) {
             this.generationLimit = generationLimit;
             stopOnGeneration = true;
+            disabled = false;
         }
 
         /**
          * @return the convergenceThreshold
          */
         public float getConvergenceThreshold() {
-            if(stopOnConvergence)
+            if (stopOnConvergence) {
                 return convergenceThreshold;
-            else return 0.0f;
+            } else {
+                return 0.0f;
+            }
         }
 
         /**
          * Set and enable the convergence threshold stop condition.
+         *
          * @param convergenceThreshold the convergenceThreshold to set
          */
         public void setConvergenceThreshold(float convergenceThreshold) {
             this.convergenceThreshold = convergenceThreshold;
             stopOnConvergence = true;
+            disabled = false;
         }
 
         /**
          * @return the fitnessThreshold
          */
         public float getFitnessThreshold() {
-            if(stopOnFitnessScore)
+            if (stopOnFitnessScore) {
                 return fitnessThreshold;
-            else return 0.0f;
+            } else {
+                return 0.0f;
+            }
         }
 
         /**
          * Set and enable the fitness threshold stop condition.
+         *
          * @param fitnessThreshold the fitnessThreshold to set
          */
         public void setFitnessThreshold(float fitnessThreshold) {
             this.fitnessThreshold = fitnessThreshold;
             stopOnFitnessScore = true;
+            disabled = false;
+        }
+
+// </editor-fold>
+
+        /**
+         * 
+         * @return true if general switch for checking conditions is on.
+         */
+        public boolean isEnabled() {
+            return !disabled;
+        }
+
+        /**
+         * Disable all stop conditions. Does not change any specific
+         * conditions properties. 
+         * @see #enable() 
+         */
+        public void disable() {
+            this.disabled = true;
+        }
+        /**
+         * Enable checking stop conditions. Does not enable any specific 
+         * conditions, it is a general switch.
+         * @see #disable() 
+         */
+        public void enable() {
+            this.disabled = false;
         }
         
         
     }
+    
+    protected final class Algorithms {
+    
+    }
+
 }

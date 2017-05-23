@@ -101,6 +101,24 @@ public class Population {
         }
     }
     
+     private void evaluate(Specimen[] specimens, Fitness fitness) {
+        for (int i = 0; i < count; i++) {
+            scoreSum -= specimens[i].getFitnessScore();
+            //System.out.print("Evaluating specimen #" + i + "\n");
+            float score = specimens[i].evaluateFitness(fitness);
+            if(score < minScore) {
+                minScore = score;
+                minSpecimen = specimens[i];
+            }
+            if(score > maxScore) {
+                maxScore = score;
+                maxSpecimen = specimens[i];
+            }
+            scoreSum += score;
+        }
+        evaluated = true;
+    }
+    
     /**
      *
      * @param preselection
@@ -111,7 +129,7 @@ public class Population {
      * @return
      * @throws Exception
      */
-    public Population nextGeneration(Preselection preselection, Fitness fitness, Mating mating, Breeding breeding, Mutation mutation) throws Exception {
+    public Population nextGeneration(Preselection preselection, Fitness fitness, Mating mating, Breeding breeding, MutantSelection mutantSelection, Mutation mutation) throws Exception {
         Specimen[] newSpecimens = new Specimen[count];
         
         //System.out.print("Evaluating… \n");
@@ -151,18 +169,43 @@ public class Population {
             //System.out.print("Children added to new generation. \n");
         }
         
-        //System.out.print("Created " + newSpecimens.length + " new specimens. \n");
-        //System.out.print("Mutating… \n");
-        for(int i = 0; i < newSpecimens.length; i++) {
-            newSpecimens[i].mutate(mutation);
-        }
+            
         
-        //System.out.print("New generation ready. \n");
+        //for(int i = 0; i < newSpecimens.length; i++) {
+        //    newSpecimens[i].mutate(mutation);
+        //}
+        
         Population nextPopulation = new Population(newSpecimens);
-        nextPopulation.evaluate(fitness);
+        System.out.print("Created " + newSpecimens.length + " new specimens. \n");
+        System.out.print("Mutating… \n");
+        nextPopulation.mutate(mutantSelection, mutation, fitness);
+        System.out.print("New generation ready. \n");
         return nextPopulation;
     }
     
+    private void mutate(MutantSelection mutantSelection, Mutation mutation, Fitness fitness) {
+        
+        System.out.print("Mutating new population with " + mutantSelection.getClass().getName() 
+                        + " and " + mutation.getClass().getName() +  "\n");
+        
+        if(mutantSelection.needsFitness())
+            evaluate(fitness);
+        
+        System.out.print("Selecting mutants… ");
+        Specimen[] mutants = mutantSelection.selectMutants(this);
+        System.out.print(mutants.length + " specimens selected. \n");
+        
+        System.out.print("Mutating… ");
+        for(Specimen mutant : mutants)
+            mutant.mutate(mutation);
+        System.out.print("done. \n");
+        
+        System.out.print("Evaluating… \n");
+        if(mutantSelection.needsFitness())
+            evaluate(mutants, fitness);
+        else 
+            evaluate(fitness);
+    }
 
 //<editor-fold defaultstate="collapsed" desc="Getters & Setters">
     public Specimen[] getSpecimens() {

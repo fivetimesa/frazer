@@ -12,7 +12,7 @@ void setup()
 
 void draw() {
   background(0);
-  text("best score: " + frazer.evolve(1).getFitnessScore(), width/2, height/2);
+  text("best score: " + String.format("%.3f", frazer.evolve(1).getFitnessScore()), width/2, height/2);
   
 }
 
