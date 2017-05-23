@@ -15,6 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package frazer;
+import frazer.Frazer.Algorithms;
 import frazer.constants.*;
 import frazer.interfaces.*;
 import java.util.Arrays;
@@ -121,46 +122,40 @@ public class Population {
     
     /**
      *
-     * @param preselection
-     * @param fitness
-     * @param mating
-     * @param breeding
-     * @param mutantSelection
-     * @param mutation
+     * @param algorithms
      * @return
      * @throws Exception
      */
-    public Population nextGeneration(Preselection preselection, Fitness fitness, Mating mating, Breeding breeding, MutantSelection mutantSelection, Mutation mutation) throws Exception {
+    public Population nextGeneration(Algorithms algorithms) throws Exception {
         Specimen[] newSpecimens = new Specimen[count];
         
         //System.out.print("Evaluating… \n");
-        evaluate(fitness);
+        evaluate(algorithms.fitness);
         //System.out.print("Specimen evaluation done. \n");
         
-        if(preselection.needsSorting() || fitness.needsSorting() || 
-                 mating.needsSorting() || breeding.needsSorting()) {
+        if(algorithms.needSorting()) {
             Arrays.sort(specimens);
             //System.out.print("Specimen array sorted \n");
         }
         
-        Specimen[] elite = preselection.selectElite(this);
+        Specimen[] elite = algorithms.preselection.selectElite(this);
         int newSpecimensCount = 0;
         for(int i = 0; i < elite.length; i++) {
             newSpecimens[i] = elite[i];
             newSpecimensCount++;
         }
         
-        specimens = preselection.discardWorst(this);
+        specimens = algorithms.preselection.discardWorst(this);
         //System.out.print("Preselection done. \n");
         
         //System.out.print("Mating & breeding… \n");
-        mating.update(this);
+        algorithms.mating.update(this);
         //System.out.print("Mating initialized \n");
         
         for(int i = newSpecimensCount; i < newSpecimens.length; i++) {
-            Specimen[] parents = mating.selectParents(this);
+            Specimen[] parents = algorithms.mating.selectParents(this);
             //System.out.print("Parents ready. \n");
-            Specimen[] children = breeding.breed(parents);
+            Specimen[] children = algorithms.breeding.breed(parents);
             //System.out.print("Children ready. \n");
             for(int j = 0; j < children.length; j++) {
                 if(newSpecimensCount >= count) break;
@@ -173,7 +168,7 @@ public class Population {
         Population nextPopulation = new Population(newSpecimens);
         //System.out.print("Created " + newSpecimens.length + " new specimens. \n");
         //System.out.print("Mutating… \n");
-        nextPopulation.mutate(mutantSelection, mutation, fitness);
+        nextPopulation.mutate(algorithms.mutantSelection, algorithms.mutation, algorithms.fitness);
         //System.out.print("New generation ready. \n");
         return nextPopulation;
     }

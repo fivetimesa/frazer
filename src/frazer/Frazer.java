@@ -17,7 +17,6 @@
 
 
 package frazer;
-import frazer.algorithms.mutation.NoMutation;
 import frazer.constants.*;
 import frazer.algorithms.*;
 import frazer.algorithms.mutantselection.*;
@@ -48,19 +47,7 @@ public class Frazer {
     /** The goal of the optimisation process (either to minimise of to maximise). */
     private Goal goal;
     
-    /** Algorithm for preselection. */
-    private Preselection preselection;
-    /** Algorithm for mating. */
-    private Mating mating;
-    /** Algorithm for breeding. */
-    private Breeding breeding;
-    /** Algorithm for fitness, to be specified by the user. */
-    private Fitness fitness;
-    /** Algorithm for mutant selection. */
-    private MutantSelection mutantSelection;
-    /** Algorithm for mutation. */
-    private Mutation mutation;
-    
+    private Algorithms algorithms;
     
     /**
      *
@@ -70,7 +57,7 @@ public class Frazer {
     {
         this.parent = parent;
         history = new History();
-        setDefaults();
+        algorithms.setDefaults();
     }
     
     
@@ -80,14 +67,14 @@ public class Frazer {
         history = new History();
         
         if(findFitnessFunction()) {
-            GenotypeType genotypeType = ((ReflectionFitness) fitness).getGeontypeType();
+            GenotypeType genotypeType = ((ReflectionFitness) algorithms.fitness).getGeontypeType();
             this.gD = new GenotypeDescription(geneCount, genotypeType);
             currentPopulation = new Population(populationCount, gD);
             
-            currentPopulation.evaluate(fitness);
+            currentPopulation.evaluate(algorithms.fitness);
             history.recordPopulation(currentPopulation);
         }
-        setDefaults();
+        algorithms.setDefaults();
     }
     
     /**
@@ -105,50 +92,15 @@ public class Frazer {
         
         this.gD = new GenotypeDescription(geneCount, genotypeType);
         currentPopulation = new Population(populationCount, gD);
-        this.fitness = fitness;
+        this.algorithms.fitness = fitness;
         
         currentPopulation.evaluate(fitness);
         history.recordPopulation(currentPopulation);
         
-        setDefaults();
+        algorithms.setDefaults();
     }
     
     
-    private void setDefaults() {
-        if(goal == null) 
-            goal = Goal.MINIMISE;
-        if(preselection == null) 
-            setPreselection(new NoPreselection());
-        if(mating == null) 
-            setMating(new TournamentMating(goal));
-        if(breeding == null) 
-            setBreeding(new CrossoverBreeding());
-        if(getMutantSelection() == null)
-            setMutantSelection(new ChanceMutantSelection(0.10f));
-        if(mutation == null) {
-            switch(gD.getGenotypeType()) {
-                case BIT:
-                    mutation = new BitMutation();
-                    break;
-                case INTEGER:
-                    mutation = new ConstantValueMutation(1f);
-                    break;
-                case SFLOAT:
-                case FLOAT:
-                    mutation = new RangeValueMutation(0.5f);
-                    break;
-                default:
-                    mutation = new NoMutation();
-                    break;
-            }
-            
-        }
-        if(getStopCondition() == null)
-            setStopCondition(new StopCondition());
-        
-        for(AlgorithmsInterface algorithm: new AlgorithmsInterface[]{preselection, fitness, mating, breeding, mutantSelection, mutation})
-            algorithm.initialize(gD);
-    }
     
     /**
      * Try to find a fitness method inside the Processing sketch. If 
@@ -162,7 +114,7 @@ public class Frazer {
     public final boolean findFitnessFunction() {
         ReflectionFitness reflectionFitness = new ReflectionFitness();
         if(reflectionFitness.findUserFitness(parent)) {
-            fitness = reflectionFitness;
+            algorithms.fitness = reflectionFitness;
             return true;
         }
         else return false;
@@ -176,7 +128,7 @@ public class Frazer {
      * @see StopCondition
      */
     public Specimen evolve(int maxGenerations) {
-        if(fitness == null) {
+        if(algorithms.fitness == null) {
             System.err.print("ERROR! No Fitness funtion specified.\n Aborting evolution.\n");
             return null;
         }
@@ -184,7 +136,7 @@ public class Frazer {
             try {
                 
                 System.out.print("Evolving… \n");
-                Population nextPopulation = currentPopulation.nextGeneration(getPreselection(), getFitness(), getMating(), getBreeding(), getMutantSelection(), getMutation());
+                Population nextPopulation = currentPopulation.nextGeneration(algorithms);
                 generationCount++;
                 System.out.print("Generation " + generationCount + "\n");
                 currentPopulation = nextPopulation;
@@ -241,84 +193,84 @@ public class Frazer {
      * @return the preselection
      */
     public Preselection getPreselection() {
-        return preselection;
+        return algorithms.preselection;
     }
 
     /**
      * @param preselection the preselection to set
      */
     public void setPreselection(Preselection preselection) {
-        this.preselection = preselection;
+        this.algorithms.preselection = preselection;
     }
 
     /**
      * @return the mating
      */
     public Mating getMating() {
-        return mating;
+        return algorithms.mating;
     }
 
     /**
      * @param mating the mating to set
      */
     public void setMating(Mating mating) {
-        this.mating = mating;
+        this.algorithms.mating = mating;
     }
 
     /**
      * @return the breeding
      */
     public Breeding getBreeding() {
-        return breeding;
+        return algorithms.breeding;
     }
 
     /**
      * @param breeding the breeding to set
      */
     public void setBreeding(Breeding breeding) {
-        this.breeding = breeding;
+        this.algorithms.breeding = breeding;
     }
 
     /**
      * @return the fitness
      */
     public Fitness getFitness() {
-        return fitness;
+        return algorithms.fitness;
     }
 
     /**
      * @param fitness the fitness to set
      */
     public void setFitness(Fitness fitness) {
-        this.fitness = fitness;
+        this.algorithms.fitness = fitness;
     }
 
     /**
      * @return the mutantSelection
      */
     public MutantSelection getMutantSelection() {
-        return mutantSelection;
+        return algorithms.mutantSelection;
     }
 
     /**
      * @param mutantSelection the mutantSelection to set
      */
     public void setMutantSelection(MutantSelection mutantSelection) {
-        this.mutantSelection = mutantSelection;
+        this.algorithms.mutantSelection = mutantSelection;
     }
     
     /**
      * @return the mutation
      */
     public Mutation getMutation() {
-        return mutation;
+        return algorithms.mutation;
     }
 
     /**
      * @param mutation the mutation to set
      */
     public void setMutation(Mutation mutation) {
-        this.mutation = mutation;
+        this.algorithms.mutation = mutation;
     }
 
     /**
@@ -548,7 +500,75 @@ public class Frazer {
     }
     
     protected final class Algorithms {
+        
+        /** Algorithm for preselection. */
+        protected Preselection preselection;
+        /** Algorithm for mating. */
+        protected Mating mating;
+        /** Algorithm for breeding. */
+        protected Breeding breeding;
+        /** Algorithm for fitness, to be specified by the user. */
+        protected Fitness fitness;
+        /** Algorithm for mutant selection. */
+        protected MutantSelection mutantSelection;
+        /** Algorithm for mutation. */
+        protected Mutation mutation;
+        
+        protected AlgorithmsInterface[] getAlgorithms() {
+            return new AlgorithmsInterface[]{preselection, fitness, mating, breeding, mutantSelection, mutation};
+        }
+        
+        
+        protected void setDefaults() {
+            if(goal == null) 
+                goal = Goal.MINIMISE;
+            if(preselection == null) 
+                setPreselection(new NoPreselection());
+            if(mating == null) 
+                setMating(new TournamentMating(goal));
+            if(breeding == null) 
+                setBreeding(new CrossoverBreeding());
+            if(getMutantSelection() == null)
+                setMutantSelection(new ChanceMutantSelection(0.10f));
+            if(mutation == null) {
+                switch(gD.getGenotypeType()) {
+                    case BIT:
+                        mutation = new BitMutation();
+                        break;
+                    case INTEGER:
+                        mutation = new ConstantValueMutation(1f);
+                        break;
+                    case SFLOAT:
+                    case FLOAT:
+                        mutation = new RangeValueMutation(0.5f);
+                        break;
+                    default:
+                        mutation = new NoMutation();
+                        break;
+                }
+
+            }
+            if(getStopCondition() == null)
+                setStopCondition(new StopCondition());
+
+            initialize(gD);
+        }
     
+        protected void update(Population population) {
+            for(AlgorithmsInterface algorithm: getAlgorithms())
+                algorithm.update(population);
+        }
+        
+        protected void initialize(GenotypeDescription gD) {
+            for(AlgorithmsInterface algorithm: getAlgorithms())
+                algorithm.initialize(gD);
+        }
+        
+        protected boolean needSorting() {
+            for(AlgorithmsInterface algorithm: getAlgorithms())
+                if(algorithm.needsSorting()) return true;
+            return false;
+        }
     }
 
 }
