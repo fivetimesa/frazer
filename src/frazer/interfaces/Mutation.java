@@ -16,17 +16,14 @@
  */
 package frazer.interfaces;
 
-import frazer.Population;
-import frazer.constants.*;
 import frazer.genotypes.*;
-import java.util.Random;
 
 /**
  * Describes Mutation for population of specimen.
  * 
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public interface Mutation {
+public interface Mutation extends AlgorithmsInterface {
    
    /**
     * This method should change genotype in some way.

@@ -44,7 +44,7 @@ public class RouletteWheelMating implements Mating {
     }
 
     @Override
-    public void initialize(Population population) {
+    public void update(Population population) {
         int n = population.getCount();
         Specimen[] specimens = population.getSpecimens();
         roulette = new double[n];

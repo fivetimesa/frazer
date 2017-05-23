@@ -156,7 +156,11 @@ abstract public class AbstractMutation {
 
    }
 
-   public void setGenotypeDescription(GenotypeDescription gD) {
+    /**
+     *
+     * @param gD 
+     */
+    public void initialize(GenotypeDescription gD) {
       this.gD = gD;
       setGeneLimit();
    }

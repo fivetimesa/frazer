@@ -15,12 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package frazer.interfaces;
+import frazer.Population;
+import frazer.genotypes.GenotypeDescription;
 
 /**
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-abstract interface AlgorithmsInterface {
+public abstract interface AlgorithmsInterface {
 
     /**
      *
@@ -29,4 +31,12 @@ abstract interface AlgorithmsInterface {
     public default boolean needsSorting() {
         return false;
     }
+    
+    public default boolean needsFitness() {
+        return false;
+    }
+    
+    public default void initialize(GenotypeDescription gD) {}
+    
+    public default void update(Population population) {}
 }

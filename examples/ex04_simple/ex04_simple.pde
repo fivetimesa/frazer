@@ -10,8 +10,8 @@ void setup()
   textAlign(CENTER);
   
   frazer = new Frazer(this, 100, 10);
-  frazer.setMutantSelection(new FixedCountMutantSelection());
-  frazer.setMutation(new NoMutation());
+  //frazer.setMutantSelection(new FixedCountMutantSelection());
+  //frazer.setMutation(new NoMutation());
 }
 
 void draw() {

@@ -125,6 +125,7 @@ public class Population {
      * @param fitness
      * @param mating
      * @param breeding
+     * @param mutantSelection
      * @param mutation
      * @return
      * @throws Exception
@@ -153,7 +154,7 @@ public class Population {
         //System.out.print("Preselection done. \n");
         
         //System.out.print("Mating & breeding… \n");
-        mating.initialize(this);
+        mating.update(this);
         //System.out.print("Mating initialized \n");
         
         for(int i = newSpecimensCount; i < newSpecimens.length; i++) {
@@ -169,38 +170,32 @@ public class Population {
             //System.out.print("Children added to new generation. \n");
         }
         
-            
-        
-        //for(int i = 0; i < newSpecimens.length; i++) {
-        //    newSpecimens[i].mutate(mutation);
-        //}
-        
         Population nextPopulation = new Population(newSpecimens);
-        System.out.print("Created " + newSpecimens.length + " new specimens. \n");
-        System.out.print("Mutating… \n");
+        //System.out.print("Created " + newSpecimens.length + " new specimens. \n");
+        //System.out.print("Mutating… \n");
         nextPopulation.mutate(mutantSelection, mutation, fitness);
-        System.out.print("New generation ready. \n");
+        //System.out.print("New generation ready. \n");
         return nextPopulation;
     }
     
     private void mutate(MutantSelection mutantSelection, Mutation mutation, Fitness fitness) {
         
-        System.out.print("Mutating new population with " + mutantSelection.getClass().getName() 
-                        + " and " + mutation.getClass().getName() +  "\n");
+        //System.out.print("Mutating new population with " + mutantSelection.getClass().getName() 
+        //                + " and " + mutation.getClass().getName() +  "\n");
         
         if(mutantSelection.needsFitness())
             evaluate(fitness);
         
-        System.out.print("Selecting mutants… ");
+        //System.out.print("Selecting mutants… ");
         Specimen[] mutants = mutantSelection.selectMutants(this);
-        System.out.print(mutants.length + " specimens selected. \n");
+        //System.out.print(mutants.length + " specimens selected. \n");
         
-        System.out.print("Mutating… ");
+        //System.out.print("Mutating… ");
         for(Specimen mutant : mutants)
             mutant.mutate(mutation);
-        System.out.print("done. \n");
+        //System.out.print("done. \n");
         
-        System.out.print("Evaluating… \n");
+        //System.out.print("Evaluating… \n");
         if(mutantSelection.needsFitness())
             evaluate(mutants, fitness);
         else 

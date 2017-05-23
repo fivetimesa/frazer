@@ -78,8 +78,8 @@ public class ConstantValueMutation extends AbstractMutation implements Mutation 
    }
 
    @Override
-   public void setGenotypeDescription(GenotypeDescription gD) {
-      super.setGenotypeDescription(gD);
+   public void initialize(GenotypeDescription gD) {
+      super.initialize(gD);
       setGeneMutation();
    }
 

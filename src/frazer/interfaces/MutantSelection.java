@@ -21,7 +21,7 @@ import frazer.Specimen;
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public interface MutantSelection extends AlgorithmsInterface{
+public interface MutantSelection extends AlgorithmsInterface {
    
       /**
     * This method should select specimen from population to mutate.
@@ -33,8 +33,4 @@ public interface MutantSelection extends AlgorithmsInterface{
     */
    public Specimen[] selectMutants(Population population);
    
-   public default boolean needsFitness()
-   {
-      return false;
-   }
 }

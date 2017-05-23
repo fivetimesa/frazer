@@ -24,7 +24,6 @@ import frazer.algorithms.mutantselection.*;
 import frazer.algorithms.mutation.*;
 import frazer.genotypes.*;
 import frazer.interfaces.*;
-import java.util.ArrayList;
 import processing.core.*;
 
 /**
@@ -125,7 +124,7 @@ public class Frazer {
         if(breeding == null) 
             setBreeding(new CrossoverBreeding());
         if(getMutantSelection() == null)
-            setMutantSelection(new ChanceMutantSelection(0.05f));
+            setMutantSelection(new ChanceMutantSelection(0.10f));
         if(mutation == null) {
             switch(gD.getGenotypeType()) {
                 case BIT:
@@ -136,15 +135,19 @@ public class Frazer {
                     break;
                 case SFLOAT:
                 case FLOAT:
-                    mutation = new RangeValueMutation(1f);
+                    mutation = new RangeValueMutation(0.5f);
                     break;
                 default:
                     mutation = new NoMutation();
                     break;
             }
+            
         }
         if(getStopCondition() == null)
             setStopCondition(new StopCondition());
+        
+        for(AlgorithmsInterface algorithm: new AlgorithmsInterface[]{preselection, fitness, mating, breeding, mutantSelection, mutation})
+            algorithm.initialize(gD);
     }
     
     /**

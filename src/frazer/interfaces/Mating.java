@@ -28,12 +28,6 @@ public interface Mating extends AlgorithmsInterface {
     /**
      *
      * @param population
-     */
-    public default void initialize(Population population) {}
-    
-    /**
-     *
-     * @param population
      * @return
      */
     public Specimen[] selectParents(Population population);
