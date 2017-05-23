@@ -151,6 +151,8 @@ public class ReflectionFitness implements Fitness {
             }
             catch (Exception e) {
                 System.err.println("Error on calling fitness");
+                e.printStackTrace(System.out);
+                fitness = 0f;
             }
         return fitness;
     }

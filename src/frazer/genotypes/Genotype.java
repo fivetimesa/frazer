@@ -50,6 +50,8 @@ public abstract class Genotype<T> implements Iterable<T> {
       return Array.getLength(getArrayInstance());
    }
 
+   abstract public void applyLimits(GenotypeDescription gD);
+   
    abstract public T getGene(int i);
 
    abstract public void setGene(int i, T value);

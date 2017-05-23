@@ -32,7 +32,6 @@ abstract public class AbstractMutation {
    int mutationCount;
    float mutationChance;
    GeneMutation geneMutation;
-   GeneLimit geneLimit;
    protected Random random;
 
    protected AbstractMutation() {
@@ -162,64 +161,6 @@ abstract public class AbstractMutation {
      */
     public void initialize(GenotypeDescription gD) {
       this.gD = gD;
-      setGeneLimit();
-   }
-
-   private void setGeneLimit() {
-      Limit limit = gD.getLimit();
-      switch (limit) {
-         case NOLIMIT:
-            geneLimit = new GeneLimit() {
-               @Override
-               float limit(int i, float value) {
-                  return value;
-               }
-            };
-            break;
-         case FORALL:
-            geneLimit = new GeneLimit() {
-               @Override
-               float limit(int i, float value) {
-                  float max;
-                  float min;
-                  max = gD.getMax();
-                  min = gD.getMin();
-                  if (value < min)
-                     return min;
-                  if (value > max)
-                     return max;
-                  return value;
-               }
-            };
-            break;
-         case INDIVIDUAL:
-            geneLimit = new GeneLimit() {
-               @Override
-               float limit(int i, float value) {
-                  float max;
-                  float min;
-                  max = gD.getMax(i);
-                  min = gD.getMin(i);
-                  if (value < min)
-                     return min;
-                  if (value > max)
-                     return max;
-                  return value;
-               }
-            };
-            break;
-         case NORMALIZE:
-            geneLimit = new GeneLimit() {
-               @Override
-               float limit(int i, float value) {
-                  if (value < 0)
-                     return 0;
-                  if (value > 1)
-                     return 1;
-                  return value;
-               }
-            };
-      }
    }
 
    abstract class GeneMutation {
@@ -239,8 +180,4 @@ abstract public class AbstractMutation {
       }
    }
 
-   abstract class GeneLimit {
-
-      abstract float limit(int i, float value);
-   }
 }

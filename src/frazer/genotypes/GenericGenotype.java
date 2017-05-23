@@ -111,6 +111,10 @@ public class GenericGenotype<T> extends Genotype<T> {
       return new GenericGenotypeIterator<>();
    }
 
+    @Override
+    public void applyLimits(GenotypeDescription gD) {
+    }
+
    private class GenericGenotypeIterator<T> implements Iterator<T> {
 
       int index;

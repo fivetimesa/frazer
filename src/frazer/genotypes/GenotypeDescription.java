@@ -28,9 +28,10 @@ public class GenotypeDescription {
    public final int geneCount;
    
    //GENE LIMIT
+   private GeneLimit geneLimit;
    private Limit limit;
-   float max, min;
-   float[] maxs, mins;
+   private float max, min;
+   private float[] maxs, mins;
 
 
    public GenotypeDescription(int geneCount, GenotypeType geneType) {
@@ -38,24 +39,46 @@ public class GenotypeDescription {
       this.geneCount = geneCount;
       
       limit = Limit.NOLIMIT;
+      setGeneLimit();
    }
 
    public GenotypeDescription(int geneCount, GenotypeType geneType, float min, float max) {
       this(geneCount, geneType);
-      this.min = min;
-      this.max = max;
-      limit = Limit.FORALL;
-   }
-
-   public GenotypeDescription(int geneCount, GenotypeType geneType, int min, int max) {
-      this(geneCount, geneType, (float) min, (float) max);
+      setGeneLimits(min, max);
+      setGeneLimit();
    }
    
    public GenotypeDescription(int geneCount, GenotypeType geneType, float[] minGeneLimits, float[] maxGeneLimits) {
       this(geneCount, geneType);
-      this.mins = minGeneLimits;
-      this.maxs = maxGeneLimits;
+      setGeneLimits(minGeneLimits, maxGeneLimits);
+      setGeneLimit();
+   }
+   
+   public final void setGeneLimits(float min, float max) {
+      this.min = min;
+      this.max = max;
+      limit = Limit.FORALL;
+      setGeneLimit();
+   }
+   
+   public final void setGeneLimits(float[] minGeneLimits, float[] maxGeneLimits) {
+      if(minGeneLimits.length <= 0 || maxGeneLimits.length <= 0) return;
+      if(this.mins == null)
+          this.mins = new float[geneCount];
+      if(this.maxs == null)
+          this.maxs = new float[geneCount];
+      for(int i = 0; i < geneCount; i++) {
+          if(i < minGeneLimits.length)
+            this.mins[i] = minGeneLimits[i];
+          else
+            this.mins[i] = minGeneLimits[minGeneLimits.length - 1];
+          if(i < maxGeneLimits.length)
+            this.maxs[i] = maxGeneLimits[i];
+          else
+            this.maxs[i] = maxGeneLimits[maxGeneLimits.length - 1];
+      }
       limit = Limit.INDIVIDUAL;
+      setGeneLimit();
    }
 
    public GenotypeType getGenotypeType() {
@@ -90,5 +113,62 @@ public class GenotypeDescription {
       if (i < 0 || i > geneCount - 1)
          throw new IndexOutOfBoundsException(
                  "GenotypeDescription index: " + i + ", Size: " + geneCount);
+   }
+   
+   public float limitGene(int i, float value) {
+       return geneLimit.limit(i, value);
+   }
+
+   private void setGeneLimit() {
+      switch (limit) {
+         case NOLIMIT:
+            geneLimit = new GeneLimit() {
+               @Override
+               protected float limit(int i, float value) {
+                  return value;
+               }
+            };
+            break;
+         case FORALL:
+            geneLimit = new GeneLimit() {
+               @Override
+               protected float limit(int i, float value) {
+                  if (value < min)
+                     return min;
+                  if (value > max)
+                     return max;
+                  return value;
+               }
+            };
+            break;
+         case INDIVIDUAL:
+            geneLimit = new GeneLimit() {
+               @Override
+               protected float limit(int i, float value) {
+                  if (value < mins[i])
+                     return mins[i];
+                  if (value > maxs[i])
+                     return maxs[i];
+                  return value;
+               }
+            };
+            break;
+         case NORMALIZE:
+            geneLimit = new GeneLimit() {
+               @Override
+               protected float limit(int i, float value) {
+                  if (value < 0)
+                     return 0;
+                  if (value > 1)
+                     return 1;
+                  return value;
+               }
+            };
+      }
+   }
+   
+   abstract private class GeneLimit {
+
+      abstract protected float limit(int i, float value);
    }
 }

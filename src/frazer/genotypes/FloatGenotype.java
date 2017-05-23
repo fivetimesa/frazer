@@ -194,6 +194,14 @@ public class FloatGenotype extends Genotype<Float> {
       return new FloatGenotypeIterator();
    }
 
+    
+    @Override
+    public void applyLimits(GenotypeDescription gD) {
+        for (int i = 0; i < genes.length; i++) {
+            genes[i] = gD.limitGene(i, genes[i]);
+        }
+    }
+
    public static interface PrimitiveIteratorOfFloat extends PrimitiveIterator<Float, FloatConsumer> {
 
       public float nextFloat();

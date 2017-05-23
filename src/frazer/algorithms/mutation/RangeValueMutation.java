@@ -53,7 +53,7 @@ public class RangeValueMutation extends ConstantValueMutation implements Mutatio
    protected void setGeneMutation() {
       switch (gD.getGenotypeType()) {
          case BIT:
-            throw new RuntimeException("Can't use ConstantValueMutation on BitGenotype");
+            throw new RuntimeException("Can't use RangeValueMutation on BitGenotype");
          case FLOAT:
          case SFLOAT:
             if (isIndividual)
@@ -62,7 +62,7 @@ public class RangeValueMutation extends ConstantValueMutation implements Mutatio
                   void mutate(int i, Genotype genes) {
                      float value = genes.getFloat(i);
                      float newValue = newGeneRangeValue(value, individualMutationStrength[i]);
-                     genes.setFloat(i, geneLimit.limit(i, newValue));
+                     genes.setFloat(i, gD.limitGene(i, newValue));
                   }
                };
             else
@@ -71,7 +71,7 @@ public class RangeValueMutation extends ConstantValueMutation implements Mutatio
                   void mutate(int i, Genotype genes) {
                      float value = genes.getFloat(i);
                      float newValue = newGeneRangeValue(value, mutationStrength);
-                     genes.setFloat(i, geneLimit.limit(i, newValue));
+                     genes.setFloat(i, gD.limitGene(i, newValue));
                   }
                };
             break;
@@ -82,16 +82,16 @@ public class RangeValueMutation extends ConstantValueMutation implements Mutatio
                   void mutate(int i, Genotype genes) {
                      float value = (float) genes.getInt(i);
                      float newValue = newGeneRangeValue(value, individualMutationStrength[i]);
-                     genes.setInt(i, (int) geneLimit.limit(i, newValue));
+                     genes.setInt(i, (int) gD.limitGene(i, newValue));
                   }
                };
             else
                geneMutation = new GeneMutation() {
                   @Override
                   void mutate(int i, Genotype genes) {
-                     float value = (float) genes.getFloat(i);
+                     float value = (float) genes.getInt(i);
                      float newValue = newGeneRangeValue(value, mutationStrength);
-                     genes.setInt(i, (int) geneLimit.limit(i, newValue));
+                     genes.setInt(i, (int) gD.limitGene(i, newValue));
                   }
                };
             break;

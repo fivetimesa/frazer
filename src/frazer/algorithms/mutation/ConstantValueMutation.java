@@ -95,7 +95,7 @@ public class ConstantValueMutation extends AbstractMutation implements Mutation 
                   void mutate(int i, Genotype genes) {
                      float value = genes.getFloat(i);
                      float newValue = newGeneValue(value, individualMutationStrength[i]);
-                     genes.setFloat(i, geneLimit.limit(i, newValue));
+                     genes.setFloat(i, gD.limitGene(i, newValue));
                   }
                };
             else
@@ -104,7 +104,7 @@ public class ConstantValueMutation extends AbstractMutation implements Mutation 
                   void mutate(int i, Genotype genes) {
                      float value = genes.getFloat(i);
                      float newValue = newGeneValue(value, mutationStrength);
-                     genes.setFloat(i, geneLimit.limit(i, newValue));
+                     genes.setFloat(i, gD.limitGene(i, newValue));
                   }
                };
             break;
@@ -115,16 +115,16 @@ public class ConstantValueMutation extends AbstractMutation implements Mutation 
                   void mutate(int i, Genotype genes) {
                      float value = (float) genes.getInt(i);
                      float newValue = newGeneValue(value, individualMutationStrength[i]);
-                     genes.setInt(i, (int) geneLimit.limit(i, newValue));
+                     genes.setInt(i, (int) gD.limitGene(i, newValue));
                   }
                };
             else
                geneMutation = new GeneMutation() {
                   @Override
                   void mutate(int i, Genotype genes) {
-                     float value = (float) genes.getFloat(i);
+                     float value = (float) genes.getInt(i);
                      float newValue = newGeneValue(value, mutationStrength);
-                     genes.setInt(i, (int) geneLimit.limit(i, newValue));
+                     genes.setInt(i, (int) gD.limitGene(i, newValue));
                   }
                };
             break;

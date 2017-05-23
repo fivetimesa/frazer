@@ -185,6 +185,13 @@ public class IntegerGenotype extends Genotype<Integer> {
       return new IntegerGenotypeIterator();
    }
 
+    @Override
+    public void applyLimits(GenotypeDescription gD) {
+        for (int i = 0; i < genes.length; i++) {
+            genes[i] = (int) gD.limitGene(i, genes[i]);
+        }
+    }
+
    private class IntegerGenotypeIterator implements PrimitiveIterator.OfInt {
 
       int index;

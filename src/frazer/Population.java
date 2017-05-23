@@ -196,6 +196,11 @@ public class Population {
         else 
             evaluate(fitness);
     }
+    
+    public void applyGeneLimits(GenotypeDescription gD) {
+        for(Specimen s: specimens)
+            s.applyGeneLimits(gD);
+    }
 
 //<editor-fold defaultstate="collapsed" desc="Getters & Setters">
     public Specimen[] getSpecimens() {

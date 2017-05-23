@@ -20,6 +20,9 @@ import frazer.genotypes.BitGenotype;
 import frazer.genotypes.Genotype;
 import frazer.genotypes.FloatGenotype;
 import frazer.constants.GenotypeType;
+import frazer.genotypes.GenotypeDescription;
+import frazer.genotypes.IntegerGenotype;
+import frazer.genotypes.SFloatGenotype;
 import frazer.interfaces.Fitness;
 import frazer.interfaces.Mutation;
 
@@ -52,13 +55,24 @@ public class Specimen implements Comparable<Specimen> {
     /**
      *
      * @param geneCount
-     * @param geneType
+     * @param genotypeType
      */
-    public Specimen(int geneCount, GenotypeType geneType) {
-        if (geneType == GenotypeType.BIT) {
-            genes = new BitGenotype(geneCount);
-        } else {
-            genes = new FloatGenotype(geneCount);
+    public Specimen(int geneCount, GenotypeType genotypeType) {
+        switch(genotypeType) {
+            case BIT:
+                genes = new BitGenotype(geneCount);
+                break;
+            case INTEGER:
+                genes = new IntegerGenotype(geneCount);
+                break;
+            case FLOAT:
+                genes = new FloatGenotype(geneCount);
+                break;
+            case SFLOAT:
+                genes = new SFloatGenotype(geneCount);
+                break;
+            default:
+                System.err.println("ERROR! Genotype type not found.");
         }
         fitnessScore = 0;
     }
@@ -183,6 +197,10 @@ public class Specimen implements Comparable<Specimen> {
         sb.append("fitnessScore");
         
         return sb.toString(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    void applyGeneLimits(GenotypeDescription gD) {
+        genes.applyLimits(gD);
     }
 
     

@@ -33,7 +33,7 @@ public class Frazer {
 
     
     private PApplet parent;
-    private History history;
+    private final History history;
     private Population currentPopulation;
     
     private GenotypeDescription gD;
@@ -57,6 +57,7 @@ public class Frazer {
     {
         this.parent = parent;
         history = new History();
+        algorithms = new Algorithms();
         algorithms.setDefaults();
     }
     
@@ -65,10 +66,12 @@ public class Frazer {
     {
         this.parent = parent;
         history = new History();
+        algorithms = new Algorithms();
         
         if(findFitnessFunction()) {
             GenotypeType genotypeType = ((ReflectionFitness) algorithms.fitness).getGeontypeType();
-            this.gD = new GenotypeDescription(geneCount, genotypeType);
+            gD = new GenotypeDescription(geneCount, genotypeType);
+            System.out.print(gD.getGenotypeType());
             currentPopulation = new Population(populationCount, gD);
             
             currentPopulation.evaluate(algorithms.fitness);
@@ -89,6 +92,7 @@ public class Frazer {
     {
         this.parent = parent;
         history = new History();
+        algorithms = new Algorithms();
         
         this.gD = new GenotypeDescription(geneCount, genotypeType);
         currentPopulation = new Population(populationCount, gD);
@@ -177,7 +181,7 @@ public class Frazer {
     /**
      * @param stopCondition the stopCondition to set
      */
-    public void setStopCondition(StopCondition stopCondition) {
+    protected void setStopCondition(StopCondition stopCondition) {
         this.stopCondition = stopCondition;
     }
 
@@ -201,6 +205,7 @@ public class Frazer {
      */
     public void setPreselection(Preselection preselection) {
         this.algorithms.preselection = preselection;
+        preselection.initialize(gD);
     }
 
     /**
@@ -215,6 +220,7 @@ public class Frazer {
      */
     public void setMating(Mating mating) {
         this.algorithms.mating = mating;
+        mating.initialize(gD);
     }
 
     /**
@@ -229,6 +235,7 @@ public class Frazer {
      */
     public void setBreeding(Breeding breeding) {
         this.algorithms.breeding = breeding;
+        breeding.initialize(gD);
     }
 
     /**
@@ -243,6 +250,7 @@ public class Frazer {
      */
     public void setFitness(Fitness fitness) {
         this.algorithms.fitness = fitness;
+        fitness.initialize(gD);
     }
 
     /**
@@ -257,6 +265,7 @@ public class Frazer {
      */
     public void setMutantSelection(MutantSelection mutantSelection) {
         this.algorithms.mutantSelection = mutantSelection;
+        mutantSelection.initialize(gD);
     }
     
     /**
@@ -271,6 +280,7 @@ public class Frazer {
      */
     public void setMutation(Mutation mutation) {
         this.algorithms.mutation = mutation;
+        mutation.initialize(gD);
     }
 
     /**
@@ -280,6 +290,16 @@ public class Frazer {
         return history;
     }
 // </editor-fold>
+    
+    public void setGeneLimits(float min, float max) {
+        gD.setGeneLimits(min, max);
+        currentPopulation.applyGeneLimits(gD);
+    }
+    
+    public void setGeneLimits(float[] min, float[] max) {
+        gD.setGeneLimits(min, max);
+        currentPopulation.applyGeneLimits(gD);
+    }
     
     /**
      * Inner class for specifing stop conditions.
@@ -499,6 +519,10 @@ public class Frazer {
         
     }
     
+    /**
+     * Convenience inner class for storing all the algorithms.
+     * Fields accessible trough getters and setters in Frazer.
+     */
     protected final class Algorithms {
         
         /** Algorithm for preselection. */

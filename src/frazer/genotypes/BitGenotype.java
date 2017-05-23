@@ -184,6 +184,10 @@ public class BitGenotype extends Genotype<Boolean> {
       return new BitGenotypeIterator();
    }
 
+    @Override
+    public void applyLimits(GenotypeDescription gD) {
+    }
+
    public static interface PrimitiveIteratorOfBoolean extends PrimitiveIterator<Boolean, BooleanConsumer> {
 
       public boolean nextBoolean();
