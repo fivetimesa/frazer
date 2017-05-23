@@ -188,6 +188,8 @@ public class Frazer {
                 getHistory().recordPopulation(currentPopulation);
             }
                 catch (Exception e) {
+                    System.out.println();
+                    e.printStackTrace(System.err);
                     System.out.print("Something went wrong. Evolution stopped at generation " + generationCount + "\n");
             }
             if(stopCondition.check()) break;

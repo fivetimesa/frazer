@@ -1,4 +1,6 @@
 import frazer.*;
+import frazer.algorithms.mutation.*;
+import frazer.algorithms.mutantselection.*;
 
 Frazer frazer;
 
@@ -8,6 +10,8 @@ void setup()
   textAlign(CENTER);
   
   frazer = new Frazer(this, 100, 10);
+  frazer.setMutantSelection(new FixedCountMutantSelection());
+  frazer.setMutation(new NoMutation());
 }
 
 void draw() {

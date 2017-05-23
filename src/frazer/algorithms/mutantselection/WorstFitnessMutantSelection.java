@@ -40,7 +40,7 @@ public class WorstFitnessMutantSelection implements MutantSelection {
       
       //NEED IMPLEMENTATION!!
       
-      return (Specimen[]) selectedMutants.toArray();
+      return selectedMutants.toArray(new Specimen[0]);
    }
    
 }

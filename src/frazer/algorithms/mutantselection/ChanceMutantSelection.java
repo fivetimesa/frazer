@@ -47,7 +47,7 @@ public class ChanceMutantSelection implements MutantSelection {
             if(random.nextFloat() < mutantSelectionChance)
                selectedMutants.add(specimens[i]);
         }
-        return (Specimen[]) selectedMutants.toArray();
+        return selectedMutants.toArray(new Specimen[0]);
    }
 
    public void setMutantSelectionChance(float mutantSelectionChance) {

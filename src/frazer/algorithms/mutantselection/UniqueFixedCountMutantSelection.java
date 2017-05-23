@@ -69,6 +69,6 @@ public class UniqueFixedCountMutantSelection extends FixedCountMutantSelection i
          specimens[swaped[i]] = temp;
       }
 
-      return (Specimen[]) selectedMutants.toArray();
+      return selectedMutants.toArray(new Specimen[0]);
    }
 }

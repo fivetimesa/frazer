@@ -71,7 +71,7 @@ public class FixedCountMutantSelection implements MutantSelection {
       for (int i = 0; i < mutantSelectionCount; i++) {
          selectedMutants.add(specimens[random.nextInt(populationCount)]);
       }
-      return (Specimen[]) selectedMutants.toArray();
+      return selectedMutants.toArray(new Specimen[0]);
    }
 
    public int getMutantSelectionCount() {
