@@ -550,24 +550,36 @@ public class Frazer {
                 setPreselection(new NoPreselection());
             if(mating == null) 
                 setMating(new TournamentMating(goal));
-            if(breeding == null) 
-                setBreeding(new CrossoverBreeding());
+            if(breeding == null) {
+                switch(gD.getGenotypeType()) {
+                    case INTEGER:
+                    case SFLOAT:
+                    case FLOAT:
+                        setBreeding(new ExtrapolatedBreeding());
+                        break;
+                    case BIT:
+                    default:
+                        setBreeding(new CrossoverBreeding());
+                        break;
+                }
+            }
+                
             if(getMutantSelection() == null)
                 setMutantSelection(new ChanceMutantSelection(0.10f));
             if(mutation == null) {
                 switch(gD.getGenotypeType()) {
                     case BIT:
-                        mutation = new BitMutation();
+                        setMutation(new BitMutation());
                         break;
                     case INTEGER:
-                        mutation = new ConstantValueMutation(1f);
+                        setMutation(new ConstantValueMutation(1f));
                         break;
                     case SFLOAT:
                     case FLOAT:
-                        mutation = new RangeValueMutation(0.5f);
+                        setMutation(new RangeValueMutation(0.5f));
                         break;
                     default:
-                        mutation = new NoMutation();
+                        setMutation(new NoMutation());
                         break;
                 }
 
@@ -575,7 +587,6 @@ public class Frazer {
             if(getStopCondition() == null)
                 setStopCondition(new StopCondition());
 
-            initialize(gD);
         }
     
         protected void update(Population population) {

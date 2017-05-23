@@ -170,6 +170,29 @@ public class IntegerGenotype extends Genotype<Integer> {
       return genes[i];
    }
    
+   
+   /**
+    * Sets new value for ith gene. Uses primitive data type float.
+    *
+    * @param i gene index
+    * @param value new value to set
+    */
+   @Override
+   public void setFloat(int i, float value) {
+      genes[i] = (int) value;
+   }
+
+   /**
+    * Gets ith gene value. Uses primitive data type float.
+    *
+    * @param i gene index
+    * @return
+    */
+   @Override
+   public float getFloat(int i) {
+      return genes[i];
+   }
+   
    /**
     * Returns genotype as array's string.
     * 
