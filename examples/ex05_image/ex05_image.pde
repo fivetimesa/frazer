@@ -13,7 +13,7 @@ void setup()
   blurred = image.copy();
   blurred.filter(BLUR, 3);
   
-  frazer = new Frazer(this, 1000, 2);
+  frazer = new Frazer(this, 10000, 2);
   frazer.setGeneLimits(new float[]{3, 3}, new float[] {width - 4, height - 4});
   frazer.setMutation(new RangeValueMutation(100));
 }
