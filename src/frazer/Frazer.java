@@ -34,6 +34,7 @@ public class Frazer {
     
     private PApplet parent;
     private final History history;
+    private Plotter plotter;
     private Population currentPopulation;
     
     private GenotypeDescription gD;
@@ -124,6 +125,11 @@ public class Frazer {
         else return false;
     }
     
+    public final void restart() {
+        int populationCount = currentPopulation.getCount();
+        currentPopulation = new Population(populationCount, gD);
+    }
+    
     /**
      * Primary evolution method. Creates and evaluates a number of generations specified by 
      * maxGenerations parameter. Generation stops if one of the stop conditions is met.
@@ -153,7 +159,25 @@ public class Frazer {
             }
             if(stopCondition.check()) break;
         }
-        return currentPopulation.getBestSpecimen(goal);
+        return currentPopulation.getBestSpecimen(getGoal());
+    }
+    
+    public void launchPlotter() {
+        plotter = new Plotter(history);
+    }
+    
+    /**
+     * @return the goal
+     */
+    public Goal getGoal() {
+        return goal;
+    }
+
+    /**
+     * @param goal the goal to set
+     */
+    public void setGoal(Goal goal) {
+        this.goal = goal;
     }
     
     // <editor-fold defaultstate="collapsed" desc="Getters & Setters">
@@ -162,13 +186,6 @@ public class Frazer {
      */
     public PApplet getParent() {
         return parent;
-    }
-
-    /**
-     * @param parent the parent to set
-     */
-    public void setParent(PApplet parent) {
-        this.parent = parent;
     }
     
     /**
@@ -289,7 +306,6 @@ public class Frazer {
     public History getHistory() {
         return history;
     }
-// </editor-fold>
     
     public void setGeneLimits(float min, float max) {
         gD.setGeneLimits(min, max);
@@ -300,6 +316,94 @@ public class Frazer {
         gD.setGeneLimits(min, max);
         currentPopulation.applyGeneLimits(gD);
     }
+    
+    public void setMating(MatingType type) {
+        switch(type) {
+            case TOURNAMENT:
+                setMating(new TournamentMating(getGoal()));
+                break;
+            case ROULETTEWHEEL:
+                setMating(new RouletteWheelMating(getGoal()));
+                break;
+        }
+    }
+    
+    public void setBreeding(BreedingType type) {
+        switch(type) {
+            case CROSSOVER:
+                setBreeding(new CrossoverBreeding());
+                break;
+            case EXTRAPOLATED:
+                setBreeding(new ExtrapolatedBreeding());
+                break;
+        }
+    }
+    
+    public void setPreselection(PreselectionType type) {
+        switch(type) {
+            case NONE:
+                setPreselection(new NoPreselection());
+                break;
+            case ELITISM:
+                throw new UnsupportedOperationException("not supported yet");
+        }
+    }
+    
+    public void setMutantSelection(MutantSelectionType type) {
+        switch(type) {
+            case CHANCE:
+                setMutantSelection(new ChanceMutantSelection());
+                break;
+            case FIXEDCOUNT:
+                setMutantSelection(new FixedCountMutantSelection());
+                break;
+            case UNIQUEFIXEDCOUNT:
+                setMutantSelection(new UniqueFixedCountMutantSelection());
+                break;
+            case WORSTFITNESS:
+                setMutantSelection(new WorstFitnessMutantSelection());
+                break;
+        }
+    }
+    
+    public void setMutation(MutationType type) {
+        switch(type) {
+            case NONE:
+                setMutation(new NoMutation());
+                break;
+            case BIT:
+                setMutation(new BitMutation());
+                break;
+            case CONSTANTVALUE:
+                setMutation(new ConstantValueMutation(0.5f));
+                break;
+            case RANGE:
+                setMutation(new RangeValueMutation(0.5f));
+                break;
+        }
+    }
+// </editor-fold>
+    
+    public static enum MatingType {
+       TOURNAMENT, ROULETTEWHEEL, CUSTOM
+    }
+    
+    public static enum BreedingType {
+       CROSSOVER, EXTRAPOLATED, CUSTOM
+    }
+    
+    public static enum PreselectionType {
+        NONE, ELITISM, CUSTOM
+    }
+    
+    public static enum MutantSelectionType {
+        CHANCE, FIXEDCOUNT, UNIQUEFIXEDCOUNT, WORSTFITNESS, CUSTOM
+    }
+    
+    public static enum MutationType {
+        NONE, BIT, CONSTANTVALUE, RANGE, CUSTOM
+    }
+
     
     /**
      * Inner class for specifing stop conditions.
@@ -327,7 +431,7 @@ public class Frazer {
             stopOnConvergence = true;
             stopOnGeneration = false;
             
-            if(goal == Goal.MINIMISE) {
+            if(getGoal() == Goal.MINIMISE) {
                 stopOnFitnessScore = true;
                 fitnessThreshold = 0.0f;
             }
@@ -374,9 +478,9 @@ public class Frazer {
          * @see Population#maxScore
          */
         public boolean fitnessThresholdCheck() {
-            if(goal == Goal.MINIMISE && currentPopulation.getMinScore() <= fitnessThreshold)
+            if(getGoal() == Goal.MINIMISE && currentPopulation.getMinScore() <= fitnessThreshold)
                 return true;
-            if(goal == Goal.MAXIMISE && currentPopulation.getMaxScore() >= fitnessThreshold)
+            if(getGoal() == Goal.MAXIMISE && currentPopulation.getMaxScore() >= fitnessThreshold)
                 return true;
             return false;
         }
@@ -544,12 +648,12 @@ public class Frazer {
         
         
         protected void setDefaults() {
-            if(goal == null) 
-                goal = Goal.MINIMISE;
+            if(getGoal() == null) 
+                setGoal(Goal.MINIMISE);
             if(preselection == null) 
                 setPreselection(new NoPreselection());
             if(mating == null) 
-                setMating(new TournamentMating(goal));
+                setMating(new TournamentMating(getGoal()));
             if(breeding == null) {
                 switch(gD.getGenotypeType()) {
                     case INTEGER:
@@ -565,7 +669,7 @@ public class Frazer {
             }
                 
             if(getMutantSelection() == null)
-                setMutantSelection(new ChanceMutantSelection(0.10f));
+                setMutantSelection(new ChanceMutantSelection(0.05f));
             if(mutation == null) {
                 switch(gD.getGenotypeType()) {
                     case BIT:
@@ -606,4 +710,5 @@ public class Frazer {
         }
     }
 
+    
 }

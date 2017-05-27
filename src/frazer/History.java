@@ -24,18 +24,31 @@ import java.util.ArrayList;
  */
 public class History {
     ArrayList<HistoryRecord> record;
+    
+    private float maxFitnessScore;
+    private float minFitnessScore;
 
     public History() {
         record = new ArrayList<>();
+        maxFitnessScore = 0;
+        minFitnessScore = Float.MAX_VALUE;
     }
     
     public void recordPopulation(Population population) {
-        record.add(new HistoryRecord(population));
+        HistoryRecord newRecord = new HistoryRecord(population);
+        record.add(newRecord);
+        if(newRecord.getMaxScore() > maxFitnessScore)
+            maxFitnessScore = newRecord.getMaxScore();
+        if(newRecord.getMinScore() < minFitnessScore)
+            minFitnessScore = newRecord.getMinScore();
     }
     
+    public int getHistoryLength() {
+        return record.size();
+    }
     
     /**
-     * @param i
+     * @param i generation
      * @return the count
      */
     public int getCount(int i) {
@@ -43,7 +56,7 @@ public class History {
     }
 
     /**
-     * @param i
+     * @param i generation
      * @return the maxScore
      */
     public float getMaxScore(int i) {
@@ -51,7 +64,7 @@ public class History {
     }
 
     /**
-     * @param i
+     * @param i generation
      * @return the minScore
      */
     public float getMinScore(int i) {
@@ -59,11 +72,33 @@ public class History {
     }
 
     /**
-     * @param i
+     * @param i generation
      * @return the scoreSum
      */
     public double getScoreSum(int i) {
         return record.get(i).getScoreSum();
+    }
+    
+    /**
+     * @param i generation
+     * @return the average score
+     */
+    public float getAverage(int i) {
+        return record.get(i).getAverage();
+    }
+    
+    /**
+     * @return the maxFitnessScore
+     */
+    public float getMaxFitnessScore() {
+        return maxFitnessScore;
+    }
+
+    /**
+     * @return the minFitnessScore
+     */
+    public float getMinFitnessScore() {
+        return minFitnessScore;
     }
     
     private class HistoryRecord {
@@ -71,12 +106,14 @@ public class History {
         private final float maxScore;
         private final float minScore;
         private final double scoreSum;
+        private final float average;
 
         public HistoryRecord(Population population) {
             this.count = population.getCount();
             this.maxScore = population.getMaxScore();
             this.minScore = population.getMinScore();
             this.scoreSum = population.getScoreSum();
+            this.average = (float) scoreSum / count;
         }
 
         /**
@@ -106,5 +143,15 @@ public class History {
         public double getScoreSum() {
             return scoreSum;
         }
+
+        /**
+         * @return the average
+         */
+        public float getAverage() {
+            return average;
+        }
+        
+        
     }
+
 }
