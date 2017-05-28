@@ -1,5 +1,4 @@
 import frazer.*;
-import frazer.constants.*;
 
 Frazer frazer;
 GoalPoints points;
@@ -8,12 +7,14 @@ int numberOfPoints = 5;
 
 void setup()
 {
-  size(800, 600);
   frazer = new Frazer(this, 100, numberOfGenes);
+  frazer.launchPlotter();
+  size(800, 600);
   points = new GoalPoints(numberOfPoints);
   
-  frazer.setMutation(new RangeValueMutation(0.15, 0.5));
-  frazer.launchPlotter();
+  frazer.setMutation(new RangeValueMutation(0.05, 0.5));
+  //frazer.setMating(Frazer.MatingType.ROULETTEWHEEL);
+  frameRate(30);
 }
 
 void draw() {
