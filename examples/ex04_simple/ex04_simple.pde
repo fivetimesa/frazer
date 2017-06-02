@@ -7,7 +7,7 @@ void setup()
   size(500, 200);
   textAlign(CENTER);
   
-  frazer = new Frazer(this, 100, 10);
+  frazer = new Frazer(this, 1000, 10);
 }
 
 void draw() {

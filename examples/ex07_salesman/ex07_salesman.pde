@@ -3,14 +3,14 @@ import frazer.constants.*;
 
 Frazer frazer;
 Cities cities;
-int numberOfCities = 10;
+int numberOfCities = 12;
 
 void setup()
 {
   
   size(800, 600);
   
-  frazer = new Frazer(this, 1000, numberOfCities - 1);
+  frazer = new Frazer(this, 500, numberOfCities - 1);
   frazer.setGeneLimits(0, 1);
   frazer.setMutation(new RangeValueMutation(0.05, 0.8));
   frazer.setMating(Frazer.MatingType.ROULETTEWHEEL);
@@ -20,12 +20,18 @@ void setup()
 }
 
 void draw() {
-  background(255);
-  cities.display();
+  background(0);
   Specimen best = frazer.evolve(1);
+  stroke(255, 255); strokeWeight(2);
   displayPath(((FloatGenotype)best.getGenes()).getGenes());
   println(best.getFitnessScore());
-
+  /*
+  stroke(255, 32); strokeWeight(1);
+  for(Specimen s: frazer.getCurrentPopulation().getSpecimens()) {
+    displayPath(((FloatGenotype)s.getGenes()).getGenes());
+  }
+  */
+  cities.display();
   /*
   float[] randomGenes = new float[numberOfCities - 1];
   for(int i = 0; i < numberOfCities - 1; i++) {
@@ -109,9 +115,10 @@ class Cities {
   void display() {
     pushStyle();
     strokeWeight(5);
-    stroke(0, 0, 20);
+    stroke(128);
+    fill(255);
     for(int i = 0; i < count; i++)
-      point(positions.get(i).x, positions.get(i).y);
+      ellipse(positions.get(i).x, positions.get(i).y, 10, 10);
     popStyle();
   }
   

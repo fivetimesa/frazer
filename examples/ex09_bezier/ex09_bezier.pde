@@ -93,17 +93,21 @@ class GoalPoints {
     return points.get(i);
   }
   
-  int mouseOver() {
+  boolean mouseOver(int i) {
     PVector mouse = new PVector(mouseX, mouseY);
     float threshold = 10;
-    for(int i = 0; i < count; i++) {
-      if(PVector.dist(mouse, points.get(i)) < threshold) return i;
-    }
-    return -1;
+    if(PVector.dist(mouse, points.get(i)) < threshold) 
+      return true;
+    else return false;
   }
   
   void startMovingPoint() {
-    movingPoint = mouseOver();
+    for(int i = 0; i < count; i++) {
+      if(mouseOver(i)) {
+        movingPoint = i;
+        return;
+      }
+    }
   }
   
   void finishMovingPoint() {
@@ -123,11 +127,10 @@ class GoalPoints {
         point = new PVector(mouseX, mouseY);
         fill(196, 64, 64); 
       }
-      else if(mouseOver() == i)
+      else if(mouseOver(i))
         fill(128, 128, 64);
       ellipse(point.x, point.y, 10, 10);
       popStyle();
     }
   }
-  
 }
