@@ -28,27 +28,29 @@ import frazer.interfaces.Mutation;
 
 /**
  *
- * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
+ * @author Teodor Michalski, Paweł Sikorski
  */
 public class Specimen implements Comparable<Specimen> {
 
-    private Genotype genes;
+    protected Genotype genes;
 
-    final static byte BITGENOTYPE = 1;
-    final static byte FLOATGENOTYPE = 0;
-    final static byte PARETOSCORE = 1;
-
-    private float fitnessScore;
-    private float[] fitnessParetoScores = null;
+    protected float fitnessScore;
+    protected float[] fitnessParetoScores = null;
 
 // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Specimen(Genotype genes) {
+    public Specimen() {
+        fitnessScore = 0;
+    }
+    
+    
+    protected Specimen(Genotype genes) {
         this.genes = genes;
         fitnessScore = 0;
     }
     
-    public Specimen(Genotype genes, float fitnessScore) {
+    
+    protected Specimen(Genotype genes, float fitnessScore) {
         this.genes = genes;
         this.fitnessScore = fitnessScore;
     }
@@ -56,7 +58,7 @@ public class Specimen implements Comparable<Specimen> {
      *
      * @param geneCount
      * @param genotypeType
-     */
+     *
     public Specimen(int geneCount, GenotypeType genotypeType) {
         switch(genotypeType) {
             case BIT:
@@ -83,7 +85,7 @@ public class Specimen implements Comparable<Specimen> {
      * @param geneType
      * @param paretoScoreSize
      * @throws Exception
-     */
+     *
     public Specimen(int geneCount, GenotypeType geneType, int paretoScoreSize) throws Exception {
         this(geneCount, geneType);
         if (paretoScoreSize > 1) {
@@ -92,10 +94,16 @@ public class Specimen implements Comparable<Specimen> {
             throw new Exception("Pareto score size must be greater than 1.");
         }
     }
+    */
     
     public Specimen copy() {
         Specimen copy = new Specimen(genes.copy(), fitnessScore);
         return copy;
+    } 
+    
+    public Specimen makeChild(Genotype genes) {
+        Specimen child = new Specimen(genes);
+        return child;
     } 
     
     public float evaluateFitness(Fitness fitness) {
@@ -158,6 +166,7 @@ public class Specimen implements Comparable<Specimen> {
      */
     public void setGenes(Genotype genes) {
         this.genes = genes;
+        this.fitnessScore = 0;
     }
 
     /**
@@ -185,7 +194,11 @@ public class Specimen implements Comparable<Specimen> {
      * @param fitnessParetoScores the fitnessParetoScores to set
      */
     public void setFitnessParetoScores(float[] fitnessParetoScores) {
-        this.fitnessParetoScores = fitnessParetoScores;
+        this.fitnessParetoScores = fitnessParetoScores.clone();
+    }
+    
+    public void setFitnessParetoScore(int i, float fitnessParetoScore) {
+        this.fitnessParetoScores[i] = fitnessParetoScore;
     }
 
 // </editor-fold>

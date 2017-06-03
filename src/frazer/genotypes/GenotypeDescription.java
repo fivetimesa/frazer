@@ -29,7 +29,7 @@ public class GenotypeDescription {
    
    //GENE LIMIT
    private GeneLimit geneLimit;
-   private Limit limit;
+   private LimitType limit;
    private float max, min;
    private float[] maxs, mins;
 
@@ -38,7 +38,7 @@ public class GenotypeDescription {
       this.genotypeType = geneType;
       this.geneCount = geneCount;
       
-      limit = Limit.NOLIMIT;
+      limit = LimitType.NOLIMIT;
       setGeneLimit();
    }
 
@@ -57,7 +57,7 @@ public class GenotypeDescription {
    public final void setGeneLimits(float min, float max) {
       this.min = min;
       this.max = max;
-      limit = Limit.FORALL;
+      limit = LimitType.FORALL;
       setGeneLimit();
    }
    
@@ -77,7 +77,7 @@ public class GenotypeDescription {
           else
             this.maxs[i] = maxGeneLimits[maxGeneLimits.length - 1];
       }
-      limit = Limit.INDIVIDUAL;
+      limit = LimitType.INDIVIDUAL;
       setGeneLimit();
    }
 
@@ -105,7 +105,7 @@ public class GenotypeDescription {
       return mins[i];
    }
 
-   public Limit getLimit() {
+   public LimitType getLimit() {
       return limit;
    }
 

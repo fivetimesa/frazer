@@ -38,6 +38,7 @@ public class Frazer {
     private Population currentPopulation;
     
     private GenotypeDescription gD;
+    private SpecimenFactory specimenFactory;
 
     /** StopCondition options. */
     private StopCondition stopCondition;
@@ -60,24 +61,53 @@ public class Frazer {
         history = new History();
         algorithms = new Algorithms();
         algorithms.setDefaults();
+        
+        specimenFactory = new SpecimenFactory();
     }
     
-    
+    /**
+     *
+     * @param parent
+     * @param populationCount
+     * @param geneCount
+     */
     public Frazer(PApplet parent, int populationCount, int geneCount)
     {
         this.parent = parent;
         history = new History();
         algorithms = new Algorithms();
         
+        specimenFactory = new SpecimenFactory();
+        
         if(findFitnessFunction()) {
             GenotypeType genotypeType = ((ReflectionFitness) algorithms.fitness).getGeontypeType();
             gD = new GenotypeDescription(geneCount, genotypeType);
             System.out.print(gD.getGenotypeType());
-            currentPopulation = new Population(populationCount, gD);
+            currentPopulation = new Population(specimenFactory.createSpecimens(populationCount));
             
             currentPopulation.evaluate(algorithms.fitness);
             history.recordPopulation(currentPopulation);
         }
+        algorithms.setDefaults();
+    }
+    
+    
+    public Frazer(PApplet parent, int populationCount, int geneCount, GenotypeType genotypeType, CustomSpecimen specimen)
+    {
+        
+        
+        
+        this.parent = parent;
+        history = new History();
+        algorithms = new Algorithms();
+        specimenFactory = new SpecimenFactory();
+        specimenFactory.setSpecimenClass(specimen.getClass());
+        
+        this.gD = new GenotypeDescription(geneCount, genotypeType);
+        currentPopulation = new Population(specimenFactory.createSpecimens(populationCount));
+        algorithms.fitness = new SpecimenFitness();
+        
+        history.recordPopulation(currentPopulation);
         algorithms.setDefaults();
     }
     
@@ -94,9 +124,10 @@ public class Frazer {
         this.parent = parent;
         history = new History();
         algorithms = new Algorithms();
+        specimenFactory = new SpecimenFactory();
         
         this.gD = new GenotypeDescription(geneCount, genotypeType);
-        currentPopulation = new Population(populationCount, gD);
+        currentPopulation = new Population(specimenFactory.createSpecimens(populationCount));
         this.algorithms.fitness = fitness;
         
         currentPopulation.evaluate(fitness);
@@ -127,7 +158,7 @@ public class Frazer {
     
     public final void restart() {
         int populationCount = currentPopulation.getCount();
-        currentPopulation = new Population(populationCount, gD);
+        currentPopulation = new Population(specimenFactory.createSpecimens(populationCount));
     }
     
     /**
@@ -143,6 +174,7 @@ public class Frazer {
             return null;
         }
         for (int i = 0; i < maxGenerations; i++) {
+            if(stopCondition.check()) break;
             try {
                 
                 System.out.print("Evolving… \n");
@@ -157,9 +189,37 @@ public class Frazer {
                     e.printStackTrace(System.err);
                     System.out.print("Something went wrong. Evolution stopped at generation " + generationCount + "\n");
             }
-            if(stopCondition.check()) break;
         }
         return currentPopulation.getBestSpecimen(getGoal());
+    }
+    
+    public void evaluateCurrent() {
+        if(algorithms.fitness == null) {
+            System.err.print("ERROR! No Fitness funtion specified.\n Aborting evolution.\n");
+        } else {
+            currentPopulation.evaluate(algorithms.fitness);
+        }
+    }
+    
+    public Specimen[] evolve() {
+        if(algorithms.fitness == null) {
+            System.err.print("ERROR! No Fitness funtion specified.\n Aborting evolution.\n");
+            return null;
+        }
+        try {
+            System.out.print("Evolving… \n");
+            Population nextPopulation = currentPopulation.nextGeneration(algorithms);
+            generationCount++;
+            System.out.print("Generation " + generationCount + "\n");
+            currentPopulation = nextPopulation;
+            getHistory().recordPopulation(currentPopulation);
+        }
+            catch (Exception e) {
+                System.out.println();
+                e.printStackTrace(System.err);
+                System.out.print("Something went wrong. Evolution stopped at generation " + generationCount + "\n");
+        }
+        return currentPopulation.getSpecimens();
     }
     
     public void launchPlotter() {
@@ -710,5 +770,59 @@ public class Frazer {
         }
     }
 
+    private class SpecimenFactory {
+        Class SpecimenClass = Specimen.class;
     
+        public Specimen createSpecimen() {
+            GenotypeType genotypeType = gD.getGenotypeType();
+            int geneCount = gD.getGeneCount();
+            
+            Genotype genes = null;
+            
+            switch(genotypeType) {
+                case BIT:
+                    genes = new BitGenotype(geneCount);
+                    break;
+                case INTEGER:
+                    genes = new IntegerGenotype(geneCount);
+                    break;
+                case FLOAT:
+                    genes = new FloatGenotype(geneCount);
+                    break;
+                case SFLOAT:
+                    genes = new SFloatGenotype(geneCount);
+                    break;
+                default:
+                    System.err.println("ERROR! Genotype type not found.");
+            }
+            return createSpecimen(genes);
+        }
+        
+        public Specimen createSpecimen(Genotype genes) {
+            Specimen newSpecimen = null;
+            try { 
+                newSpecimen = (Specimen) SpecimenClass.newInstance();
+                newSpecimen.setGenes(genes);
+            }
+            catch (Exception e) {
+                System.err.println("Error on instantiating a specimen");
+            }
+            return newSpecimen;
+        }
+        
+        public Specimen[] createSpecimens(int count) {
+            Specimen[] specimens = new Specimen[count];
+            for(int i = 0; i < count; i++) 
+                specimens[i] = createSpecimen();
+            return specimens;
+        }
+        
+        public void setSpecimenClass(Class specimenClass) {
+            this.SpecimenClass = specimenClass;
+        }
+        
+        public boolean hasCustomSpecimen() {
+            return !SpecimenClass.equals(Specimen.class);
+        }
+    }
 }

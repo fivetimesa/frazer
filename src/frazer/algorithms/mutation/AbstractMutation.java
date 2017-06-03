@@ -17,7 +17,7 @@
 package frazer.algorithms.mutation;
 
 import frazer.constants.GenotypeMutationType;
-import frazer.constants.Limit;
+import frazer.constants.LimitType;
 import frazer.genotypes.*;
 import java.util.Random;
 

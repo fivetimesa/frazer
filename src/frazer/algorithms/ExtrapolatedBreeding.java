@@ -48,7 +48,7 @@ public class ExtrapolatedBreeding implements Breeding {
     @Override
     public void initialize(GenotypeDescription gD) {
         if(gD.getGenotypeType() == GenotypeType.BIT)
-                System.err.print("Extrapolated breeding does not work with bit-type Genotype.");
+            System.err.print("Extrapolated breeding does not work with bit-type Genotype.");
     }
     
 
@@ -113,7 +113,7 @@ public class ExtrapolatedBreeding implements Breeding {
                 }
                 childrenGenes[i].setFloat(g, value);
             }
-            children[i] = new Specimen(childrenGenes[i]);
+            children[i] = parent[0].makeChild(childrenGenes[i]);
         }
         return children;
     }

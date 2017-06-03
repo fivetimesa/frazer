@@ -14,24 +14,43 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package frazer.interfaces;
+package frazer;
 
 import frazer.genotypes.Genotype;
+import frazer.interfaces.Fitness;
 
 /**
  *
- * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
+ * @author Teodor Michalski, Paweł Sikorski
  */
-public interface Fitness extends AlgorithmsInterface {
+public abstract class CustomSpecimen extends Specimen {
+// <editor-fold defaultstate="collapsed" desc="Constructors">
 
     /**
      *
-     * @param genotype
-     * @return fitness score
      */
-    public float calculateFitness(Genotype genotype);
     
-    public default boolean allowsFastEvaluation() {
-        return true;
+    public CustomSpecimen() {
+        super();
     }
+    
+    /**
+     *
+     * @param genes
+     */
+    public CustomSpecimen(Genotype genes) {
+        super(genes);
+    }
+// </editor-fold>
+    
+    @Override
+    abstract public Specimen makeChild(Genotype genes);
+    
+    @Override
+    final public float evaluateFitness(Fitness fitness) {
+        fitnessScore = calculateFitness();
+        return fitnessScore;
+    }
+    
+    abstract float calculateFitness();
 }

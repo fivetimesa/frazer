@@ -34,7 +34,7 @@ public class Population {
     private double scoreSum;
     private Specimen minSpecimen;
     private Specimen maxSpecimen;
-    private GenotypeDescription gD;
+    //private GenotypeDescription gD;
     /**
      * Population of specimens.
      */
@@ -45,7 +45,7 @@ public class Population {
      *
      * @param populationCount
      * @param gD
-     */
+     *
     public Population(int populationCount, GenotypeDescription gD) {
         this.gD = gD;
         this.count = populationCount;
@@ -130,7 +130,11 @@ public class Population {
         Specimen[] newSpecimens = new Specimen[count];
         
         //System.out.print("Evaluating… \n");
-        evaluate(algorithms.fitness);
+        if(!evaluated && algorithms.fitness.allowsFastEvaluation())
+            evaluate(algorithms.fitness);
+        else 
+            throw new Exception("Population must be manually evaluated to proceed");
+        
         //System.out.print("Specimen evaluation done. \n");
         
         if(algorithms.needSorting()) {
@@ -173,13 +177,17 @@ public class Population {
         return nextPopulation;
     }
     
-    private void mutate(MutantSelection mutantSelection, Mutation mutation, Fitness fitness) {
+    private void mutate(MutantSelection mutantSelection, Mutation mutation, Fitness fitness) throws Exception {
         
         //System.out.print("Mutating new population with " + mutantSelection.getClass().getName() 
         //                + " and " + mutation.getClass().getName() +  "\n");
         
         if(mutantSelection.needsFitness())
-            evaluate(fitness);
+            if(fitness.allowsFastEvaluation())
+                evaluate(fitness);
+            else 
+                throw new Exception("Mutant selection demands fast evaluation.\n"
+                        + "Fast evaluation not allowed by fitness function");
         
         //System.out.print("Selecting mutants… ");
         Specimen[] mutants = mutantSelection.selectMutants(this);
@@ -193,7 +201,7 @@ public class Population {
         //System.out.print("Evaluating… \n");
         if(mutantSelection.needsFitness())
             evaluate(mutants, fitness);
-        else 
+        else if(fitness.allowsFastEvaluation())
             evaluate(fitness);
     }
     
@@ -220,10 +228,6 @@ public class Population {
             return maxSpecimen;
         else return minSpecimen;
     }
-
-   public GenotypeDescription getGenotypeDescription() {
-      return gD;
-   }
     
     public int getCount() {
         return count;

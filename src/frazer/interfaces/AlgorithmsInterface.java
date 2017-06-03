@@ -23,7 +23,7 @@ import frazer.genotypes.GenotypeDescription;
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
 public abstract interface AlgorithmsInterface {
-
+    
     /**
      *
      * @return
@@ -36,7 +36,8 @@ public abstract interface AlgorithmsInterface {
         return false;
     }
     
-    public default void initialize(GenotypeDescription gD) {}
+    public default void initialize(GenotypeDescription gD) {
+    }
     
     public default void update(Population population) {}
 }

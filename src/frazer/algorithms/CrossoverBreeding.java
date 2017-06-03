@@ -87,7 +87,7 @@ public class CrossoverBreeding implements Breeding {
                     genes.setGene(g, parent[parentId].getGenes().getGene(g));
                 //System.out.print(parentId + "|");
             }
-            children[i] = new Specimen(genes);
+            children[i] = parent[0].makeChild(genes);
             //System.out.print("\nChild #" + i + " ready. \n");
         }
         return children;

@@ -20,6 +20,6 @@ package frazer.constants;
  *
  * @author Teodor Michalski, Maciek Bajor, Paweł Sikorski
  */
-public enum Limit {
+public enum LimitType {
     FORALL, INDIVIDUAL, NOLIMIT, NORMALIZE
 }
