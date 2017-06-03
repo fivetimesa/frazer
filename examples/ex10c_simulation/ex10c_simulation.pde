@@ -1,4 +1,6 @@
+import frazer.*;
 
+Frazer frazer;
 Creature c;
 
 void setup() {

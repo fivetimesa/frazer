@@ -1,6 +1,6 @@
 public static class Creature extends CustomSpecimen {
-  private static int w;
-  private static int h;
+  private int w;
+  private int h;
   private ArrayList<Node> nodes;
   private ArrayList<Spring> springs;
   private ArrayList<Spring> diagonals;
@@ -17,7 +17,7 @@ public static class Creature extends CustomSpecimen {
   private float clock;
   private static float clockStep = 0.01;
   
-  private static PVector start;
+  private PVector start;
   private PVector center;
   
   public Creature() {
@@ -30,14 +30,14 @@ public static class Creature extends CustomSpecimen {
     clock = 0;
   }
   
-  public CustomSpecimen makeChild(Genotype genes) {
+  public Specimen makeChild(Genotype genes) {
     Creature child = new Creature();
-    child.init(w, h, size);
     child.setGenes(genes);
+    child.init(w, h, size);
     return child;
   }
   
-  public void init(int w, int h, float size) {
+  public Creature init(int w, int h, float size) {
     this.w = w;
     this.h = h;
     this.size = size;
@@ -81,11 +81,15 @@ public static class Creature extends CustomSpecimen {
     updateCenter();
     start = center.copy();
     groupNodes();
+    
+    return this;
   }
   
   private void groupNodes() {
     for(int i = nodes.size() - 1; i >= 0; i--) {
-      double r = Math.random();
+      //double r = Math.random();
+      //println("nodes count = " + nodes.size() + "; gene count = " + genes.getGeneCount());
+      float r = Utility.sawLimit(genes.getFloat(i), 0.0f, 1.0f);
       if(r < 0.2) group1.add(nodes.get(i));
       else if(r < 0.4) group2.add(nodes.get(i));
       else if(r > 0.95) {
@@ -265,6 +269,8 @@ public static class Creature extends CustomSpecimen {
   }
   
   public float calculateFitness() {
-    return center.x - start.x;
+    updateCenter();
+    println("evaluating: start.x = " + start.x + "; center.x = " + center.x);
+    return (1000 - (center.x - start.x));
   }
 }

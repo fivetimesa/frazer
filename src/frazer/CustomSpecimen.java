@@ -52,5 +52,5 @@ public abstract class CustomSpecimen extends Specimen {
         return fitnessScore;
     }
     
-    abstract float calculateFitness();
+    abstract public float calculateFitness();
 }

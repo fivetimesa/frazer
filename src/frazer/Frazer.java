@@ -105,9 +105,9 @@ public class Frazer {
         
         this.gD = new GenotypeDescription(geneCount, genotypeType);
         currentPopulation = new Population(specimenFactory.createSpecimens(populationCount));
+        System.out.println("Specimen class is: " + currentPopulation.getSpecimens()[0].getClass());
         algorithms.fitness = new SpecimenFitness();
         
-        history.recordPopulation(currentPopulation);
         algorithms.setDefaults();
     }
     
@@ -199,6 +199,7 @@ public class Frazer {
         } else {
             currentPopulation.evaluate(algorithms.fitness);
         }
+        history.recordPopulation(currentPopulation);
     }
     
     public Specimen[] evolve() {

@@ -130,10 +130,13 @@ public class Population {
         Specimen[] newSpecimens = new Specimen[count];
         
         //System.out.print("Evaluating… \n");
-        if(!evaluated && algorithms.fitness.allowsFastEvaluation())
-            evaluate(algorithms.fitness);
-        else 
-            throw new Exception("Population must be manually evaluated to proceed");
+        if(!evaluated) {
+            if( algorithms.fitness.allowsFastEvaluation()) {
+                evaluate(algorithms.fitness);
+            } else {
+                throw new Exception("Population must be manually evaluated to proceed");
+            }
+        }
         
         //System.out.print("Specimen evaluation done. \n");
         

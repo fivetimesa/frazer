@@ -116,6 +116,7 @@ public class Plotter {
         private void drawPlot() {
             //update plot data
             numberOfGenerations = evolutionHistory.getHistoryLength();
+            if(numberOfGenerations == 0) return;
             if(numberOfGenerations < 50)
                 maxValue = evolutionHistory.getMaxFitnessScore();
             minValue = evolutionHistory.getMinFitnessScore();
@@ -216,6 +217,18 @@ public class Plotter {
         
         void drawText() {
             pushMatrix();
+            numberOfGenerations = evolutionHistory.getHistoryLength();
+            if(numberOfGenerations == 0) {
+                
+                pushStyle();
+                translate(width/2, height/2);
+                textMode(CENTER);
+                fill(colorPrimary);
+                text("AWAITING DATA…", 0, 0);
+                popStyle();
+                popMatrix();
+                return;
+            }
             int textLineHeight = 20;
             translate(textFieldX, textFieldY);
             fill(colorPrimary);
