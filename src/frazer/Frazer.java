@@ -712,7 +712,7 @@ public class Frazer {
             if(getGoal() == null) 
                 setGoal(Goal.MINIMISE);
             if(preselection == null) 
-                setPreselection(new NoPreselection());
+                setPreselection(new ElitePreselection(getGoal(), 0.1f));
             if(mating == null) 
                 setMating(new TournamentMating(getGoal()));
             if(breeding == null) {
