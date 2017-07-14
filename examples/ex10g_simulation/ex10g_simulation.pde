@@ -17,12 +17,12 @@ void setup() {
   sampleCreature = new Creature();
   //c.moveTo(new PVector(width/2, height/2));
   
-  frazer = new Frazer(this, 500, w * h, GenotypeType.FLOAT, sampleCreature);
+  frazer = new Frazer(this, 500, w * h * 2, GenotypeType.FLOAT, sampleCreature);
   frazer.setGeneLimits(0, 1);
   //frazer.setGoal(Goal.MAXIMISE);
   frazer.setMutantSelection(new ChanceMutantSelection(0.33f));
-  frazer.setMutation(new RangeValueMutation(0.33f, 0.15f));
-  frazer.setBreeding(new CrossoverBreeding());
+  frazer.setMutation(new RangeValueMutation(0.1f, 0.15f));
+  frazer.setBreeding(new CrossoverBreeding(7));
   frazer.setMating(new TournamentMating(Goal.MINIMISE));
   //frazer.launchPlotter();
   population = castArray(frazer.getCurrentPopulation().getSpecimens());
@@ -41,7 +41,7 @@ void draw() {
     counter++;
   }
   if(display) {
-    sampleCreature.update();
+    //sampleCreature.update();
     sampleCreature.display(g);
   }
   
@@ -55,12 +55,12 @@ void draw() {
   if(counter >= simulationSteps) {
     counter = 0;
     frazer.evaluateCurrent();
-    sampleCreature = (Creature) frazer.getCurrentPopulation().getMinSpecimen();
-    sampleCreature.moveTo(new PVector(width/2, sampleCreature.getCenter().y));
+    //sampleCreature = (Creature) frazer.getCurrentPopulation().getMinSpecimen();
+    //sampleCreature.moveTo(new PVector(width/2, sampleCreature.getCenter().y));
     println("best score: " + (1000 - frazer.getCurrentPopulation().getMinScore()));
     println("worst score: " + (1000 - frazer.getCurrentPopulation().getMaxScore()));
     population = castArray(frazer.evolve());
-    //sampleCreature = population[0];
+    sampleCreature = population[0];
   }
 }
 

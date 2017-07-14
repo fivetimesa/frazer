@@ -2,10 +2,10 @@ public static class Creature extends CustomSpecimen {
   private int w;
   private int h;
   private ArrayList<Node> nodes;
+  private HashMap<Node, Float> phaseShift;
+  private HashMap<Node, Float> stretchPower;
   private ArrayList<Spring> springs;
   private ArrayList<Spring> diagonals;
-  private ArrayList<Node> group1;
-  private ArrayList<Node> group2;
   
   private static float gravity = 0.1;
   private static float friction = 0.99;
@@ -25,8 +25,6 @@ public static class Creature extends CustomSpecimen {
     super();
     nodes = new ArrayList();
     springs = new ArrayList();
-    group1 = new ArrayList();
-    group2 = new ArrayList();
     diagonals = new ArrayList();
     clock = 0;
   }
@@ -88,20 +86,39 @@ public static class Creature extends CustomSpecimen {
   }
   
   private void groupNodes() {
+    stretchPower = new HashMap();
+    phaseShift = new HashMap();
+    for(int i = 0; i < nodes.size(); i++) {
+      Node n = nodes.get(i);
+      
+      float power = Utility.sawLimit(genes.getFloat(i), 0.0f, 1.0f);
+      float shift = Utility.sawLimit(genes.getFloat(i * 2), 0.0f, 1.0f);
+      
+      if(power < 0.25) {
+        stretchPower.put(n, 0.0f);
+        phaseShift.put(n, 0.0f);
+      }
+      else if(power > 0.95) {
+        stretchPower.put(n, 1.0f);
+        phaseShift.put(n, 0.0f);
+      }
+      else {
+        stretchPower.put(n, map(power, 0.25f, 0.95f, 0.0f, 1.0f));
+        phaseShift.put(n, TAU * shift);
+      }
+    }
+    
     for(int i = nodes.size() - 1; i >= 0; i--) {
-      //double r = Math.random();
-      //println("nodes count = " + nodes.size() + "; gene count = " + genes.getGeneCount());
-      float r = Utility.sawLimit(genes.getFloat(i), 0.0f, 1.0f);
-      if(r < 0.2) group1.add(nodes.get(i));
-      else if(r > 0.8) group2.add(nodes.get(i));
-      else if(r > 0.49 && r < 0.51) {
-        Node n = nodes.get(i);
+      Node n = nodes.get(i);
+      if(stretchPower.get(n) == 1.0) {
         for(int j = springs.size() - 1; j >= 0; j--) {
           Spring s = springs.get(j);
           if(s.getA() == n || s.getB() == n) 
             springs.remove(j);
         }
         nodes.remove(i);
+        stretchPower.remove(n);
+        phaseShift.remove(n);
       }
     }
   }
@@ -122,13 +139,12 @@ public static class Creature extends CustomSpecimen {
   public void display(PGraphics pg) {
     for(Spring s: springs)
       s.display(pg);
-    for(Node n: nodes)
-      if(group1.contains(n))
-        n.display(pg, 30 - 30 * sin(clock));
-      else if(group2.contains(n))
-        n.display(pg, 30 - 30 * cos(clock));
+    for(Node n: nodes) {
+      if(stretchPower.get(n) > 0)
+        n.display(pg, 50 - 40 * stretchPower.get(n) * sin(clock + phaseShift.get(n)));
       else
         n.display(pg);
+    }
     updateCenter();
     displayCenter(pg);
   }
@@ -144,38 +160,27 @@ public static class Creature extends CustomSpecimen {
   
   
   private void move() {
-    float pSize1 = size * (1 + change * sin(clock));
-    float pSize2 = size * (1 + change * cos(clock));
-    
-    float pDiagonalSize1 = size * (1 + change * sin(clock) * sqrt(2));
-    float pDiagonalSize2 = size * (1 + change * cos(clock) * sqrt(2));
-    
     clock += clockStep;
-    float size1 = size * (1 + change * sin(clock));
-    float size2 = size * (1 + change * cos(clock));
-    
-    float diagonalSize1 = size * (1 + change * sin(clock) * sqrt(2));
-    float diagonalSize2 = size * (1 + change * cos(clock) * sqrt(2));
-    
-    float ds1 = size1 - pSize1;
-    float ds2 = size2 - pSize2;
-    
-    float dds1 = diagonalSize1 - pDiagonalSize1;
-    float dds2 = diagonalSize2 - pDiagonalSize2;
     
     for(Spring s: springs) {
-      int g1 = 0;
-      int g2 = 0;
-      if(group1.contains(s.getA())) g1++;
-      else if(group2.contains(s.getA())) g2++;
-      if(group1.contains(s.getB())) g1++;
-      else if(group2.contains(s.getB())) g2++;
-      if(g1 > 0 || g2 > 0) {
-        if(diagonals.contains(s))
-          s.changeRestLength(g1 * dds1 + g2 * dds2);
-        else
-          s.changeRestLength(g1 * ds1 + g2 * ds2);
-      }
+      Node a = s.getA();
+      Node b = s.getB();
+      
+      float powerA = stretchPower.get(a);
+      float powerB = stretchPower.get(b);
+      float phaseA = phaseShift.get(a);
+      float phaseB = phaseShift.get(b);
+      
+      float pSizeA = (powerA * sin(clock - clockStep + phaseA));
+      float sizeA = (powerA * sin(clock + phaseA));
+      float pSizeB = (powerB * sin(clock - clockStep + phaseB));
+      float sizeB = (powerB * sin(clock + phaseB));
+      
+      float dif = size * change * (sizeA - pSizeA + sizeB - pSizeB);
+      if(diagonals.contains(s)) 
+        dif *= sqrt(2);
+        
+      s.changeRestLength(dif);
     }
   }
   
@@ -245,7 +250,7 @@ public static class Creature extends CustomSpecimen {
   }
   
   
-  public void init2(int w, int h, float size) {
+  public Creature init2(int w, int h, float size) {
     this.w = w;
     this.h = h;
     this.size = size;
@@ -290,7 +295,11 @@ public static class Creature extends CustomSpecimen {
       }
     }
     updateCenter();
+    start = center.copy();
     groupNodes();
+    moveTo(new PVector(center.x, groundY - h * 0.5 * size));
+    
+    return this;
   }
   
   public void setGroundLevel(int y) {
